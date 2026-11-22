@@ -1,0 +1,169 @@
+sku,item,name,brand,qty,pack,mrp,price,rating,n_reviews,in_stock,price_on_request,page
+SM1001,nappies,Sangam Medium Nappies,Sangam,40,40 pcs,841,841,4.5,40,True,False,1
+SM1002,curd,Adyar Fresh Thick Curd,Adyar Fresh,400,0.4 kg,38,38,4.9,40,True,False,1
+SM1003,dal,Adyar Fresh Toor Dal,Adyar Fresh,500,500 g,91,76,,0,True,True,1
+SM1004,biscuits,Sangam Cream Biscuits,Sangam,150,150 g,37,30,4.7,212,True,False,1
+SM1005,chips,Sangam Salted Chips,Sangam,100,0.1 kg,40,40,4.0,640,True,False,1
+SM1006,curd,Nilgiri Farms Set Curd,Nilgiri Farms,800,800 g,66,60,,0,True,False,1
+SM1007,chips,Kaveri Tomato Chips,Kaveri,100,100 g,41,41,,0,True,False,1
+SM1008,nappies,Marina Medium Nappies,Marina,80,80 pcs,1262,1117,3.8,12,True,False,1
+SM1009,dal,Sangam Toor Dal,Sangam,1000,1 kg,191,166,3.9,640,True,False,1
+SM1010,biscuits,Sangam Glucose Biscuits,Sangam,150,150 g,33,33,3.7,212,True,False,1
+SM1011,curd,Sangam Low Fat Curd,Sangam,200,0.2 kg,21,21,3.6,85,True,False,1
+SM1012,dal,Nilgiri Farms Urad Dal,Nilgiri Farms,1000,1 kg,183,160,4.4,3,False,False,1
+SM1013,biscuits,Nilgiri Farms Marie Biscuits,Nilgiri Farms,300,300 g,69,63,3.6,85,True,False,1
+SM1014,beer,Marina Wheat Beer,Marina,1300,1300 ml,379,379,,0,True,False,1
+SM1015,rice,Marina Ponni Rice,Marina,2500,2.5 kg,165,144,3.3,12,True,True,1
+SM1016,tea,Adyar Fresh Leaf Tea,Adyar Fresh,500,0.5 kg,268,268,,0,True,False,1
+SM1017,soap,Nilgiri Farms Lime Soap,Nilgiri Farms,200,200 g,95,90,3.4,212,True,False,1
+SM1018,chips,Kaveri Onion Chips,Kaveri,50,50 g,21,20,4.1,85,False,False,1
+SM1019,soap,Marina Rose Soap,Marina,100,100 g,43,43,4.5,3,True,False,1
+SM1020,milk,Marina Full Cream Milk,Marina,1000,1 L,55,48,,0,True,False,1
+SM1021,eggs,Adyar Fresh Free Range Eggs,Adyar Fresh,24,pack of 24,140,131,4.1,640,True,False,1
+SM1022,biscuits,Pothigai Glucose Biscuits,Pothigai,300,300 g,72,72,3.7,3,True,False,1
+SM1023,curd,Pothigai Set Curd,Pothigai,200,200 g,18,18,3.7,12,True,False,1
+SM1024,butter,Sangam Unsalted Butter,Sangam,200,0.2 kg,119,97,4.3,212,True,False,1
+SM1025,curd,Nilgiri Farms Set Curd,Nilgiri Farms,800,800 g,65,57,,0,True,False,2
+SM1026,nappies,Adyar Fresh Large Nappies,Adyar Fresh,80,80 pcs,1669,1669,3.7,40,True,False,2
+SM1027,chips,Pothigai Salted Chips,Pothigai,100,100 g,47,38,4.1,640,True,False,2
+SM1028,eggs,Marina White Eggs,Marina,24,pack of 24,179,145,4.1,12,True,False,2
+SM1029,jam,Marina Mango Jam,Marina,200,200 g,124,124,,0,True,False,2
+SM1030,bread,Marina Multigrain Bread,Marina,200,0.2 kg,27,27,4.2,12,True,False,2
+SM1031,nappies,Nilgiri Farms Small Nappies,Nilgiri Farms,40,40 pcs,663,663,4.3,12,True,False,2
+SM1032,rice,Adyar Fresh Sona Masoori Rice,Adyar Fresh,10000,10000 g,634,634,4.0,212,True,False,2
+SM1033,chips,Pothigai Tomato Chips,Pothigai,100,100 g,40,37,3.7,85,True,False,2
+SM1034,rice,Nilgiri Farms Ponni Rice,Nilgiri Farms,10000,10000gm,646,646,3.9,3,True,False,2
+SM1035,tea,Pothigai Leaf Tea,Pothigai,250,250 g,143,122,,0,True,False,2
+SM1036,nappies,Nilgiri Farms Large Nappies,Nilgiri Farms,80,80 pcs,1354,1212,3.3,212,True,False,2
+SM1037,dal,Sangam Moong Dal,Sangam,2000,2000gm,352,306,4.2,40,True,False,2
+SM1038,butter,Pothigai Salted Butter,Pothigai,100,100 g,58,49,3.6,12,True,False,2
+SM1039,eggs,Sangam Brown Eggs,Sangam,6,pack of 6,45,45,4.2,12,False,False,2
+SM1040,dal,Sangam Moong Dal,Sangam,2000,2 kg,359,359,4.4,40,True,False,2
+SM1041,dal,Marina Toor Dal,Marina,1000,1 kg,172,172,4.3,640,True,False,2
+SM1042,tea,Adyar Fresh Leaf Tea,Adyar Fresh,250,250gm,141,141,,0,True,False,2
+SM1043,tea,Adyar Fresh Green Tea,Adyar Fresh,500,500 g,332,285,,0,True,False,2
+SM1044,butter,Nilgiri Farms Cooking Butter,Nilgiri Farms,200,0.2 kg,108,102,,0,True,False,2
+SM1045,dal,Adyar Fresh Chana Dal,Adyar Fresh,500,0.5 kg,83,83,3.8,12,True,False,2
+SM1046,chips,Marina Tomato Chips,Marina,100,100 g,37,30,3.6,40,True,False,2
+SM1047,tea,Adyar Fresh Dust Tea,Adyar Fresh,500,500gm,270,270,,0,True,False,2
+SM1048,jam,Adyar Fresh Pineapple Jam,Adyar Fresh,200,200gm,113,95,,0,True,False,2
+SM1049,butter,Kaveri Cooking Butter,Kaveri,100,100 g,62,57,3.7,12,False,False,3
+SM1050,chips,Marina Tomato Chips,Marina,25,25gm,13,13,4.0,12,True,False,3
+SM1051,nappies,Marina Large Nappies,Marina,40,pack of 40,707,617,4.2,212,True,False,3
+SM1052,beer,Sangam Wheat Beer,Sangam,650,650 ml,188,188,4.5,212,True,False,3
+SM1053,milk,Kaveri Double Toned Milk,Kaveri,500,500 ml,35,35,4.9,640,False,False,3
+SM1054,chips,Kaveri Salted Chips,Kaveri,50,50 g,18,18,4.2,3,True,False,3
+SM1055,eggs,Pothigai Free Range Eggs,Pothigai,6,6 pcs,45,45,4.0,40,True,True,3
+SM1056,tea,Nilgiri Farms Green Tea,Nilgiri Farms,250,250 g,155,155,3.5,12,True,False,3
+SM1057,biscuits,Sangam Digestive Biscuits,Sangam,75,0.075 kg,15,12,4.0,640,True,False,3
+SM1058,butter,Pothigai Salted Butter,Pothigai,100,0.1 kg,55,55,3.7,3,True,False,3
+SM1059,jam,Nilgiri Farms Strawberry Jam,Nilgiri Farms,100,0.1 kg,49,49,4.1,40,True,False,3
+SM1060,butter,Nilgiri Farms Unsalted Butter,Nilgiri Farms,50,50gm,38,38,3.5,85,True,True,3
+SM1061,bread,Kaveri Milk Bread,Kaveri,800,800 g,92,92,3.5,3,False,False,3
+SM1062,biscuits,Pothigai Cream Biscuits,Pothigai,75,75 g,18,18,4.2,212,True,False,3
+SM1063,curd,Nilgiri Farms Low Fat Curd,Nilgiri Farms,800,800 g,80,74,4.0,85,True,False,3
+SM1064,milk,Pothigai Full Cream Milk,Pothigai,1000,1000 ml,78,78,4.0,40,False,False,3
+SM1065,nappies,Sangam Large Nappies,Sangam,80,80 pcs,1621,1307,4.1,85,True,True,3
+SM1066,chips,Marina Salted Chips,Marina,50,50gm,24,21,5.0,40,True,False,3
+SM1067,soap,Nilgiri Farms Neem Soap,Nilgiri Farms,200,0.2 kg,107,107,4.5,85,True,False,3
+SM1068,beer,Kaveri Strong Beer,Kaveri,650,650 ml,232,232,,0,True,False,3
+SM1069,rice,Sangam Ponni Rice,Sangam,2500,2500 g,159,146,,0,True,False,3
+SM1070,bread,Marina White Bread,Marina,400,400gm,50,50,4.7,212,True,False,3
+SM1071,rice,Pothigai Ponni Rice,Pothigai,10000,10000 g,690,650,,0,True,False,3
+SM1072,soap,Marina Lime Soap,Marina,50,0.05 kg,23,21,3.7,212,True,False,3
+SM1073,eggs,Marina White Eggs,Marina,12,12 pcs,70,70,3.8,3,True,False,4
+SM1074,bread,Sangam Brown Bread,Sangam,400,400 g,51,48,4.0,212,True,False,4
+SM1075,butter,Sangam Cooking Butter,Sangam,200,200gm,117,117,,0,True,False,4
+SM1076,biscuits,Kaveri Cream Biscuits,Kaveri,300,300 g,58,58,,0,False,False,4
+SM1077,rice,Marina Ponni Rice,Marina,10000,10000 g,669,537,4.2,640,True,False,4
+SM1078,jam,Nilgiri Farms Strawberry Jam,Nilgiri Farms,100,100 g,63,54,,0,True,False,4
+SM1079,beer,Kaveri Lager Beer,Kaveri,650,650 ml,225,180,,0,True,False,4
+SM1080,butter,Marina Cooking Butter,Marina,50,50gm,27,22,4.2,212,False,False,4
+SM1081,soap,Adyar Fresh Neem Soap,Adyar Fresh,100,100 g,45,45,4.3,40,True,False,4
+SM1082,jam,Nilgiri Farms Mixed Fruit Jam,Nilgiri Farms,400,0.4 kg,192,163,4.3,85,True,False,4
+SM1083,beer,Pothigai Wheat Beer,Pothigai,650,650 ml,192,158,4.3,40,True,False,4
+SM1084,jam,Adyar Fresh Pineapple Jam,Adyar Fresh,400,400 g,210,210,3.5,85,True,False,4
+SM1085,milk,Kaveri Skimmed Milk,Kaveri,1000,1000 ml,57,57,3.7,40,True,False,4
+SM1086,jam,Adyar Fresh Mango Jam,Adyar Fresh,200,0.2 kg,128,128,4.0,40,True,False,4
+SM1087,milk,Kaveri Double Toned Milk,Kaveri,1000,1000 ml,59,53,4.2,3,True,False,4
+SM1088,milk,Sangam Toned Milk,Sangam,1000,1000 ml,58,50,4.2,212,True,False,4
+SM1089,nappies,Pothigai Small Nappies,Pothigai,80,80 pcs,1776,1550,4.3,3,True,False,4
+SM1090,rice,Nilgiri Farms Idli Rice,Nilgiri Farms,5000,5000 g,409,343,4.0,640,True,False,4
+SM1091,bread,Nilgiri Farms Milk Bread,Nilgiri Farms,200,200gm,20,20,4.3,85,True,False,4
+SM1092,milk,Nilgiri Farms Full Cream Milk,Nilgiri Farms,250,250 ml,15,15,4.8,640,True,False,4
+SM1093,milk,Kaveri Full Cream Milk,Kaveri,250,250 ml,18,18,4.4,12,True,False,4
+SM1094,butter,Kaveri Unsalted Butter,Kaveri,100,100 g,60,51,3.3,640,True,False,4
+SM1095,jam,Marina Pineapple Jam,Marina,200,200 g,124,115,4.2,212,True,False,4
+SM1096,curd,Sangam Low Fat Curd,Sangam,400,400 g,44,42,4.6,12,True,False,4
+SM1097,soap,Marina Neem Soap,Marina,50,50 g,23,22,,0,True,False,5
+SM1098,nappies,Sangam Large Nappies,Sangam,40,pack of 40,812,670,3.6,212,True,False,5
+SM1099,milk,Adyar Fresh Skimmed Milk,Adyar Fresh,500,0.5 L,27,22,3.5,85,True,False,5
+SM1100,jam,Adyar Fresh Pineapple Jam,Adyar Fresh,400,400 g,186,186,,0,True,False,5
+SM1101,curd,Adyar Fresh Low Fat Curd,Adyar Fresh,400,400 g,40,40,,0,True,False,5
+SM1102,bread,Pothigai Milk Bread,Pothigai,400,400 g,47,40,3.7,212,True,False,5
+SM1103,eggs,Pothigai Brown Eggs,Pothigai,12,pack of 12,83,70,4.0,212,True,False,5
+SM1104,rice,Sangam Basmati Rice,Sangam,5000,5 kg,402,402,4.3,40,True,False,5
+SM1105,beer,Adyar Fresh Lager Beer,Adyar Fresh,650,650 ml,216,201,4.1,12,True,False,5
+SM1106,rice,Pothigai Ponni Rice,Pothigai,5000,5 kg,305,305,4.7,85,True,False,5
+SM1107,biscuits,Pothigai Digestive Biscuits,Pothigai,75,75gm,19,17,4.3,40,True,False,5
+SM1108,jam,Nilgiri Farms Pineapple Jam,Nilgiri Farms,100,100 g,44,44,4.3,40,True,False,5
+SM1109,eggs,Kaveri Brown Eggs,Kaveri,12,pack of 12,66,66,3.7,640,True,False,5
+SM1110,eggs,Kaveri Brown Eggs,Kaveri,12,12 pcs,83,83,,0,True,False,5
+SM1111,soap,Kaveri Rose Soap,Kaveri,100,100 g,45,39,4.0,12,True,False,5
+SM1112,beer,Adyar Fresh Wheat Beer,Adyar Fresh,650,650 ml,209,209,,0,True,False,5
+SM1113,eggs,Adyar Fresh White Eggs,Adyar Fresh,12,12 pcs,96,96,3.8,12,True,False,5
+SM1114,chips,Nilgiri Farms Tomato Chips,Nilgiri Farms,25,25 g,12,12,4.1,85,True,False,5
+SM1115,soap,Sangam Lime Soap,Sangam,200,200 g,95,95,3.9,3,True,False,5
+SM1116,dal,Pothigai Moong Dal,Pothigai,500,0.5 kg,97,97,3.5,640,True,False,5
+SM1117,curd,Sangam Low Fat Curd,Sangam,200,200gm,17,17,4.5,3,True,False,5
+SM1118,biscuits,Kaveri Digestive Biscuits,Kaveri,150,150 g,39,39,4.9,640,True,False,5
+SM1119,nappies,Sangam Medium Nappies,Sangam,40,40 pcs,851,754,,0,True,False,5
+SM1120,biscuits,Marina Cream Biscuits,Marina,150,0.15 kg,32,32,4.3,640,True,False,5
+SM1121,milk,Pothigai Full Cream Milk,Pothigai,500,500 ml,32,28,,0,True,False,6
+SM1122,biscuits,Adyar Fresh Cream Biscuits,Adyar Fresh,75,75 g,19,19,3.6,3,True,False,6
+SM1123,soap,Nilgiri Farms Lime Soap,Nilgiri Farms,100,100 g,58,55,4.5,12,True,False,6
+SM1124,beer,Kaveri Strong Beer,Kaveri,325,325 ml,114,98,4.0,3,True,False,6
+SM1125,nappies,Kaveri Large Nappies,Kaveri,40,40 pcs,713,646,3.6,640,True,False,6
+SM1126,bread,Nilgiri Farms Milk Bread,Nilgiri Farms,200,200 g,25,25,,0,True,False,6
+SM1127,tea,Sangam Dust Tea,Sangam,125,125 g,75,61,4.4,640,True,False,6
+SM1128,tea,Sangam Leaf Tea,Sangam,125,125 g,74,64,4.5,40,True,False,6
+SM1129,eggs,Pothigai Free Range Eggs,Pothigai,12,pack of 12,72,64,,0,True,False,6
+SM1130,bread,Marina Milk Bread,Marina,400,400 g,41,41,3.9,212,True,False,6
+SM1131,curd,Sangam Set Curd,Sangam,800,800 g,63,63,4.7,40,True,False,6
+SM1132,tea,Sangam Leaf Tea,Sangam,500,500 g,345,345,3.9,85,False,False,6
+SM1133,curd,Sangam Thick Curd,Sangam,400,0.4 kg,46,46,3.8,3,True,False,6
+SM1134,dal,Pothigai Urad Dal,Pothigai,2000,2 kg,388,388,3.4,212,True,False,6
+SM1135,soap,Adyar Fresh Lime Soap,Adyar Fresh,100,100gm,45,45,4.2,640,True,False,6
+SM1136,bread,Nilgiri Farms Multigrain Bread,Nilgiri Farms,400,400 g,48,45,3.3,85,True,False,6
+SM1137,rice,Pothigai Basmati Rice,Pothigai,2500,2.5 kg,154,154,4.2,640,True,False,6
+SM1138,curd,Marina Thick Curd,Marina,800,800 g,88,75,3.7,85,True,False,6
+SM1139,dal,Nilgiri Farms Toor Dal,Nilgiri Farms,2000,2 kg,309,309,4.9,640,True,False,6
+SM1140,beer,Marina Wheat Beer,Marina,650,650 ml,166,140,3.9,12,True,False,6
+SM1141,bread,Adyar Fresh Multigrain Bread,Adyar Fresh,200,0.2 kg,20,18,3.3,12,True,False,6
+SM1142,butter,Nilgiri Farms Unsalted Butter,Nilgiri Farms,100,0.1 kg,76,76,3.7,40,True,False,6
+SM1143,chips,Nilgiri Farms Onion Chips,Nilgiri Farms,25,25gm,13,13,3.5,3,True,False,6
+SM1144,eggs,Kaveri Free Range Eggs,Kaveri,12,12 pcs,73,73,3.5,40,True,False,6
+SM1145,soap,Nilgiri Farms Sandal Soap,Nilgiri Farms,50,0.05 kg,25,25,2.9,640,True,False,7
+SM1146,jam,Nilgiri Farms Strawberry Jam,Nilgiri Farms,200,200gm,87,79,3.8,40,False,False,7
+SM1147,tea,Sangam Leaf Tea,Sangam,500,500 g,322,322,4.7,40,True,False,7
+SM1148,butter,Nilgiri Farms Salted Butter,Nilgiri Farms,100,0.1 kg,59,50,4.1,212,True,False,7
+SM1149,milk,Sangam Toned Milk,Sangam,1000,1 L,69,57,,0,True,False,7
+SM1150,bread,Marina White Bread,Marina,200,200gm,23,23,4.5,12,False,False,7
+SM1151,jam,Pothigai Pineapple Jam,Pothigai,200,200 g,112,112,3.2,12,True,False,7
+SM1152,rice,Marina Idli Rice,Marina,2500,2.5 kg,170,140,3.8,640,False,False,7
+SM1153,bread,Sangam Brown Bread,Sangam,400,400 g,42,42,3.5,40,True,False,7
+SM1154,beer,Marina Strong Beer,Marina,650,0.65 L,180,171,,0,True,False,7
+SM1155,nappies,Nilgiri Farms Medium Nappies,Nilgiri Farms,40,40 pcs,777,777,4.7,12,True,False,7
+SM1156,tea,Kaveri Leaf Tea,Kaveri,500,500 g,363,363,,0,True,False,7
+SM1157,beer,Sangam Lager Beer,Sangam,650,0.65 L,223,201,3.3,3,True,False,7
+SM1158,butter,Nilgiri Farms Cooking Butter,Nilgiri Farms,100,100gm,67,67,4.1,640,True,False,7
+SM1159,soap,Sangam Neem Soap,Sangam,100,0.1 kg,53,53,,0,True,False,7
+SM1160,dal,Sangam Moong Dal,Sangam,1000,1000gm,186,151,,0,True,False,7
+SM1161,rice,Pothigai Basmati Rice,Pothigai,2500,2.5 kg,154,142,3.7,40,True,False,7
+SM1162,milk,Pothigai Full Cream Milk,Pothigai,250,250 ml,19,15,,0,True,False,7
+SM1163,beer,Sangam Wheat Beer,Sangam,650,650 ml,211,211,,0,True,False,7
+SM1164,dal,Sangam Urad Dal,Sangam,2000,2 kg,344,294,4.5,3,True,False,7
+SM1165,biscuits,Nilgiri Farms Cream Biscuits,Nilgiri Farms,150,0.15 kg,36,36,4.8,212,True,False,7
+SM1166,chips,Marina Tomato Chips,Marina,25,25 g,9,9,4.6,3,True,False,7
+SM1167,tea,Kaveri Leaf Tea,Kaveri,125,125 g,82,82,,0,True,False,7
+SM1168,eggs,Sangam Brown Eggs,Sangam,6,6 pcs,40,38,5.0,85,True,False,7

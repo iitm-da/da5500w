@@ -1,0 +1,201 @@
+{
+ "page": 6,
+ "pages": 7,
+ "per_page": 24,
+ "total": 168,
+ "next": "page-7.json",
+ "items": [
+  {
+   "sku": "SM1121",
+   "name": "Pothigai Full Cream Milk",
+   "category": "milk",
+   "price": 28,
+   "mrp": 32,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1122",
+   "name": "Adyar Fresh Cream Biscuits",
+   "category": "biscuits",
+   "price": 19,
+   "mrp": 19,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1123",
+   "name": "Nilgiri Farms Lime Soap",
+   "category": "soap",
+   "price": 55,
+   "mrp": 58,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1124",
+   "name": "Kaveri Strong Beer",
+   "category": "beer",
+   "price": 98,
+   "mrp": 114,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1125",
+   "name": "Kaveri Large Nappies",
+   "category": "nappies",
+   "price": 646,
+   "mrp": 713,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1126",
+   "name": "Nilgiri Farms Milk Bread",
+   "category": "bread",
+   "price": 25,
+   "mrp": 25,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1127",
+   "name": "Sangam Dust Tea",
+   "category": "tea",
+   "price": 61,
+   "mrp": 75,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1128",
+   "name": "Sangam Leaf Tea",
+   "category": "tea",
+   "price": 64,
+   "mrp": 74,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1129",
+   "name": "Pothigai Free Range Eggs",
+   "category": "eggs",
+   "price": 64,
+   "mrp": 72,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1130",
+   "name": "Marina Milk Bread",
+   "category": "bread",
+   "price": 41,
+   "mrp": 41,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1131",
+   "name": "Sangam Set Curd",
+   "category": "curd",
+   "price": 63,
+   "mrp": 63,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1132",
+   "name": "Sangam Leaf Tea",
+   "category": "tea",
+   "price": 345,
+   "mrp": 345,
+   "in_stock": false
+  },
+  {
+   "sku": "SM1133",
+   "name": "Sangam Thick Curd",
+   "category": "curd",
+   "price": 46,
+   "mrp": 46,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1134",
+   "name": "Pothigai Urad Dal",
+   "category": "dal",
+   "price": 388,
+   "mrp": 388,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1135",
+   "name": "Adyar Fresh Lime Soap",
+   "category": "soap",
+   "price": 45,
+   "mrp": 45,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1136",
+   "name": "Nilgiri Farms Multigrain Bread",
+   "category": "bread",
+   "price": 45,
+   "mrp": 48,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1137",
+   "name": "Pothigai Basmati Rice",
+   "category": "rice",
+   "price": 154,
+   "mrp": 154,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1138",
+   "name": "Marina Thick Curd",
+   "category": "curd",
+   "price": 75,
+   "mrp": 88,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1139",
+   "name": "Nilgiri Farms Toor Dal",
+   "category": "dal",
+   "price": 309,
+   "mrp": 309,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1140",
+   "name": "Marina Wheat Beer",
+   "category": "beer",
+   "price": 140,
+   "mrp": 166,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1141",
+   "name": "Adyar Fresh Multigrain Bread",
+   "category": "bread",
+   "price": 18,
+   "mrp": 20,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1142",
+   "name": "Nilgiri Farms Unsalted Butter",
+   "category": "butter",
+   "price": 76,
+   "mrp": 76,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1143",
+   "name": "Nilgiri Farms Onion Chips",
+   "category": "chips",
+   "price": 13,
+   "mrp": 13,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1144",
+   "name": "Kaveri Free Range Eggs",
+   "category": "eggs",
+   "price": 73,
+   "mrp": 73,
+   "in_stock": true
+  }
+ ]
+}

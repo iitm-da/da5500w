@@ -1,0 +1,201 @@
+{
+ "page": 4,
+ "pages": 7,
+ "per_page": 24,
+ "total": 168,
+ "next": "page-5.json",
+ "items": [
+  {
+   "sku": "SM1073",
+   "name": "Marina White Eggs",
+   "category": "eggs",
+   "price": 70,
+   "mrp": 70,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1074",
+   "name": "Sangam Brown Bread",
+   "category": "bread",
+   "price": 48,
+   "mrp": 51,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1075",
+   "name": "Sangam Cooking Butter",
+   "category": "butter",
+   "price": 117,
+   "mrp": 117,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1076",
+   "name": "Kaveri Cream Biscuits",
+   "category": "biscuits",
+   "price": 58,
+   "mrp": 58,
+   "in_stock": false
+  },
+  {
+   "sku": "SM1077",
+   "name": "Marina Ponni Rice",
+   "category": "rice",
+   "price": 537,
+   "mrp": 669,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1078",
+   "name": "Nilgiri Farms Strawberry Jam",
+   "category": "jam",
+   "price": 54,
+   "mrp": 63,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1079",
+   "name": "Kaveri Lager Beer",
+   "category": "beer",
+   "price": 180,
+   "mrp": 225,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1080",
+   "name": "Marina Cooking Butter",
+   "category": "butter",
+   "price": 22,
+   "mrp": 27,
+   "in_stock": false
+  },
+  {
+   "sku": "SM1081",
+   "name": "Adyar Fresh Neem Soap",
+   "category": "soap",
+   "price": 45,
+   "mrp": 45,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1082",
+   "name": "Nilgiri Farms Mixed Fruit Jam",
+   "category": "jam",
+   "price": 163,
+   "mrp": 192,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1083",
+   "name": "Pothigai Wheat Beer",
+   "category": "beer",
+   "price": 158,
+   "mrp": 192,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1084",
+   "name": "Adyar Fresh Pineapple Jam",
+   "category": "jam",
+   "price": 210,
+   "mrp": 210,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1085",
+   "name": "Kaveri Skimmed Milk",
+   "category": "milk",
+   "price": 57,
+   "mrp": 57,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1086",
+   "name": "Adyar Fresh Mango Jam",
+   "category": "jam",
+   "price": 128,
+   "mrp": 128,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1087",
+   "name": "Kaveri Double Toned Milk",
+   "category": "milk",
+   "price": 53,
+   "mrp": 59,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1088",
+   "name": "Sangam Toned Milk",
+   "category": "milk",
+   "price": 50,
+   "mrp": 58,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1089",
+   "name": "Pothigai Small Nappies",
+   "category": "nappies",
+   "price": 1550,
+   "mrp": 1776,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1090",
+   "name": "Nilgiri Farms Idli Rice",
+   "category": "rice",
+   "price": 343,
+   "mrp": 409,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1091",
+   "name": "Nilgiri Farms Milk Bread",
+   "category": "bread",
+   "price": 20,
+   "mrp": 20,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1092",
+   "name": "Nilgiri Farms Full Cream Milk",
+   "category": "milk",
+   "price": 15,
+   "mrp": 15,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1093",
+   "name": "Kaveri Full Cream Milk",
+   "category": "milk",
+   "price": 18,
+   "mrp": 18,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1094",
+   "name": "Kaveri Unsalted Butter",
+   "category": "butter",
+   "price": 51,
+   "mrp": 60,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1095",
+   "name": "Marina Pineapple Jam",
+   "category": "jam",
+   "price": 115,
+   "mrp": 124,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1096",
+   "name": "Sangam Low Fat Curd",
+   "category": "curd",
+   "price": 42,
+   "mrp": 44,
+   "in_stock": true
+  }
+ ]
+}

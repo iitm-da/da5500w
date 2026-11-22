@@ -1,0 +1,13 @@
+# robots.txt of the simulated shop (DA5500W Module 2)
+# A real site serves this file from the root of its host.
+User-agent: *
+Disallow: /account/
+Disallow: /api/
+Allow: /api/products/
+Disallow: /search
+Crawl-delay: 2
+
+User-agent: GPTBot
+Disallow: /
+
+Sitemap: https://iitm-da.github.io/da5500w/module2/data/shop/sitemap.xml

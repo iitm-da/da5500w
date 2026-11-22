@@ -1,0 +1,11 @@
+body{font-family:system-ui,sans-serif;margin:0;background:#f6f7f8;color:#14222b}
+header{background:#0b2a4a;color:#fff;padding:14px 28px}header a{color:#cfe3f7;margin-right:18px;text-decoration:none}
+main{padding:20px 28px;max-width:1100px;margin:auto}h1{font-size:22px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+article.product{background:#fff;border:1px solid #dce4e8;border-radius:8px;padding:12px}
+article.sponsored{border-color:#b98a1f;background:#fffaf0}
+.name{font-weight:600;margin:0 0 4px;font-size:15px}.pack,.cat{color:#53666f;font-size:13px}
+.price{font-size:18px;font-weight:700;margin-top:6px}.mrp{color:#8fa0a9;font-size:13px;margin-left:6px}
+.rating{color:#b98a1f}.count{color:#53666f;font-size:12px}.badge{font-size:11px;color:#b02f3b;font-weight:700}
+.tag{font-size:10px;letter-spacing:.08em;color:#8f5d0a}
+nav.pages{margin:20px 0}nav.pages a,nav.pages b{margin-right:10px}

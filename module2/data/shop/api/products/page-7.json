@@ -1,0 +1,201 @@
+{
+ "page": 7,
+ "pages": 7,
+ "per_page": 24,
+ "total": 168,
+ "next": null,
+ "items": [
+  {
+   "sku": "SM1145",
+   "name": "Nilgiri Farms Sandal Soap",
+   "category": "soap",
+   "price": 25,
+   "mrp": 25,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1146",
+   "name": "Nilgiri Farms Strawberry Jam",
+   "category": "jam",
+   "price": 79,
+   "mrp": 87,
+   "in_stock": false
+  },
+  {
+   "sku": "SM1147",
+   "name": "Sangam Leaf Tea",
+   "category": "tea",
+   "price": 322,
+   "mrp": 322,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1148",
+   "name": "Nilgiri Farms Salted Butter",
+   "category": "butter",
+   "price": 50,
+   "mrp": 59,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1149",
+   "name": "Sangam Toned Milk",
+   "category": "milk",
+   "price": 57,
+   "mrp": 69,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1150",
+   "name": "Marina White Bread",
+   "category": "bread",
+   "price": 23,
+   "mrp": 23,
+   "in_stock": false
+  },
+  {
+   "sku": "SM1151",
+   "name": "Pothigai Pineapple Jam",
+   "category": "jam",
+   "price": 112,
+   "mrp": 112,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1152",
+   "name": "Marina Idli Rice",
+   "category": "rice",
+   "price": 140,
+   "mrp": 170,
+   "in_stock": false
+  },
+  {
+   "sku": "SM1153",
+   "name": "Sangam Brown Bread",
+   "category": "bread",
+   "price": 42,
+   "mrp": 42,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1154",
+   "name": "Marina Strong Beer",
+   "category": "beer",
+   "price": 171,
+   "mrp": 180,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1155",
+   "name": "Nilgiri Farms Medium Nappies",
+   "category": "nappies",
+   "price": 777,
+   "mrp": 777,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1156",
+   "name": "Kaveri Leaf Tea",
+   "category": "tea",
+   "price": 363,
+   "mrp": 363,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1157",
+   "name": "Sangam Lager Beer",
+   "category": "beer",
+   "price": 201,
+   "mrp": 223,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1158",
+   "name": "Nilgiri Farms Cooking Butter",
+   "category": "butter",
+   "price": 67,
+   "mrp": 67,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1159",
+   "name": "Sangam Neem Soap",
+   "category": "soap",
+   "price": 53,
+   "mrp": 53,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1160",
+   "name": "Sangam Moong Dal",
+   "category": "dal",
+   "price": 151,
+   "mrp": 186,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1161",
+   "name": "Pothigai Basmati Rice",
+   "category": "rice",
+   "price": 142,
+   "mrp": 154,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1162",
+   "name": "Pothigai Full Cream Milk",
+   "category": "milk",
+   "price": 15,
+   "mrp": 19,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1163",
+   "name": "Sangam Wheat Beer",
+   "category": "beer",
+   "price": 211,
+   "mrp": 211,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1164",
+   "name": "Sangam Urad Dal",
+   "category": "dal",
+   "price": 294,
+   "mrp": 344,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1165",
+   "name": "Nilgiri Farms Cream Biscuits",
+   "category": "biscuits",
+   "price": 36,
+   "mrp": 36,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1166",
+   "name": "Marina Tomato Chips",
+   "category": "chips",
+   "price": 9,
+   "mrp": 9,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1167",
+   "name": "Kaveri Leaf Tea",
+   "category": "tea",
+   "price": 82,
+   "mrp": 82,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1168",
+   "name": "Sangam Brown Eggs",
+   "category": "eggs",
+   "price": 38,
+   "mrp": 40,
+   "in_stock": true
+  }
+ ]
+}

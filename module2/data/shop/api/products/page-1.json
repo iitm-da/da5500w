@@ -1,0 +1,201 @@
+{
+ "page": 1,
+ "pages": 7,
+ "per_page": 24,
+ "total": 168,
+ "next": "page-2.json",
+ "items": [
+  {
+   "sku": "SM1001",
+   "name": "Sangam Medium Nappies",
+   "category": "nappies",
+   "price": 841,
+   "mrp": 841,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1002",
+   "name": "Adyar Fresh Thick Curd",
+   "category": "curd",
+   "price": 38,
+   "mrp": 38,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1003",
+   "name": "Adyar Fresh Toor Dal",
+   "category": "dal",
+   "price": null,
+   "mrp": 91,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1004",
+   "name": "Sangam Cream Biscuits",
+   "category": "biscuits",
+   "price": 30,
+   "mrp": 37,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1005",
+   "name": "Sangam Salted Chips",
+   "category": "chips",
+   "price": 40,
+   "mrp": 40,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1006",
+   "name": "Nilgiri Farms Set Curd",
+   "category": "curd",
+   "price": 60,
+   "mrp": 66,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1007",
+   "name": "Kaveri Tomato Chips",
+   "category": "chips",
+   "price": 41,
+   "mrp": 41,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1008",
+   "name": "Marina Medium Nappies",
+   "category": "nappies",
+   "price": 1117,
+   "mrp": 1262,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1009",
+   "name": "Sangam Toor Dal",
+   "category": "dal",
+   "price": 166,
+   "mrp": 191,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1010",
+   "name": "Sangam Glucose Biscuits",
+   "category": "biscuits",
+   "price": 33,
+   "mrp": 33,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1011",
+   "name": "Sangam Low Fat Curd",
+   "category": "curd",
+   "price": 21,
+   "mrp": 21,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1012",
+   "name": "Nilgiri Farms Urad Dal",
+   "category": "dal",
+   "price": 160,
+   "mrp": 183,
+   "in_stock": false
+  },
+  {
+   "sku": "SM1013",
+   "name": "Nilgiri Farms Marie Biscuits",
+   "category": "biscuits",
+   "price": 63,
+   "mrp": 69,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1014",
+   "name": "Marina Wheat Beer",
+   "category": "beer",
+   "price": 379,
+   "mrp": 379,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1015",
+   "name": "Marina Ponni Rice",
+   "category": "rice",
+   "price": null,
+   "mrp": 165,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1016",
+   "name": "Adyar Fresh Leaf Tea",
+   "category": "tea",
+   "price": 268,
+   "mrp": 268,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1017",
+   "name": "Nilgiri Farms Lime Soap",
+   "category": "soap",
+   "price": 90,
+   "mrp": 95,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1018",
+   "name": "Kaveri Onion Chips",
+   "category": "chips",
+   "price": 20,
+   "mrp": 21,
+   "in_stock": false
+  },
+  {
+   "sku": "SM1019",
+   "name": "Marina Rose Soap",
+   "category": "soap",
+   "price": 43,
+   "mrp": 43,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1020",
+   "name": "Marina Full Cream Milk",
+   "category": "milk",
+   "price": 48,
+   "mrp": 55,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1021",
+   "name": "Adyar Fresh Free Range Eggs",
+   "category": "eggs",
+   "price": 131,
+   "mrp": 140,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1022",
+   "name": "Pothigai Glucose Biscuits",
+   "category": "biscuits",
+   "price": 72,
+   "mrp": 72,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1023",
+   "name": "Pothigai Set Curd",
+   "category": "curd",
+   "price": 18,
+   "mrp": 18,
+   "in_stock": true
+  },
+  {
+   "sku": "SM1024",
+   "name": "Sangam Unsalted Butter",
+   "category": "butter",
+   "price": 97,
+   "mrp": 119,
+   "in_stock": true
+  }
+ ]
+}

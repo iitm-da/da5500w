@@ -1,0 +1,89 @@
+{
+ "week": "2026-W48",
+ "offers": [
+  {
+   "sku": "SM1162",
+   "name": "Pothigai Full Cream Milk",
+   "price": 15,
+   "mrp": 19,
+   "off_pct": 21
+  },
+  {
+   "sku": "SM1057",
+   "name": "Sangam Digestive Biscuits",
+   "price": 12,
+   "mrp": 15,
+   "off_pct": 20
+  },
+  {
+   "sku": "SM1077",
+   "name": "Marina Ponni Rice",
+   "price": 537,
+   "mrp": 669,
+   "off_pct": 20
+  },
+  {
+   "sku": "SM1079",
+   "name": "Kaveri Lager Beer",
+   "price": 180,
+   "mrp": 225,
+   "off_pct": 20
+  },
+  {
+   "sku": "SM1004",
+   "name": "Sangam Cream Biscuits",
+   "price": 30,
+   "mrp": 37,
+   "off_pct": 19
+  },
+  {
+   "sku": "SM1027",
+   "name": "Pothigai Salted Chips",
+   "price": 38,
+   "mrp": 47,
+   "off_pct": 19
+  },
+  {
+   "sku": "SM1028",
+   "name": "Marina White Eggs",
+   "price": 145,
+   "mrp": 179,
+   "off_pct": 19
+  },
+  {
+   "sku": "SM1046",
+   "name": "Marina Tomato Chips",
+   "price": 30,
+   "mrp": 37,
+   "off_pct": 19
+  },
+  {
+   "sku": "SM1080",
+   "name": "Marina Cooking Butter",
+   "price": 22,
+   "mrp": 27,
+   "off_pct": 19
+  },
+  {
+   "sku": "SM1099",
+   "name": "Adyar Fresh Skimmed Milk",
+   "price": 22,
+   "mrp": 27,
+   "off_pct": 19
+  },
+  {
+   "sku": "SM1127",
+   "name": "Sangam Dust Tea",
+   "price": 61,
+   "mrp": 75,
+   "off_pct": 19
+  },
+  {
+   "sku": "SM1160",
+   "name": "Sangam Moong Dal",
+   "price": 151,
+   "mrp": 186,
+   "off_pct": 19
+  }
+ ]
+}

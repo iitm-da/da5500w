@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Offers this week</title>
+<link rel="stylesheet" href="shop.css">
+</head>
+<body>
+<header><a href="index.html">Supermarket Online</a><a href="catalogue/page-1.html">Catalogue</a><a href="offers.html">Offers</a></header>
+<main>
+<h1>Offers this week</h1>
+<p id="status">Loading offers ...</p>
+<div class="grid" id="offers"></div>
+<script>
+/* the offers are not in this file: the browser fetches them after the page has loaded */
+setTimeout(function () {
+  fetch('api/offers.json').then(function (r) { return r.json(); }).then(function (d) {
+    var box = document.getElementById('offers');
+    d.offers.forEach(function (o) {
+      var a = document.createElement('article');
+      a.className = 'product offer'; a.dataset.sku = o.sku;
+      a.innerHTML = '<h2 class="name">' + o.name + '</h2><div class="price">\u20B9' + o.price +
+        '<s class="mrp">\u20B9' + o.mrp + '</s></div><div class="badge">' + o.off_pct + '% off</div>';
+      box.appendChild(a);
+    });
+    document.getElementById('status').textContent = d.offers.length + ' offers in week ' + d.week;
+  });
+}, 400);
+</script>
+</main>
+</body>
+</html>
