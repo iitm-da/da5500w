@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>DA5500W M2 L1: Getting Data from the Web</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400..700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --paper:#FFFFFF; --card:#FFFFFF; --ink:#0E1330; --soft:#5D6488;
+  --line:#CED3E6; --hair:#E2E5F0; --surround:#E4E7F1;
+  --code-bg:#0E1330; --code-ink:#D9E4E9;
+  --t-cls:#2B4BFF; --t-qnt:#9B2C7E; --t-grp:#0E7A55; --t-anc:#A87900;
+  --t-asr:#E8382D; --t-alt:#4B5A87; --t-dot:#6A4CA8; --t-ref:#0E7A55;
+  --sw:1280px; --sh:720px;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --disp:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+/* ligatures OFF: a deck full of ->, =>, != and <= must show them as typed */
+*,*::before,*::after{font-variant-ligatures:none;
+  font-feature-settings:"liga" 0,"clig" 0,"calt" 0,"dlig" 0}
+html,body{height:100%;background:var(--surround);overflow:hidden;
+  font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased}
+#stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#deck{width:var(--sw);height:var(--sh);position:relative;transform-origin:center center;
+  box-shadow:0 20px 70px rgba(0,0,0,.5)}
+.slide{position:absolute;inset:0;background:var(--paper);padding:44px 58px 62px;
+  display:none;flex-direction:column}
+.slide.on{display:flex}
+@media (prefers-reduced-motion:no-preference){
+  .slide.on{animation:fi .22s ease}
+  @keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+}
+/* ---------- headings ---------- */
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--soft);margin-bottom:9px;display:flex;gap:10px;align-items:center}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+h1.t{font-family:var(--disp);font-weight:700;font-size:34px;line-height:1.1;
+  letter-spacing:-.018em;margin-bottom:4px}
+h1.t.sm{font-size:29px}
+h1.t small{display:block;font-family:var(--body);font-weight:400;font-size:15px;
+  color:var(--soft);letter-spacing:0;margin-top:6px;line-height:1.42}
+h1.t small.tight{font-size:13.5px;line-height:1.4}
+h2.s{font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:-.005em;margin-bottom:7px}
+h2.s.xs{font-size:14px;margin-bottom:5px}
+.body{font-size:14.5px;line-height:1.5}
+.wrap{flex:1;min-height:0;margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;flex:1;min-height:0}
+.cols.w6040{grid-template-columns:1.5fr 1fr}
+.cols.w4060{grid-template-columns:1fr 1.5fr}
+.cols.w7030{grid-template-columns:2.2fr 1fr}
+.cols.w3070{grid-template-columns:1fr 2.2fr}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+.colstack{display:flex;flex-direction:column;gap:10px;min-height:0}
+ul.b{list-style:none;font-size:14px;line-height:1.46}
+ul.b li{position:relative;padding-left:15px;margin-bottom:8px}
+ul.b li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;
+  background:var(--line);border:1px solid var(--soft)}
+ul.b li strong{font-weight:600}
+ul.b.sm{font-size:12.6px;line-height:1.44}
+ul.b.sm li{margin-bottom:6px;padding-left:13px}
+ul.b.sm li::before{top:7px;width:5px;height:5px}
+ol.n{list-style:none;counter-reset:st;font-size:13px;line-height:1.45}
+ol.n li{position:relative;padding-left:26px;margin-bottom:9px;counter-increment:st}
+ol.n li::before{content:counter(st);position:absolute;left:0;top:1px;width:18px;height:18px;
+  background:var(--ink);color:#fff;font-family:var(--mono);font-size:10px;
+  display:flex;align-items:center;justify-content:center;border-radius:2px}
+/* ---------- code ---------- */
+pre.code{background:var(--code-bg);color:var(--code-ink);font-family:var(--mono);
+  font-size:12.5px;line-height:1.55;padding:12px 14px;overflow:hidden;
+  border-left:3px solid #2B4BFF;white-space:pre;tab-size:4}
+pre.code.sm{font-size:11.5px;line-height:1.5}
+pre.code.xs{font-size:10.5px;line-height:1.45}
+pre.code.xxs{font-size:9.6px;line-height:1.4}
+.out{background:var(--card);border:1px solid var(--hair);border-left:3px solid #8A90B0;
+  font-family:var(--mono);font-size:11.5px;line-height:1.5;padding:10px 13px;
+  white-space:pre;overflow:hidden;color:#1A2152}
+.out.xs{font-size:10.3px;line-height:1.42}
+.out.xxs{font-size:9.5px;line-height:1.38}
+.outlbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--soft);margin-bottom:4px}
+/* text-transform:none is load-bearing — .outlbl and .eyebrow are uppercase,
+   and an uppercased code token is a different token */
+code.k{font-family:var(--mono);font-size:.94em;background:var(--card);
+  border:1px solid var(--hair);padding:1px 5px;border-radius:2px;white-space:nowrap;
+  text-transform:none}
+/* python token colours, dark ground */
+pre.code .py-kw{color:#8FB8FF}
+pre.code .py-str{color:#B7E39B}
+pre.code .py-cm{color:#6F8896;font-style:italic}
+pre.code .py-fn{color:#F0C46B}
+pre.code .py-num{color:#F58ACE}
+pre.code .py-bi{color:#C0A6F5}
+/* http token colours */
+pre.code .h-mth{color:#F0C46B;font-weight:700}
+pre.code .h-url{color:#E9F2F6}
+pre.code .h-hdr{color:#6FB6F0}
+pre.code .h-val{color:#B7E39B}
+pre.code .h-ok{color:#55D6A2;font-weight:700}
+pre.code .h-bad{color:#FF9090;font-weight:700}
+pre.code .h-dim{color:#6F8896}
+/* json token colours */
+pre.code .j-key{color:#6FB6F0}
+pre.code .j-str{color:#B7E39B}
+pre.code .j-num{color:#F58ACE}
+pre.code .j-pun{color:#8CA3AF}
+/* light-ground variants for .out blocks */
+.out .h-hdr{color:#2B4BFF;font-weight:500}
+.out .h-ok{color:#0E7A55;font-weight:700}
+.out .h-bad{color:#E8382D;font-weight:700}
+.out .h-dim{color:#8A90B0}
+.out .j-key{color:#2B4BFF}
+.out .j-str{color:#0E7A55}
+.out .j-num{color:#9B2C7E}
+/* ---------- tables ---------- */
+table.d{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card)}
+table.d th,table.d td{border:1px solid var(--hair);padding:5.5px 9px;text-align:left;vertical-align:top}
+table.d th{background:var(--ink);color:#fff;font-weight:600;font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase}
+table.d td:first-child{font-family:var(--mono);white-space:nowrap}
+table.d th.m,table.d td.m{font-family:var(--mono);text-align:right;white-space:nowrap}
+table.d.sm{font-size:11.5px}
+table.d.sm th,table.d.sm td{padding:4px 8px}
+table.d.xs{font-size:10.6px}
+table.d.xs th,table.d.xs td{padding:3.5px 7px}
+table.d tr.hl td{background:#FDE9E7}
+table.d.tight th,table.d.tight td{padding:2.4px 7px}
+table.d.tight th{text-transform:none}
+table.d.tight tr.tot td{font-weight:700}
+
+table.d tr.ok td{background:#F3FBF7}
+table.d tr.wr td{background:#FFF6D1}
+table.d.free td:first-child{white-space:normal;font-family:var(--body)}
+table.d td.m{font-family:var(--mono)}
+table.d td.o{font-family:var(--mono);font-size:10.8px;color:#1A2152;white-space:nowrap}
+table.d td.c{text-align:center;font-family:var(--mono)}
+/* ---------- cards & callouts ---------- */
+.card{background:var(--card);border:1px solid var(--hair);border-top:3px solid var(--ink);
+  padding:11px 13px}
+.card h3{font-family:var(--disp);font-size:14.5px;font-weight:700;margin-bottom:5px}
+.card h3 .num{font-family:var(--mono);font-size:11px;color:var(--soft);margin-right:7px}
+.card p{font-size:12.5px;line-height:1.45;color:#1A2152}
+.card.sm{padding:9px 11px}
+.card.sm h3{font-size:13px}
+.card.sm p{font-size:11.6px;line-height:1.42}
+.card.b{border-top-color:var(--t-cls)}
+.card.g{border-top-color:var(--t-grp)}
+.card.r{border-top-color:var(--t-asr)}
+.card.o{border-top-color:var(--t-anc)}
+.card.p{border-top-color:var(--t-qnt)}
+.callout{background:var(--card);border:1px solid var(--hair);border-left:4px solid var(--t-cls);
+  padding:10px 14px;font-size:13.5px;line-height:1.46}
+.callout.sm{font-size:12.3px;padding:8px 12px;line-height:1.44}
+.callout.warn{border-left-color:var(--t-anc);background:#FFF6D1}
+.callout.bad{border-left-color:var(--t-asr);background:#FDE9E7}
+.callout.good{border-left-color:var(--t-grp);background:#F3FBF7}
+.callout b{font-weight:700}
+.tag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;
+  text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;border-radius:2px;
+  vertical-align:2px;margin-right:7px}
+.tag.r{color:var(--t-asr)}.tag.g{color:var(--t-grp)}.tag.b{color:var(--t-cls)}
+.tag.o{color:var(--t-anc)}.tag.p{color:var(--t-qnt)}
+.jsbadge{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  background:var(--t-anc);color:#fff;padding:2px 6px;border-radius:2px}
+.hit{background:#BFE3F2;border-radius:2px;padding:1px 0;
+  box-shadow:0 1px 0 #12556F inset,0 -2px 0 #12556F inset}
+.hit.bad{background:#F8D3D7;box-shadow:0 1px 0 #E8382D inset,0 -2px 0 #E8382D inset}
+.hit.wrn{background:#FFF6D1;box-shadow:0 1px 0 #A87900 inset,0 -2px 0 #A87900 inset}
+/* ---------- the route ladder (recurs in all four lectures) ---------- */
+.ladder{display:grid;grid-template-columns:38px 1fr;gap:0 12px}
+.ladder .rung{display:contents}
+.ladder .num{font-family:var(--mono);font-size:11px;color:#fff;background:var(--soft);
+  display:flex;align-items:center;justify-content:center;height:100%;border-radius:2px}
+.ladder .num.on{background:var(--t-asr)}
+.ladder .txt{background:var(--card);border:1px solid var(--hair);padding:8px 12px;margin-bottom:8px}
+.ladder .txt.on{border-left:3px solid var(--t-asr);background:#FDE9E7}
+.ladder .txt h4{font-family:var(--disp);font-size:13.5px;font-weight:700;margin-bottom:2px}
+.ladder .txt p{font-size:11.8px;line-height:1.42;color:#1A2152}
+/* ---------- motivation rows ---------- */
+.mrow{display:grid;grid-template-columns:118px 1fr 250px;gap:13px;align-items:center;
+  background:var(--card);border:1px solid var(--hair);border-left:3px solid var(--line);
+  padding:9px 13px}
+.mrow>.k{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--soft);line-height:1.5}
+.mrow>.v{font-family:var(--mono);font-size:10.4px;line-height:1.55;white-space:pre;
+  overflow:hidden;color:#1A2152}
+.mrow>.n{font-size:11.6px;line-height:1.4;color:#1A2152;border-left:1px solid var(--hair);
+  padding-left:13px;align-self:stretch;display:grid;align-content:center}
+.mrow>.n b{font-weight:700;color:var(--ink)}
+/* ---------- request/response wire diagram ---------- */
+.wire{display:grid;grid-template-columns:1fr 96px 1fr;align-items:center;gap:0}
+.wire .box{background:var(--card);border:1px solid var(--hair);border-top:3px solid var(--ink);
+  padding:10px 13px}
+.wire .box h4{font-family:var(--disp);font-size:13px;font-weight:700;margin-bottom:4px}
+.wire .arrows{display:flex;flex-direction:column;gap:16px;padding:0 6px}
+.wire .ar{position:relative;height:2px;background:var(--t-cls)}
+.wire .ar::after{content:"";position:absolute;right:-1px;top:-4px;border-left:8px solid var(--t-cls);
+  border-top:5px solid transparent;border-bottom:5px solid transparent}
+.wire .ar.back{background:var(--t-grp)}
+.wire .ar.back::after{right:auto;left:-1px;border-left:none;border-right:8px solid var(--t-grp)}
+.wire .ar b{position:absolute;left:50%;top:-17px;transform:translateX(-50%);
+  font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--soft);white-space:nowrap;background:var(--paper);padding:0 5px}
+/* ---------- widget: request inspector ---------- */
+.insp{display:grid;grid-template-columns:250px 1fr;gap:14px;flex:1;min-height:0}
+.insp .ctl{display:flex;flex-direction:column;gap:7px;min-height:0;overflow:auto}
+.insp .ctl .hdr{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--soft);margin-top:4px}
+.tgl{display:flex;align-items:flex-start;gap:8px;background:var(--card);border:1px solid var(--hair);
+  padding:6px 9px;cursor:pointer;font-size:11.5px;line-height:1.35}
+.tgl:hover{background:#E8ECFF}
+.tgl input{margin-top:2px;accent-color:var(--t-cls);flex:none}
+.tgl b{font-family:var(--mono);font-size:11px;font-weight:500;display:block}
+.tgl i{font-style:normal;color:var(--soft);font-size:10.4px;display:block;line-height:1.3}
+.tgl.on{border-left:3px solid var(--t-grp)}
+.insp .res{display:flex;flex-direction:column;gap:9px;min-height:0}
+#wire{flex:none}
+#verdict{flex:none;background:var(--card);border:1px solid var(--hair);
+  border-left:4px solid var(--soft);padding:11px 14px;font-size:12.6px;line-height:1.46}
+#verdict.ok{border-left-color:var(--t-grp);background:#F3FBF7}
+#verdict.bad{border-left-color:var(--t-asr);background:#FDE9E7}
+#verdict .st{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.01em;
+  display:block;margin-bottom:5px}
+#verdict.ok .st{color:var(--t-grp)}
+#verdict.bad .st{color:var(--t-asr)}
+#verdict .why{color:#1A2152}
+#verdict .why em{font-style:normal;font-family:var(--mono);font-size:11.6px;color:var(--ink)}
+/* ---------- cover ---------- */
+.cover{justify-content:center;padding:0 68px 70px}
+.cover .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--t-asr);margin-bottom:20px}
+.cover h1{font-family:var(--disp);font-weight:800;font-size:78px;line-height:.96;
+  letter-spacing:-.035em}
+.cover .pt{font-family:var(--disp);font-weight:700;font-size:28px;color:var(--soft);
+  letter-spacing:-.02em;margin-top:10px}
+.cover .rule{width:96px;height:4px;background:var(--ink);margin:24px 0 22px}
+.cover .sub{font-size:16.5px;color:#1A2152;max-width:640px;line-height:1.5}
+.cover .by{margin-top:26px;font-family:var(--disp);font-weight:700;font-size:19px;
+  color:var(--ink);letter-spacing:-.01em}
+.cover .by span{display:block;font-family:var(--mono);font-size:10px;font-weight:400;
+  letter-spacing:.2em;text-transform:uppercase;color:#8A90B0;margin-bottom:5px}
+.meta{margin-top:30px;font-family:var(--mono);font-size:11.5px;color:var(--soft)}
+.meta td{padding:4px 40px 4px 0;text-transform:uppercase;letter-spacing:.1em}
+.meta td:first-child{color:#8A90B0}
+.coverpat{position:absolute;right:0;top:0;bottom:0;width:430px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;gap:3px;opacity:.45;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 45%);
+  mask-image:linear-gradient(90deg,transparent,#000 45%)}
+.coverpat div{font-family:var(--mono);font-size:12.5px;white-space:nowrap;letter-spacing:.02em}
+.coverpat .h-mth{color:var(--t-anc);font-weight:700}
+.coverpat .h-hdr{color:var(--t-cls)}
+.coverpat .h-val{color:var(--t-grp)}
+.coverpat .h-bad{color:var(--t-asr);font-weight:700}
+.coverpat .h-dim{color:#9AA3CC}
+/* ---------- embedded demo ---------- */
+.demo-frame{flex:1;width:100%;min-height:0;display:block;border:1px solid var(--line);
+  background:var(--paper)}
+.demo-link{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--t-cls);
+  text-decoration:none;border-bottom:1px solid currentColor;margin-left:8px;white-space:nowrap}
+/* ---------- rail ---------- */
+.rail{position:absolute;left:0;right:0;bottom:0;height:30px;background:var(--card);
+  border-top:1.5px solid var(--ink);display:flex;align-items:center;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--soft)}
+.rail .a{padding:0 16px;flex:1}
+.rail .n{padding:0 16px;border-left:1px solid var(--hair);color:var(--ink);white-space:nowrap}
+.rail .b{padding:0 16px;border-left:1px solid var(--hair);color:var(--ink);font-weight:500;
+  max-width:340px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.rail .c{padding:0 16px;border-left:1px solid var(--hair);width:186px;text-align:right;
+  white-space:nowrap}
+#pbar{position:absolute;left:0;top:0;height:3px;background:var(--t-asr);z-index:20;transition:width .2s}
+/* ---------- nav ---------- */
+#nav{position:fixed;right:16px;bottom:12px;display:flex;gap:7px;z-index:40}
+#nav button{width:36px;height:36px;border:1px solid #46606E;background:#1B2E39;color:#CFDDE3;
+  font-size:16px;cursor:pointer;border-radius:3px}
+#nav button:hover{background:#26414F}
+#nav button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#hint{position:fixed;left:16px;bottom:15px;color:#6D8593;font-family:var(--mono);
+  font-size:10.5px;letter-spacing:.1em;z-index:40}
+@media print{
+  html,body{background:#fff;overflow:visible}
+  #stage{position:static;display:block}
+  #deck{width:auto;height:auto;transform:none!important;box-shadow:none}
+  .slide{display:flex!important;position:relative;width:1280px;height:720px;page-break-after:always}
+  #nav,#hint,#pbar{display:none}
+}
+</style>
+<style>
+/* ================= additions for the Data Cleaning series =================
+   Vocabulary specific to this module. Everything above is the shared theme,
+   copied verbatim from the Data Collection decks.                          */
+
+/* ---------- the spine: symptom -> mechanisms -> what it permits ---------- */
+.spine{display:grid;grid-template-columns:150px 1fr 1fr;gap:0 12px;align-items:stretch}
+.spine .hd{font-family:var(--mono);font-size:9.3px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--soft);padding-bottom:5px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.spine .sym{background:var(--ink);color:#fff;padding:8px 11px;margin-bottom:7px;
+  display:flex;flex-direction:column;justify-content:center}
+.spine .sym b{font-family:var(--disp);font-size:13.5px;font-weight:700;display:block;line-height:1.15}
+.spine .sym i{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.13em;
+  text-transform:uppercase;color:#9BB4C0;margin-top:3px}
+.spine .mid,.spine .rgt{background:var(--card);border:1px solid var(--hair);padding:8px 11px;
+  margin-bottom:7px;font-size:11.7px;line-height:1.4;color:#1A2152;display:flex;align-items:center}
+.spine .rgt{border-left:3px solid var(--t-grp)}
+.spine .mid{border-left:3px solid var(--t-anc)}
+.spine .now .sym{background:var(--t-asr)}
+.spine .now .mid,.spine .now .rgt{background:#FDE9E7}
+.spine b.q{font-weight:700;color:var(--ink)}
+
+/* ---------- three-mechanism cards ---------- */
+.mech{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;flex:1;min-height:0}
+.mech .m{background:var(--card);border:1px solid var(--hair);border-top:3px solid var(--ink);
+  padding:11px 13px;display:flex;flex-direction:column;gap:7px;min-height:0}
+.mech .m.a{border-top-color:var(--t-grp)}
+.mech .m.b{border-top-color:var(--t-anc)}
+.mech .m.c{border-top-color:var(--t-asr)}
+.mech .m h3{font-family:var(--disp);font-size:15px;font-weight:700;line-height:1.1}
+.mech .m h3 span{display:block;font-family:var(--mono);font-size:9.2px;font-weight:400;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--soft);margin-bottom:3px}
+.mech .m .def{font-size:12.2px;line-height:1.42;color:#1A2152}
+.mech .m .def b{font-weight:700;color:var(--ink)}
+.mech .m .ex{font-size:11.4px;line-height:1.4;color:var(--soft);border-top:1px solid var(--hair);
+  padding-top:6px;margin-top:auto}
+.mech .m .ex b{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--soft);display:block;margin-bottom:3px}
+
+/* ---------- figures (inline SVG, no image files) ---------- */
+.fig{background:var(--card);border:1px solid var(--hair);padding:10px 12px 8px;
+  display:flex;flex-direction:column;min-height:0}
+.fig .cap{font-family:var(--mono);font-size:9.3px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--soft);margin-bottom:7px}
+.fig .rd{font-size:11.6px;line-height:1.4;color:#1A2152;margin-top:7px;
+  border-top:1px solid var(--hair);padding-top:6px}
+.fig .rd b{font-weight:700;color:var(--ink)}
+.fig svg{display:block;max-height:100%}
+.fig .rd{margin-top:auto}
+
+/* ---------- the cleaning log ---------- */
+table.log{width:100%;border-collapse:collapse;font-size:11.6px;background:var(--card)}
+table.log th,table.log td{border:1px solid var(--hair);padding:5px 9px;text-align:left;
+  vertical-align:top;line-height:1.38}
+table.log th{background:var(--ink);color:#fff;font-weight:600;font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase}
+table.log td:nth-child(1){font-family:var(--mono);font-size:10.6px;white-space:nowrap;color:#1A2152}
+table.log td:nth-child(4){font-style:italic;color:var(--soft)}
+table.log td.n{font-family:var(--mono);text-align:right;white-space:nowrap}
+
+/* ---------- the missingness lab (slides 6, 23 and 35) ---------- */
+.lab{display:grid;grid-template-columns:1.62fr 1fr;gap:15px;flex:1;min-height:0}
+.lab .plot{background:var(--card);border:1px solid var(--hair);padding:9px 11px 7px;
+  display:flex;flex-direction:column;min-height:0}
+.lab .plot svg{flex:1;min-height:0;display:block}
+.plotnote{font-size:10.6px;color:var(--soft);line-height:1.35;margin-top:5px;
+  border-top:1px solid var(--hair);padding-top:5px}
+.plotnote b{color:var(--ink)}
+.seg{display:flex;gap:6px;flex:none;margin-bottom:7px}
+.seg button{font-family:var(--mono);font-size:11px;letter-spacing:.09em;padding:5px 13px;
+  border:1px solid var(--line);background:var(--paper);color:var(--soft);cursor:pointer;
+  border-radius:2px;transition:background .15s,color .15s,border-color .15s}
+.seg button:hover{background:#E2EBF0;color:var(--ink)}
+.seg button.on{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:700}
+.seg button.alt{margin-left:auto;font-size:10.4px;letter-spacing:.12em}
+.seg button:focus-visible{outline:2px solid var(--t-cls);outline-offset:1px}
+.meanbox{background:var(--card);border:1px solid var(--hair);padding:8px 10px;flex:none}
+.meanbox svg{display:block;width:100%}
+.pt{transition:fill .28s ease,stroke .28s ease,opacity .28s ease}
+g.knobpt{transition:transform .45s cubic-bezier(.4,0,.2,1)}
+@media (prefers-reduced-motion:reduce){g.knobpt{transition:none}}
+
+/* ---------- fill: let a short column spread over the stage instead of
+   piling its cards at the top. Cards grow and centre their own text; callouts,
+   tables and code keep their natural height.                                 */
+.colstack.fill{gap:12px}
+.colstack.fill > .card{flex:1 1 0;display:flex;flex-direction:column;justify-content:center}
+.colstack.fill > .callout,.colstack.fill > table,.colstack.fill > pre,
+.colstack.fill > .out,.colstack.fill > .outlbl,.colstack.fill > h2{flex:0 0 auto}
+
+/* ---------- roomy: table-dominant slides that would otherwise underfill ---------- */
+table.d.roomy td,table.d.roomy th{padding:19px 10px}
+table.d.roomy.tall td,table.d.roomy.tall th{padding:27px 10px}
+table.log.roomy td,table.log.roomy th{padding:17px 10px}
+.spine.roomy .sym,.spine.roomy .mid,.spine.roomy .rgt{padding:24px 12px;margin-bottom:10px}
+
+/* ---------- cover ornament: a wall of raw cells ---------- */
+.coverpat .c-miss{color:var(--t-asr);font-weight:700}
+.coverpat .c-val{color:var(--t-grp)}
+.coverpat .c-dim{color:#9AA3CC}
+.coverpat .c-hdr{color:var(--t-cls);font-weight:700}
+
+/* ---------- intuition-slide reveals: the figure arrives in the order the
+   lecturer speaks it, so the picture is not finished before the sentence is. */
+@media (prefers-reduced-motion:no-preference){
+  .slide.on .fig svg .hi{animation:hifade .55s ease .15s both}
+  .slide.on .fig svg .mk{animation:hifade .5s ease both}
+  .slide.on .fig svg .mk0{animation-delay:.55s}
+  .slide.on .fig svg .mk1{animation-delay:.95s}
+  .slide.on .fig svg .drawline{stroke-dasharray:900;stroke-dashoffset:900;
+    animation:drawin 1.15s .25s ease-out forwards}
+  @keyframes hifade{from{opacity:0}to{opacity:1}}
+  @keyframes drawin{to{stroke-dashoffset:0}}
+}
+
+.fig .expl{margin-top:auto;padding:12px 16px}
+.fig .expl p + p{margin-top:6px}
+/* ---------- staged builds: on a slide marked .build, one arrow press
+   reveals one more [data-at] piece before the deck moves to the next slide.
+   The lecturer speaks a term, then presses once, and that term appears. */
+.slide.build [data-at]{opacity:0}
+.slide.build [data-at].shown{opacity:1}
+@media (prefers-reduced-motion:no-preference){
+  .slide.build [data-at]{transition:opacity .34s ease}
+}
+.bld{position:absolute;right:58px;bottom:38px;display:flex;gap:5px;z-index:3}
+.bld i{width:17px;height:3px;background:var(--line);border-radius:2px;display:block;
+  transition:background .25s ease}
+.bld i.on{background:var(--t-asr)}
+</style>
+
+<style>
+/* deck additions */
+.seg{flex-wrap:wrap}
+.seg button{text-transform:none}
+.wctl{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap}
+.wctl .out{padding:6px 10px}
+.wctl label.rg{display:flex;flex-direction:column;justify-content:center;gap:3px;font-family:var(--mono);
+  font-size:10px;letter-spacing:.1em;color:var(--soft);min-width:230px}
+.wctl label.rg b{color:var(--ink);font-size:12px;letter-spacing:0}
+input[type=range]{width:100%;accent-color:#E8382D}
+.wbtn{font-family:var(--mono);font-size:11px;padding:5px 16px;border:1px solid var(--ink);background:var(--ink);
+  color:#fff;cursor:pointer;border-radius:2px;min-width:74px}
+.kv{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kv .lf{font-family:var(--mono);font-size:24px;font-weight:700;padding:8px 12px;background:var(--card);
+  border:1px solid var(--hair);border-left:4px solid var(--soft);line-height:1.2}
+.kv .lf small{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);font-weight:500}
+.kv .lf.bad{color:#E8382D;border-left-color:#E8382D}.kv .lf.ok{color:#0E7A55;border-left-color:#0E7A55}
+.kv .lf.b{color:#2B4BFF;border-left-color:#2B4BFF}
+.kv.k3{grid-template-columns:repeat(3,1fr)}
+ul.b.lg{font-size:15px;line-height:1.5}
+ul.b.lg li{margin-bottom:11px}
+table.d td.r,table.d th.r{text-align:right;font-family:var(--mono);white-space:nowrap}
+table.d tr.best td{background:#F3FBF7;font-weight:700}
+.cols.nat{flex:none}
+.wctl .jsbadge{align-self:center}
+.card.big{padding:14px 16px}
+.card.big h3{font-size:16.5px;margin-bottom:8px}
+.card.big p{font-size:13.6px;line-height:1.55}
+.refs{font-size:12.5px;line-height:1.5}
+.refs p{margin-bottom:8px;padding-left:16px;text-indent:-16px}
+
+.match{display:flex;flex-direction:column;gap:8px}
+.match .q{display:grid;grid-template-columns:1fr 230px;gap:10px;align-items:stretch}
+.match .q .s{background:var(--card);border:1px solid var(--hair);border-left:4px solid var(--soft);padding:9px 13px;
+  font-size:14px;line-height:1.4;border-radius:8px}
+.match .q .s small{display:block;font-size:12px;color:var(--soft);margin-top:2px;min-height:17px}
+.match select{font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:var(--card);border-radius:8px;
+  padding:0 8px;color:var(--ink)}
+.match .q.right .s{border-left-color:#0E7A55;background:#F3FBF7}
+.match .q.wrong .s{border-left-color:#E8382D;background:#FDE9E7}
+.hx{display:grid;grid-template-columns:5fr 7fr;gap:12px}
+.hx pre{font-family:var(--mono);font-size:11.5px;line-height:1.5;background:var(--card);border:1px solid var(--hair);
+  border-radius:8px;padding:10px 12px;margin:0;white-space:pre-wrap;word-break:break-all;min-height:300px}
+.hx pre b{color:#2B4BFF}.hx pre i{color:var(--soft);font-style:normal}.hx pre em{color:#E8382D;font-style:normal;font-weight:700}
+.hx pre em.ok{color:#0E7A55}
+.hx .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--soft);margin-bottom:4px}
+.sp-row{display:flex;gap:10px;align-items:stretch}
+.sp-row input{flex:1;font-family:var(--mono);font-size:15px;padding:7px 12px;border:1px solid var(--ink);border-radius:8px;
+  background:var(--card);color:var(--ink);font-variant-ligatures:none}
+.sp-pre{display:flex;flex-wrap:wrap;gap:6px}
+.sp-pre button{font-family:var(--mono);font-size:11px;padding:4px 9px;border:1px solid var(--line);background:var(--card);
+  border-radius:8px;cursor:pointer;color:var(--ink);font-variant-ligatures:none}
+.sp-pre button:hover{border-color:var(--ink)}
+#sp-src{font-family:var(--mono);font-size:10.6px;line-height:1.42;background:var(--card);border:1px solid var(--hair);
+  border-radius:8px;padding:10px 14px;margin:0;column-count:2;column-gap:26px;white-space:pre;font-variant-ligatures:none}
+#sp-src .el{display:block;break-inside:avoid}
+#sp-src mark{background:#FFE9A8;color:var(--ink);border-radius:3px;outline:1px solid #C99A1E}
+#sp-src .tg{color:#2B4BFF}#sp-src .at{color:#A87900}
+#sp-n{min-width:210px;white-space:normal}
+pre.code,.out{font-variant-ligatures:none}
+
+/* theme: masterclass */
+:root{--mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --disp:"Geist",system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --body:"Geist",system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+body{font-feature-settings:"ss01","liga" 0,"calt" 0}
+#deck{box-shadow:0 24px 70px rgba(14,19,48,.16)}
+h1.t{font-weight:600;letter-spacing:-.028em}
+h2.s{font-weight:600}
+.eyebrow{color:#2B4BFF}
+.eyebrow::after{background:#E2E5F0}
+#pbar{background:#2B4BFF}
+.card,.fig,.out{border-radius:8px}
+pre.code{border-radius:8px;border-left:0}
+/* cover: navy ground, as on the masterclass decks */
+.slide.cover{background:#0E1330;color:#fff}
+.cover h1{font-weight:600;letter-spacing:-.035em;color:#fff}
+.cover .kicker{color:#FFC800}
+.cover .pt{color:#AEB6E0;font-weight:500}
+.cover .rule{background:#2B4BFF}
+.cover .sub{color:#D5D9EE}
+.cover .by{color:#fff;font-weight:600}
+.cover .by span{color:#AEB6E0}
+.coverpat{opacity:.55}
+#nav button{background:#0E1330;border-color:#0E1330;color:#fff;border-radius:8px}
+#nav button:hover{background:#2B4BFF}
+#nav button:focus-visible{outline-color:#2B4BFF}
+#hint{color:#8A90B0}
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+<div id="pbar"></div>
+
+<section class="slide cover" data-sec="Cover">
+  <div class="coverpat">
+    <div><span class="h-dim">&gt; </span><span class="h-val">GET /shop/catalogue/page-1.html</span></div>
+    <div><span class="h-dim">&lt; </span><span class="h-val">200 OK &#183; text/html &#183; 9,177 bytes</span></div>
+    <div>&#160;</div>
+    <div><span class="h-dim">&gt; </span><span class="h-val">GET /shop/api/products/page-1.json</span></div>
+    <div><span class="h-dim">&lt; </span><span class="h-val">200 OK &#183; application/json</span></div>
+    <div>&#160;</div>
+    <div><span class="h-dim">&gt; </span><span class="h-val">GET /shop/catalogue/page-9.html</span></div>
+    <div><span class="h-dim">&lt; </span><span class="h-bad">404 Not Found</span></div>
+  </div>
+  <div class="kicker">DA5500W &#183; Data Mining: Concepts and Techniques</div>
+  <h1>Getting Data<br/>from the Web</h1>
+  <div class="pt">Module 2 &#183; Lecture 1</div>
+  <div class="rule"></div>
+  <p class="sub">The supermarket of Module 1 now has an online shop. Its catalogue of 168 products is collected twice,
+  once from a JSON API and once from HTML pages, and the two results are compared.</p>
+  <div class="by"><span>Instructor</span>Dr. Arun B Ayyar</div>
+  <table class="meta">
+    <tr><td>Course</td><td>DA5500W &#183; Web-enabled MTech &#183; DSAI, IIT Madras</td></tr>
+    <tr><td>Data</td><td>a simulated shop &#183; 168 products &#183; 7 HTML pages &#183; 7 JSON pages</td></tr>
+    <tr><td>Reading</td><td>Mitchell, Web Scraping with Python (O'Reilly), chapters 1 and 2</td></tr>
+  </table>
+</section>
+
+<section class="slide" data-sec="Recap">
+  <div class="eyebrow">Recap</div>
+  <h1 class="t">Recap of Module 1
+    <small>The KDD process of Module 1 began with customers.csv and sales.csv already on disk.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><div class="cap">the seven steps, with the step that comes before them</div><svg viewBox="0 0 1120 80" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="The KDD steps with a step added in front: get the data"><rect x="14.0" y="20.0" width="122.0" height="46.0" fill="#FDE9E7" stroke="#E2E5F0" stroke-width="1" /><rect x="14.0" y="20.0" width="122.0" height="4.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="75.0" y="40.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >get the data</text><text x="75.0" y="58.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >module 2</text><line x1="138.0" y1="43.0" x2="144.0" y2="43.0" stroke="#5D6488" stroke-width="1.6" /><path d="M150.0,43.0 L142.0,39.0 L142.0,47.0 z" fill="#5D6488"/><rect x="152.0" y="20.0" width="122.0" height="46.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="152.0" y="20.0" width="122.0" height="4.0" fill="#5D6488" stroke="none" stroke-width="1" /><text x="213.0" y="46.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >clean</text><line x1="276.0" y1="43.0" x2="282.0" y2="43.0" stroke="#5D6488" stroke-width="1.6" /><path d="M288.0,43.0 L280.0,39.0 L280.0,47.0 z" fill="#5D6488"/><rect x="290.0" y="20.0" width="122.0" height="46.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="290.0" y="20.0" width="122.0" height="4.0" fill="#5D6488" stroke="none" stroke-width="1" /><text x="351.0" y="46.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >integrate</text><line x1="414.0" y1="43.0" x2="420.0" y2="43.0" stroke="#5D6488" stroke-width="1.6" /><path d="M426.0,43.0 L418.0,39.0 L418.0,47.0 z" fill="#5D6488"/><rect x="428.0" y="20.0" width="122.0" height="46.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="428.0" y="20.0" width="122.0" height="4.0" fill="#5D6488" stroke="none" stroke-width="1" /><text x="489.0" y="46.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >select</text><line x1="552.0" y1="43.0" x2="558.0" y2="43.0" stroke="#5D6488" stroke-width="1.6" /><path d="M564.0,43.0 L556.0,39.0 L556.0,47.0 z" fill="#5D6488"/><rect x="566.0" y="20.0" width="122.0" height="46.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="566.0" y="20.0" width="122.0" height="4.0" fill="#5D6488" stroke="none" stroke-width="1" /><text x="627.0" y="46.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >transform</text><line x1="690.0" y1="43.0" x2="696.0" y2="43.0" stroke="#5D6488" stroke-width="1.6" /><path d="M702.0,43.0 L694.0,39.0 L694.0,47.0 z" fill="#5D6488"/><rect x="704.0" y="20.0" width="122.0" height="46.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="704.0" y="20.0" width="122.0" height="4.0" fill="#5D6488" stroke="none" stroke-width="1" /><text x="765.0" y="46.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >mine</text><line x1="828.0" y1="43.0" x2="834.0" y2="43.0" stroke="#5D6488" stroke-width="1.6" /><path d="M840.0,43.0 L832.0,39.0 L832.0,47.0 z" fill="#5D6488"/><rect x="842.0" y="20.0" width="122.0" height="46.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="842.0" y="20.0" width="122.0" height="4.0" fill="#5D6488" stroke="none" stroke-width="1" /><text x="903.0" y="46.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >evaluate</text><line x1="966.0" y1="43.0" x2="972.0" y2="43.0" stroke="#5D6488" stroke-width="1.6" /><path d="M978.0,43.0 L970.0,39.0 L970.0,47.0 z" fill="#5D6488"/><rect x="980.0" y="20.0" width="122.0" height="46.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="980.0" y="20.0" width="122.0" height="4.0" fill="#5D6488" stroke="none" stroke-width="1" /><text x="1041.0" y="46.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >present</text></svg></div><div class="kv"><div class="lf "><small>baskets mined</small>12,000</div><div class="lf "><small>rules written &#8594; kept</small>1,274 &#8594; 22</div><div class="lf "><small>lift of butter &#8594; jam</small>3.38</div><div class="lf bad"><small>files given to us</small>3</div></div><div class="cols nat"><div class="callout"><b>What Module 1 assumed.</b> Somebody had already exported the sales and the customer list. Every step after that worked on those files.</div><div class="callout"><b>What this module adds.</b> The data is on a web server. A program has to ask for it, read the answer and turn it into a table.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Sources">
+  <div class="eyebrow">Sources &#183; Concept</div>
+  <h1 class="t">Concept
+    <small>Data reaches a program from a web server by four routes. Each route down the list needs more code and breaks more easily.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><div class="cap">the four routes, with the shop file that shows each</div><svg viewBox="0 0 1120 216" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Four routes to data: file, API, HTML page, page built by JavaScript"><rect x="20.0" y="8.0" width="1000.0" height="42.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="20.0" y="8.0" width="6.0" height="42.0" fill="#0E7A55" stroke="none" stroke-width="1" /><text x="46.0" y="35.0" font-family="Geist Mono,ui-monospace,monospace" font-size="17" fill="#0E7A55" text-anchor="start" font-weight="700" >1</text><text x="76.0" y="34.0" font-family="Geist,system-ui,sans-serif" font-size="15" fill="#0E1330" text-anchor="start" font-weight="700" >File or bulk download</text><text x="330.0" y="34.0" font-family="Geist,system-ui,sans-serif" font-size="13" fill="#0E1330" text-anchor="start" font-weight="400" >a CSV, a spreadsheet, a database export</text><text x="1004.0" y="34.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#5D6488" text-anchor="end" font-weight="400" >module1/data/sales.csv</text><rect x="20.0" y="60.0" width="1000.0" height="42.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="20.0" y="60.0" width="6.0" height="42.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="46.0" y="87.0" font-family="Geist Mono,ui-monospace,monospace" font-size="17" fill="#2B4BFF" text-anchor="start" font-weight="700" >2</text><text x="76.0" y="86.0" font-family="Geist,system-ui,sans-serif" font-size="15" fill="#0E1330" text-anchor="start" font-weight="700" >API</text><text x="330.0" y="86.0" font-family="Geist,system-ui,sans-serif" font-size="13" fill="#0E1330" text-anchor="start" font-weight="400" >JSON with named, typed fields</text><text x="1004.0" y="86.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#5D6488" text-anchor="end" font-weight="400" >api/products/page-1.json</text><rect x="20.0" y="112.0" width="1000.0" height="42.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="20.0" y="112.0" width="6.0" height="42.0" fill="#A87900" stroke="none" stroke-width="1" /><text x="46.0" y="139.0" font-family="Geist Mono,ui-monospace,monospace" font-size="17" fill="#A87900" text-anchor="start" font-weight="700" >3</text><text x="76.0" y="138.0" font-family="Geist,system-ui,sans-serif" font-size="15" fill="#0E1330" text-anchor="start" font-weight="700" >HTML page</text><text x="330.0" y="138.0" font-family="Geist,system-ui,sans-serif" font-size="13" fill="#0E1330" text-anchor="start" font-weight="400" >markup written for a browser; every value is text</text><text x="1004.0" y="138.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#5D6488" text-anchor="end" font-weight="400" >catalogue/page-1.html</text><rect x="20.0" y="164.0" width="1000.0" height="42.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="20.0" y="164.0" width="6.0" height="42.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="46.0" y="191.0" font-family="Geist Mono,ui-monospace,monospace" font-size="17" fill="#E8382D" text-anchor="start" font-weight="700" >4</text><text x="76.0" y="190.0" font-family="Geist,system-ui,sans-serif" font-size="15" fill="#0E1330" text-anchor="start" font-weight="700" >Page built by JavaScript</text><text x="330.0" y="190.0" font-family="Geist,system-ui,sans-serif" font-size="13" fill="#0E1330" text-anchor="start" font-weight="400" >an empty page and a script that fills it</text><text x="1004.0" y="190.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#5D6488" text-anchor="end" font-weight="400" >offers.html (lecture 2)</text><line x1="1070.0" y1="14.0" x2="1070.0" y2="198.0" stroke="#5D6488" stroke-width="1.6" /><path d="M1070.0,204.0 L1074.0,196.0 L1066.0,196.0 z" fill="#5D6488"/><text x="1084.0" y="110.0" font-family="Geist,system-ui,sans-serif" font-size="11" fill="#5D6488" text-anchor="middle" font-weight="400" transform="rotate(90 1084 110)">more code, more ways to fail</text></svg></div><div class="cols nat"><div class="callout sm"><b>Choosing a route.</b> Start at route 1 and move down only when the fields the question needs are missing from the route above.</div><div class="callout sm"><b>This lecture</b> covers routes 2 and 3 and the protocol under both. Lecture 2 covers route 4, polite collection and the law.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Sources">
+  <div class="eyebrow">Sources &#183; Example</div>
+  <h1 class="t">Example
+    <small>The running dataset of this module is a simulated shop of 168 products, published as a small website.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols w6040 nat"><div class="fig"><div class="cap">iitm-da.github.io/da5500w/module2/data/shop/</div><svg viewBox="0 0 590 206" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Site map of the simulated shop"><rect x="10.0" y="70.0" width="150.0" height="54.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="10.0" y="70.0" width="150.0" height="4.0" fill="#5D6488" stroke="none" stroke-width="1" /><text x="85.0" y="94.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >index.html</text><text x="85.0" y="112.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >home page</text><rect x="240.0" y="6.0" width="340.0" height="40.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="240.0" y="6.0" width="6.0" height="40.0" fill="#A87900" stroke="none" stroke-width="1" /><text x="258.0" y="24.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="start" font-weight="600" >catalogue/page-1 ... 7.html</text><text x="258.0" y="39.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#5D6488" text-anchor="start" font-weight="400" >168 products as HTML, 24 a page</text><line x1="160.0" y1="97.0" x2="200.0" y2="97.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="200.0" y1="97.0" x2="200.0" y2="26.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="200.0" y1="26.0" x2="232.0" y2="26.0" stroke="#8A90B0" stroke-width="1.4" /><path d="M238.0,26.0 L230.0,22.0 L230.0,30.0 z" fill="#8A90B0"/><rect x="240.0" y="56.0" width="340.0" height="40.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="240.0" y="56.0" width="6.0" height="40.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="258.0" y="74.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="start" font-weight="600" >api/products/page-1 ... 7.json</text><text x="258.0" y="89.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#5D6488" text-anchor="start" font-weight="400" >the same catalogue as JSON</text><line x1="160.0" y1="97.0" x2="200.0" y2="97.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="200.0" y1="97.0" x2="200.0" y2="76.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="200.0" y1="76.0" x2="232.0" y2="76.0" stroke="#8A90B0" stroke-width="1.4" /><path d="M238.0,76.0 L230.0,72.0 L230.0,80.0 z" fill="#8A90B0"/><rect x="240.0" y="106.0" width="340.0" height="40.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="240.0" y="106.0" width="6.0" height="40.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="258.0" y="124.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="start" font-weight="600" >offers.html</text><text x="258.0" y="139.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#5D6488" text-anchor="start" font-weight="400" >filled in by JavaScript</text><line x1="160.0" y1="97.0" x2="200.0" y2="97.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="200.0" y1="97.0" x2="200.0" y2="126.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="200.0" y1="126.0" x2="232.0" y2="126.0" stroke="#8A90B0" stroke-width="1.4" /><path d="M238.0,126.0 L230.0,122.0 L230.0,130.0 z" fill="#8A90B0"/><rect x="240.0" y="156.0" width="340.0" height="40.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="240.0" y="156.0" width="6.0" height="40.0" fill="#5D6488" stroke="none" stroke-width="1" /><text x="258.0" y="174.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="start" font-weight="600" >robots.txt</text><text x="258.0" y="189.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#5D6488" text-anchor="start" font-weight="400" >the owner&#x27;s requests to crawlers</text><line x1="160.0" y1="97.0" x2="200.0" y2="97.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="200.0" y1="97.0" x2="200.0" y2="176.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="200.0" y1="176.0" x2="232.0" y2="176.0" stroke="#8A90B0" stroke-width="1.4" /><path d="M238.0,176.0 L230.0,172.0 L230.0,180.0 z" fill="#8A90B0"/></svg></div><div class="colstack"><div class="kv k3"><div class="lf "><small>products</small>168</div><div class="lf "><small>pages</small>7</div><div class="lf "><small>per page</small>24</div></div><div class="callout sm"><b>Simulated.</b> The products are the 14 items of the Module 1 sales file in several brands and pack sizes. Defects were planted in the HTML with a fixed seed.</div><div class="callout sm"><b>Open to scraping.</b> The site exists for this course. Every request shown in the lecture can be repeated from a notebook.</div></div></div>
+  </div>
+</section>
+
+<section class="slide build" data-sec="HTTP">
+  <div class="eyebrow">HTTP &#183; Concept</div>
+  <h1 class="t">Concept
+    <small>HTTP is the protocol under routes 2, 3 and 4: the client sends one request as text and the server sends one response.</small></h1>
+  <div class="wrap" style="zoom:1.48">
+<div class="fig"><div class="cap">one exchange with the shop</div><svg viewBox="0 0 1120 204" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="A client sends a request and a server sends a response"><rect x="40.0" y="50.0" width="190.0" height="80.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="40.0" y="50.0" width="190.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="135.0" y="87.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >client</text><text x="135.0" y="105.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >a browser or a Python script</text><rect x="890.0" y="50.0" width="190.0" height="80.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="890.0" y="50.0" width="190.0" height="4.0" fill="#4B5A87" stroke="none" stroke-width="1" /><text x="985.0" y="87.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >server</text><text x="985.0" y="105.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >iitm-da.github.io</text><g data-at="1"><line x1="236.0" y1="72.0" x2="878.0" y2="72.0" stroke="#2B4BFF" stroke-width="2" /><path d="M884.0,72.0 L876.0,68.0 L876.0,76.0 z" fill="#2B4BFF"/><text x="560.0" y="62.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#2B4BFF" text-anchor="middle" font-weight="600" >request:  GET /da5500w/module2/data/shop/catalogue/page-1.html</text></g><g data-at="2"><line x1="884.0" y1="108.0" x2="242.0" y2="108.0" stroke="#0E7A55" stroke-width="2" /><path d="M236.0,108.0 L244.0,112.0 L244.0,104.0 z" fill="#0E7A55"/><text x="560.0" y="128.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E7A55" text-anchor="middle" font-weight="600" >response:  200 OK  +  9,177 bytes of HTML</text></g><g data-at="3"><rect x="790.0" y="150.0" width="290.0" height="44.0" fill="#FDE9E7" stroke="#E8382D" stroke-width="1" rx="6"/><text x="935.0" y="169.0" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#E8382D" text-anchor="middle" font-weight="700" >the server keeps no memory</text><text x="935.0" y="185.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#E8382D" text-anchor="middle" font-weight="400" >of this exchange for the next request</text></g></svg></div><div class="cols nat"><div class="callout sm" data-at="1"><b>Request.</b> A method, a path and some headers. The method GET asks to read a resource.</div><div class="callout sm" data-at="2"><b>Response.</b> A status code, headers and a body. The body is the page, the JSON or the file.</div><div class="callout warn sm" data-at="3"><b>Stateless.</b> Each request is answered on its own. Anything the server has to remember travels in a header such as a cookie.</div></div><div class="bld"><i></i><i></i><i></i></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="HTTP">
+  <div class="eyebrow">HTTP &#183; Example</div>
+  <h1 class="t">Example
+    <small>requests.get() on a catalogue page sent 5 header lines and received status 200 in 446 ms.</small></h1>
+  <div class="wrap" style="zoom:1.26">
+<div class="cols nat"><div class="colstack"><div class="outlbl">request, as sent by the requests library</div><div class="out sm">GET /da5500w/module2/data/shop/catalogue/page-1.html HTTP/1.1
+Host: iitm-da.github.io
+User-Agent: python-requests/2.32.5
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: keep-alive</div><div class="callout sm"><b>Three parts.</b> A request line with the method and the path, then headers, then an empty body for a GET.</div></div><div class="colstack"><div class="outlbl">response from the published shop</div><div class="out sm">HTTP/1.1 200 OK
+Content-Length: 1365
+Server: GitHub.com
+Content-Type: text/html; charset=utf-8
+Last-Modified: Sun, 22 Nov 2026 18:41:44 GMT
+ETag: W/&quot;6b033768-23d9&quot;
+Cache-Control: max-age=600
+Content-Encoding: gzip
+Date: Sun, 22 Nov 2026 18:48:14 GMT
+
+&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;title&gt;Catalogue, page 1&lt;/title&gt; ...</div><div class="callout sm"><b>Content-Type</b> says how to read the body. <b>Content-Length</b> is 1,365 because the page travelled compressed with gzip; requests unpacked it to 9,177 bytes.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="HTTP">
+  <div class="eyebrow">HTTP &#183; Mechanism</div>
+  <h1 class="t">Mechanism
+    <small>The method states what the request does, and the first digit of the status code states how it went.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols w6040 nat"><table class="d"><tr><th>status</th><th>meaning</th><th>what a scraper does</th></tr><tr><td><b>200</b> OK</td><td>the body is the resource</td><td>parse it, then check the content</td></tr><tr><td><b>301, 302</b></td><td>the resource has moved</td><td>requests follows the redirect</td></tr><tr><td><b>403</b> Forbidden</td><td>the server refuses this client</td><td>stop and read the terms of the site</td></tr><tr><td><b>404</b> Not Found</td><td>no resource at this path</td><td>stop paging; record the URL</td></tr><tr><td><b>429</b> Too Many Requests</td><td>the client is too fast</td><td>wait as Retry-After says (lecture 2)</td></tr><tr><td><b>500, 503</b></td><td>the server failed</td><td>retry later, a few times</td></tr></table><div class="colstack"><table class="d"><tr><th>method</th><th>use</th></tr><tr><td><b>GET</b></td><td>read a resource; parameters go in the URL</td></tr><tr><td><b>POST</b></td><td>send a body: a form, a login, a JSON query</td></tr><tr><td><b>HEAD</b></td><td>headers only, no body</td></tr></table><div class="callout warn sm"><b>Measured on the shop.</b> catalogue/page-9.html does not exist. The server answered 404 with a 9,379-byte HTML error page, and a parser finds 0 products in it without raising any error.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="HTTP">
+  <div class="eyebrow">HTTP &#183; Test</div>
+  <h1 class="t">Test
+    <small>Four requests to the shop. Before pressing send, say the status code and the Content-Type that will come back.</small></h1>
+  <div class="wrap" style="zoom:1.34">
+<div class="seg" id="hx-seg"><button data-k="0" class="on">a catalogue page</button><button data-k="1">the same data as JSON</button><button data-k="2">a page that does not exist</button><button data-k="3">robots.txt</button><button class="wbtn" id="hx-go">send &#9654;</button><span class="jsbadge">browser JS</span></div><div class="hx"><div><div class="lbl">REQUEST</div><pre id="hx-req"></pre></div><div><div class="lbl">RESPONSE, RECORDED FROM THE PUBLISHED SHOP</div><pre id="hx-res"></pre></div></div><script type="application/json" id="hx-data">[{"label":"a catalogue page","req":"GET /da5500w/module2/data/shop/catalogue/page-1.html HTTP/1.1\nHost: iitm-da.github.io\nUser-Agent: python-requests/2.32.5\nAccept-Encoding: gzip, deflate\nAccept: */*\nConnection: keep-alive","status":"HTTP/1.1 200 OK","ok":true,"heads":"Content-Length: 1365\nServer: GitHub.com\nContent-Type: text/html; charset=utf-8\nLast-Modified: Sun, 22 Nov 2026 18:41:44 GMT\nETag: W/\"6b033768-23d9\"\nCache-Control: max-age=600\nContent-Encoding: gzip\nDate: Sun, 22 Nov 2026 18:48:14 GMT","body":"<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Catalogue, page 1</title>\n<link rel=\"stylesheet\" href=\"../shop.css\">\n</head>\n<body>\n<header><a href=\"../index.html\">Supermarket Online</a><a href=\"../catalogue/page-1.html\">Catalogue</a><a href=\"../offers.html\">Offers</a></header>\n<main>\n<h1>Catalogue</h1>\n<p ...","note":"9,177 bytes after unpacking, 446 ms"},{"label":"the same data as JSON","req":"GET /da5500w/module2/data/shop/api/products/page-1.json HTTP/1.1\nHost: iitm-da.github.io\nUser-Agent: python-requests/2.32.5\nAccept-Encoding: gzip, deflate\nAccept: */*\nConnection: keep-alive","status":"HTTP/1.1 200 OK","ok":true,"heads":"Content-Length: 694\nServer: GitHub.com\nContent-Type: application/json; charset=utf-8\nLast-Modified: Sun, 22 Nov 2026 18:41:44 GMT\nETag: W/\"6b033768-d79\"\nCache-Control: max-age=600\nContent-Encoding: gzip\nDate: Sun, 22 Nov 2026 18:48:15 GMT","body":"{\n \"page\": 1,\n \"pages\": 7,\n \"per_page\": 24,\n \"total\": 168,\n \"next\": \"page-2.json\",\n \"items\": [\n  {\n   \"sku\": \"SM1001\",\n   \"name\": \"Sangam Medium Nappies\",\n   \"category\": \"nappies\",\n   \"price\": 841,\n   \"mrp\": 841,\n   \"in_stock\": true\n  },\n  {\n   \"sku\": \"SM1002\",\n   \"name\": \"Adyar Fresh Thick Curd\",\n   \"category\": \"curd\",\n   \"pric ...","note":"3,449 bytes after unpacking, 455 ms"},{"label":"a page that does not exist","req":"GET /da5500w/module2/data/shop/catalogue/page-9.html HTTP/1.1\nHost: iitm-da.github.io\nUser-Agent: python-requests/2.32.5\nAccept-Encoding: gzip, deflate\nAccept: */*\nConnection: keep-alive","status":"HTTP/1.1 404 Not Found","ok":false,"heads":"Content-Length: 5254\nServer: GitHub.com\nContent-Type: text/html; charset=utf-8\nETag: W/\"6afdd72a-24a3\"\nContent-Encoding: gzip\nDate: Sun, 22 Nov 2026 18:48:16 GMT","body":"<!DOCTYPE html>\n<html>\n  <head>\n    <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\">\n    <meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; style-src 'unsafe-inline'; img-src data:; connect-src 'self'\">\n    <title>Page not found &middot; GitHub Pages</title>\n    <style type=\"text/css\" medi ...","note":"9,379 bytes after unpacking, 448 ms"},{"label":"robots.txt","req":"GET /da5500w/module2/data/shop/robots.txt HTTP/1.1\nHost: iitm-da.github.io\nUser-Agent: python-requests/2.32.5\nAccept-Encoding: gzip, deflate\nAccept: */*\nConnection: keep-alive","status":"HTTP/1.1 200 OK","ok":true,"heads":"Content-Length: 233\nServer: GitHub.com\nContent-Type: text/plain; charset=utf-8\nLast-Modified: Sun, 22 Nov 2026 18:41:44 GMT\nETag: W/\"6b033768-143\"\nCache-Control: max-age=600\nContent-Encoding: gzip\nDate: Sun, 22 Nov 2026 18:48:17 GMT","body":"# robots.txt of the simulated shop (DA5500W Module 2)\n# A real site serves this file from the root of its host.\nUser-agent: *\nDisallow: /account/\nDisallow: /api/\nAllow: /api/products/\nDisallow: /search\nCrawl-delay: 2\n\nUser-agent: GPTBot\nDisallow: /\n\nSitemap: https://iitm-da.github.io/da5500w/module2/data/shop/sitemap.xml ...","note":"323 bytes after unpacking, 426 ms"}]</script>
+  </div>
+</section>
+
+<section class="slide" data-sec="HTTP">
+  <div class="eyebrow">HTTP &#183; Assumptions</div>
+  <h1 class="t">Assumptions
+    <small>The server answers the whole request, headers included. Two requests for one URL can receive different responses.</small></h1>
+  <div class="wrap" style="zoom:1.48">
+<div class="cols nat"><div class="colstack"><table class="d"><tr><th>header sent by requests</th><th>value</th></tr><tr><td><b>User-Agent</b></td><td>python-requests/2.32.5</td></tr><tr><td><b>Accept-Encoding</b></td><td>gzip, deflate</td></tr><tr><td><b>Accept</b></td><td>*/*</td></tr><tr><td><b>Connection</b></td><td>keep-alive</td></tr></table><div class="callout sm">The library names itself as <b>python-requests/2.32.5</b>. A browser sends a longer User-Agent and a dozen more headers.</div></div><div class="colstack"><pre class="code ">headers = {<span class="py-str">&#x27;User-Agent&#x27;</span>: <span class="py-str">&#x27;da5500w-student (your.name@example.org)&#x27;</span>}
+r = requests.get(url, headers=headers, timeout=<span class="py-num">10</span>)</pre><div class="callout sm"><b>Name the scraper.</b> A User-Agent with a project name and a contact address lets the site owner write to you before blocking you.</div><div class="callout warn sm"><b>Set a timeout.</b> Without one, a request to a server that never answers waits forever.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="API">
+  <div class="eyebrow">API &#183; Concept</div>
+  <h1 class="t">Concept
+    <small>An API is a URL that returns data for a program to read. Most return JSON, a text format with six kinds of value.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="colstack"><div class="outlbl">one product in api/products/page-1.json</div><div class="out sm">{
+ &quot;sku&quot;: &quot;SM1001&quot;,
+ &quot;name&quot;: &quot;Sangam Medium Nappies&quot;,
+ &quot;category&quot;: &quot;nappies&quot;,
+ &quot;price&quot;: 841,
+ &quot;mrp&quot;: 841,
+ &quot;in_stock&quot;: true
+}</div></div><div class="colstack"><div class="fig"><div class="cap">JSON value &#8594; Python type after r.json()</div><svg viewBox="0 0 520 210" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="JSON values and the Python types they become"><rect x="10.0" y="6.0" width="150.0" height="26.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><text x="85.0" y="23.5" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#2B4BFF" text-anchor="middle" font-weight="700" >{ ... }</text><text x="180.0" y="23.5" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="400" >object</text><line x1="270.0" y1="19.0" x2="324.0" y2="19.0" stroke="#8A90B0" stroke-width="1.4" /><path d="M330.0,19.0 L322.0,15.0 L322.0,23.0 z" fill="#8A90B0"/><text x="344.0" y="23.5" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="600" >dict</text><rect x="10.0" y="40.0" width="150.0" height="26.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><text x="85.0" y="57.5" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E7A55" text-anchor="middle" font-weight="700" >[ ... ]</text><text x="180.0" y="57.5" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="400" >array</text><line x1="270.0" y1="53.0" x2="324.0" y2="53.0" stroke="#8A90B0" stroke-width="1.4" /><path d="M330.0,53.0 L322.0,49.0 L322.0,57.0 z" fill="#8A90B0"/><text x="344.0" y="57.5" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="600" >list</text><rect x="10.0" y="74.0" width="150.0" height="26.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><text x="85.0" y="91.5" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#A87900" text-anchor="middle" font-weight="700" >&quot;SM1001&quot;</text><text x="180.0" y="91.5" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="400" >string</text><line x1="270.0" y1="87.0" x2="324.0" y2="87.0" stroke="#8A90B0" stroke-width="1.4" /><path d="M330.0,87.0 L322.0,83.0 L322.0,91.0 z" fill="#8A90B0"/><text x="344.0" y="91.5" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="600" >str</text><rect x="10.0" y="108.0" width="150.0" height="26.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><text x="85.0" y="125.5" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#9B2C7E" text-anchor="middle" font-weight="700" >841</text><text x="180.0" y="125.5" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="400" >number</text><line x1="270.0" y1="121.0" x2="324.0" y2="121.0" stroke="#8A90B0" stroke-width="1.4" /><path d="M330.0,121.0 L322.0,117.0 L322.0,125.0 z" fill="#8A90B0"/><text x="344.0" y="125.5" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="600" >int or float</text><rect x="10.0" y="142.0" width="150.0" height="26.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><text x="85.0" y="159.5" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#4B5A87" text-anchor="middle" font-weight="700" >true</text><text x="180.0" y="159.5" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="400" >boolean</text><line x1="270.0" y1="155.0" x2="324.0" y2="155.0" stroke="#8A90B0" stroke-width="1.4" /><path d="M330.0,155.0 L322.0,151.0 L322.0,159.0 z" fill="#8A90B0"/><text x="344.0" y="159.5" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="600" >True</text><rect x="10.0" y="176.0" width="150.0" height="26.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><text x="85.0" y="193.5" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#E8382D" text-anchor="middle" font-weight="700" >null</text><text x="180.0" y="193.5" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="400" >null</text><line x1="270.0" y1="189.0" x2="324.0" y2="189.0" stroke="#8A90B0" stroke-width="1.4" /><path d="M330.0,189.0 L322.0,185.0 L322.0,193.0 z" fill="#8A90B0"/><text x="344.0" y="193.5" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="600" >None</text></svg></div></div></div><div class="cols nat"><div class="callout sm"><b>Typed.</b> 841 arrives as a number and true as a boolean. Nothing has to be parsed out of a sentence.</div><div class="callout sm"><b>Named.</b> Each value has a field name chosen by the people who run the server, and the names stay when the page design changes.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="API">
+  <div class="eyebrow">API &#183; Example</div>
+  <h1 class="t">Example
+    <small>One GET returns page 1 of the catalogue: 24 products and four fields that describe the paging.</small></h1>
+  <div class="wrap" style="zoom:1.3599999999999999">
+<pre class="code "><span class="py-kw">import</span> requests
+BASE = <span class="py-str">&#x27;https://iitm-da.github.io/da5500w/module2/data/shop/&#x27;</span>
+r = requests.get(BASE + <span class="py-str">&#x27;api/products/page-1.json&#x27;</span>, timeout=<span class="py-num">10</span>)
+<span class="py-kw">print</span>(r.status_code, r.headers[<span class="py-str">&#x27;Content-Type&#x27;</span>], len(r.content), <span class="py-str">&#x27;bytes&#x27;</span>)
+d = r.json()
+<span class="py-kw">print</span>({k: d[k] <span class="py-kw">for</span> k <span class="py-kw">in</span> (<span class="py-str">&#x27;page&#x27;</span>, <span class="py-str">&#x27;pages&#x27;</span>, <span class="py-str">&#x27;per_page&#x27;</span>, <span class="py-str">&#x27;total&#x27;</span>, <span class="py-str">&#x27;next&#x27;</span>)})
+<span class="py-kw">print</span>(d[<span class="py-str">&#x27;items&#x27;</span>][<span class="py-num">0</span>])</pre><div class="outlbl">output</div><div class="out sm">200 application/json; charset=utf-8 3449 bytes
+{&#x27;page&#x27;: 1, &#x27;pages&#x27;: 7, &#x27;per_page&#x27;: 24, &#x27;total&#x27;: 168, &#x27;next&#x27;: &#x27;page-2.json&#x27;}
+{&#x27;sku&#x27;: &#x27;SM1001&#x27;, &#x27;name&#x27;: &#x27;Sangam Medium Nappies&#x27;, &#x27;category&#x27;: &#x27;nappies&#x27;, &#x27;price&#x27;: 841, &#x27;mrp&#x27;: 841, &#x27;in_stock&#x27;: True}</div><div class="cols nat"><div class="callout sm"><b>r.json()</b> turns the body into a dict. The products are the list under <b>items</b>.</div><div class="callout sm"><b>Paging fields.</b> The server states 168 products on 7 pages and gives the address of the next page.</div></div>
+  </div>
+</section>
+
+<section class="slide build" data-sec="API">
+  <div class="eyebrow">API &#183; Mechanism</div>
+  <h1 class="t">Mechanism
+    <small>Pagination: the catalogue comes in pages, and the loop follows the next field until the server sends null.</small></h1>
+  <div class="wrap" style="zoom:1.22">
+<div class="fig"><svg viewBox="0 0 1120 88" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Seven JSON pages chained by the next field"><rect x="20.0" y="14.0" width="124.0" height="50.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="20.0" y="14.0" width="124.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="82.0" y="37.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="middle" font-weight="600" >page-1.json</text><text x="82.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >24 rows so far</text><line x1="146.0" y1="39.0" x2="164.0" y2="39.0" stroke="#2B4BFF" stroke-width="1.6" /><path d="M170.0,39.0 L162.0,35.0 L162.0,43.0 z" fill="#2B4BFF"/><g data-at="2"><rect x="172.0" y="14.0" width="124.0" height="50.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="172.0" y="14.0" width="124.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="234.0" y="37.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="middle" font-weight="600" >page-2.json</text><text x="234.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >48 rows so far</text><line x1="298.0" y1="39.0" x2="316.0" y2="39.0" stroke="#2B4BFF" stroke-width="1.6" /><path d="M322.0,39.0 L314.0,35.0 L314.0,43.0 z" fill="#2B4BFF"/></g><g data-at="2"><rect x="324.0" y="14.0" width="124.0" height="50.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="324.0" y="14.0" width="124.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="386.0" y="37.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="middle" font-weight="600" >page-3.json</text><text x="386.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >72 rows so far</text><line x1="450.0" y1="39.0" x2="468.0" y2="39.0" stroke="#2B4BFF" stroke-width="1.6" /><path d="M474.0,39.0 L466.0,35.0 L466.0,43.0 z" fill="#2B4BFF"/></g><g data-at="2"><rect x="476.0" y="14.0" width="124.0" height="50.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="476.0" y="14.0" width="124.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="538.0" y="37.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="middle" font-weight="600" >page-4.json</text><text x="538.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >96 rows so far</text><line x1="602.0" y1="39.0" x2="620.0" y2="39.0" stroke="#2B4BFF" stroke-width="1.6" /><path d="M626.0,39.0 L618.0,35.0 L618.0,43.0 z" fill="#2B4BFF"/></g><g data-at="2"><rect x="628.0" y="14.0" width="124.0" height="50.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="628.0" y="14.0" width="124.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="690.0" y="37.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="middle" font-weight="600" >page-5.json</text><text x="690.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >120 rows so far</text><line x1="754.0" y1="39.0" x2="772.0" y2="39.0" stroke="#2B4BFF" stroke-width="1.6" /><path d="M778.0,39.0 L770.0,35.0 L770.0,43.0 z" fill="#2B4BFF"/></g><g data-at="2"><rect x="780.0" y="14.0" width="124.0" height="50.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="780.0" y="14.0" width="124.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="842.0" y="37.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="middle" font-weight="600" >page-6.json</text><text x="842.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >144 rows so far</text><line x1="906.0" y1="39.0" x2="924.0" y2="39.0" stroke="#2B4BFF" stroke-width="1.6" /><path d="M930.0,39.0 L922.0,35.0 L922.0,43.0 z" fill="#2B4BFF"/></g><g data-at="3"><rect x="932.0" y="14.0" width="124.0" height="50.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="932.0" y="14.0" width="124.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="994.0" y="37.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="middle" font-weight="600" >page-7.json</text><text x="994.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >168 rows so far</text><text x="994.0" y="80.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#E8382D" text-anchor="middle" font-weight="700" >next: null</text></g></svg></div><div class="cols w6040 nat"><pre class="code sm"><span class="py-kw">import</span> time, pandas <span class="py-kw">as</span> pd
+rows, url, n = [], BASE + <span class="py-str">&#x27;api/products/page-1.json&#x27;</span>, <span class="py-num">0</span>
+while url:
+    r = requests.get(url, timeout=<span class="py-num">10</span>)
+    r.raise_for_status()<span class="py-cm">                 # stop on any status that is not 2xx</span>
+    d = r.json(); n += <span class="py-num">1</span>
+    rows += d[<span class="py-str">&#x27;items&#x27;</span>]
+    url = requests.compat.urljoin(url, d[<span class="py-str">&#x27;next&#x27;</span>]) <span class="py-kw">if</span> d[<span class="py-str">&#x27;next&#x27;</span>] <span class="py-kw">else</span> <span class="py-kw">None</span>
+    time.sleep(<span class="py-num">0.5</span>)<span class="py-cm">                      # one request every half second</span>
+api = pd.DataFrame(rows)
+<span class="py-kw">print</span>(n, <span class="py-str">&#x27;requests,&#x27;</span>, len(api), <span class="py-str">&#x27;rows, total stated by the server:&#x27;</span>, d[<span class="py-str">&#x27;total&#x27;</span>])
+<span class="py-kw">print</span>(api.dtypes.to_string())</pre><div class="colstack"><div class="outlbl">output</div><div class="out sm">7 requests, 168 rows, total stated by the server: 168
+sku          object
+name         object
+category     object
+price       float64
+mrp           int64
+in_stock       bool</div><div class="callout sm" data-at="3"><b>The server ends the loop.</b> Following <b>next</b> needs no page count in the code, so the loop stays correct when the catalogue grows.</div></div></div><div class="bld"><i></i><i></i><i></i></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="API">
+  <div class="eyebrow">API &#183; Test</div>
+  <h1 class="t">Test
+    <small>A loop that ends without an error has not shown that the table is complete. Three checks take one line each.</small></h1>
+  <div class="wrap" style="zoom:1.1400000000000001">
+<div class="cols nat"><div class="colstack"><pre class="code "><span class="py-kw">print</span>(len(api) == d[<span class="py-str">&#x27;total&#x27;</span>])<span class="py-cm">          # 1. every row the server says it has</span>
+<span class="py-kw">print</span>(api.sku.is_unique)<span class="py-cm">               # 2. no product twice</span>
+<span class="py-kw">print</span>(api.price.isna().sum())<span class="py-cm">          # 3. missing prices, counted</span>
+<span class="py-kw">print</span>(api[api.price.isna()].name.tolist()[:<span class="py-num">2</span>])</pre><div class="outlbl">output</div><div class="out sm">True
+True
+5
+[&#x27;Adyar Fresh Toor Dal&#x27;, &#x27;Marina Ponni Rice&#x27;]</div></div><div class="colstack"><table class="d sm"><tr><th>sku</th><th>name</th><th>category</th><th>price</th><th>mrp</th><th>in_stock</th></tr><tr><td>SM1001</td><td>Sangam Medium Nappies</td><td>nappies</td><td>841</td><td>841</td><td>True</td></tr><tr><td>SM1002</td><td>Adyar Fresh Thick Curd</td><td>curd</td><td>38</td><td>38</td><td>True</td></tr><tr><td>SM1003</td><td>Adyar Fresh Toor Dal</td><td>dal</td><td>&#8212;</td><td>91</td><td>True</td></tr><tr><td>SM1004</td><td>Sangam Cream Biscuits</td><td>biscuits</td><td>30</td><td>37</td><td>True</td></tr></table><div class="callout sm"><b>Check 3.</b> 5 products have price null. The JSON says so with a missing value, and pandas reads the column as float64.</div></div></div><div class="cols nat"><div class="callout good sm"><b>Check 1.</b> 168 rows collected against 168 stated by the server.</div><div class="callout good sm"><b>Check 2.</b> 168 different sku in 168 rows, so no product arrived twice.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="API">
+  <div class="eyebrow">API &#183; Drawbacks</div>
+  <h1 class="t">Drawbacks
+    <small>An API returns the fields its owner chose to publish. This one has six, and two that the question needs are absent.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="colstack"><table class="d"><tr><th>field</th><th>in the JSON</th><th>on the HTML page</th></tr><tr><td>sku, name, category</td><td>yes</td><td>yes</td></tr><tr><td>price, mrp</td><td>yes, as numbers</td><td>yes, as text</td></tr><tr><td>in_stock</td><td>yes</td><td>yes, as a badge</td></tr><tr><td><b>rating</b></td><td><b>no</b></td><td>yes</td></tr><tr><td><b>number of reviews</b></td><td><b>no</b></td><td>yes</td></tr><tr><td><b>pack size</b></td><td><b>no</b></td><td>yes</td></tr></table></div><div class="colstack"><div class="callout sm"><b>Missing fields.</b> A question about ratings or about price per kilogram cannot be answered from this API.</div><div class="callout sm"><b>Keys and quotas.</b> Many public APIs ask for a key and cap the number of calls per day. This shop asks for neither.</div><div class="callout warn sm"><b>No API at all.</b> Many sites publish only pages for people. The data is then inside HTML, which is route 3.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="HTML">
+  <div class="eyebrow">HTML &#183; Concept</div>
+  <h1 class="t">Concept
+    <small>An HTML page is a tree of elements written as text. A scraper names the elements that hold the values it wants.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><div class="cap">one product card of catalogue/page-1.html as a tree</div><svg viewBox="0 0 1120 206" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="One product card drawn as a tree of elements"><rect x="430.0" y="6.0" width="260.0" height="40.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="430.0" y="6.0" width="260.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="560.0" y="26.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="middle" font-weight="700" >article</text><text x="560.0" y="40.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >class=&quot;product&quot; data-sku=&quot;SM1001&quot;</text><line x1="560.0" y1="46.0" x2="120.0" y2="84.0" stroke="#8A90B0" stroke-width="1.3" /><rect x="20.0" y="84.0" width="200.0" height="40.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="20.0" y="84.0" width="200.0" height="4.0" fill="#A87900" stroke="none" stroke-width="1" /><text x="120.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="middle" font-weight="700" >h2.name</text><text x="120.0" y="118.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >Sangam Medium Nappies</text><line x1="560.0" y1="46.0" x2="340.0" y2="84.0" stroke="#8A90B0" stroke-width="1.3" /><rect x="240.0" y="84.0" width="200.0" height="40.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="240.0" y="84.0" width="200.0" height="4.0" fill="#A87900" stroke="none" stroke-width="1" /><text x="340.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="middle" font-weight="700" >div.cat</text><text x="340.0" y="118.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >nappies</text><line x1="560.0" y1="46.0" x2="560.0" y2="84.0" stroke="#8A90B0" stroke-width="1.3" /><rect x="460.0" y="84.0" width="200.0" height="40.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="460.0" y="84.0" width="200.0" height="4.0" fill="#A87900" stroke="none" stroke-width="1" /><text x="560.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="middle" font-weight="700" >div.pack</text><text x="560.0" y="118.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >40 pcs</text><line x1="560.0" y1="46.0" x2="780.0" y2="84.0" stroke="#8A90B0" stroke-width="1.3" /><rect x="680.0" y="84.0" width="200.0" height="40.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="680.0" y="84.0" width="200.0" height="4.0" fill="#A87900" stroke="none" stroke-width="1" /><text x="780.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="middle" font-weight="700" >div.price</text><text x="780.0" y="118.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >₹841.00</text><line x1="560.0" y1="46.0" x2="1000.0" y2="84.0" stroke="#8A90B0" stroke-width="1.3" /><rect x="900.0" y="84.0" width="200.0" height="40.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="900.0" y="84.0" width="200.0" height="4.0" fill="#5D6488" stroke="none" stroke-width="1" /><text x="1000.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="middle" font-weight="700" >div</text><text x="1000.0" y="118.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >(no class)</text><line x1="1000.0" y1="124.0" x2="795.0" y2="160.0" stroke="#8A90B0" stroke-width="1.3" /><rect x="700.0" y="160.0" width="190.0" height="40.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="700.0" y="160.0" width="190.0" height="4.0" fill="#0E7A55" stroke="none" stroke-width="1" /><text x="795.0" y="180.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="middle" font-weight="700" >span.rating</text><text x="795.0" y="194.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >title=&quot;4.5 out of 5&quot;</text><line x1="1000.0" y1="124.0" x2="1005.0" y2="160.0" stroke="#8A90B0" stroke-width="1.3" /><rect x="910.0" y="160.0" width="190.0" height="40.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="910.0" y="160.0" width="190.0" height="4.0" fill="#0E7A55" stroke="none" stroke-width="1" /><text x="1005.0" y="180.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E1330" text-anchor="middle" font-weight="700" >span.count</text><text x="1005.0" y="194.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >(40)</text></svg></div><div class="cols nat"><div class="callout sm"><b>Four things carry information:</b> the tag name, the attributes, the text and the position of the element in the tree.</div><div class="callout sm"><b>Written for a browser.</b> The markup says how the card should look. No field is declared as a price or as a number.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="HTML">
+  <div class="eyebrow">HTML &#183; Example</div>
+  <h1 class="t">Example
+    <small>The markup of the first product card. Page 1 holds 25 such article elements.</small></h1>
+  <div class="wrap" style="zoom:1.32">
+<div class="cols w6040 nat"><div class="colstack"><div class="outlbl">catalogue/page-1.html, first card</div><div class="out sm">&lt;article class=&quot;product&quot; data-sku=&quot;SM1001&quot;&gt;
+&lt;h2 class=&quot;name&quot;&gt;Sangam Medium Nappies&lt;/h2&gt;
+&lt;div class=&quot;cat&quot;&gt;nappies&lt;/div&gt;
+&lt;div class=&quot;pack&quot;&gt;40 pcs&lt;/div&gt;
+&lt;div class=&quot;price&quot;&gt;₹841.00&lt;/div&gt;
+&lt;div&gt;&lt;span class=&quot;rating&quot; title=&quot;4.5 out of 5&quot;&gt;★★★★☆&lt;/span&gt; &lt;span class=&quot;count&quot;&gt;(40)&lt;/span&gt;&lt;/div&gt;
+&lt;/article&gt;</div><div class="fig"><div class="cap">the same card in a browser</div><svg viewBox="0 0 560 112" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="The card as a browser draws it"><rect x="130.0" y="4.0" width="300.0" height="104.0" fill="#FFFFFF" stroke="#CED3E6" stroke-width="1" rx="8"/><text x="146.0" y="28.0" font-family="Geist,system-ui,sans-serif" font-size="14" fill="#0E1330" text-anchor="start" font-weight="700" >Sangam Medium Nappies</text><text x="146.0" y="45.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#5D6488" text-anchor="start" font-weight="400" >nappies</text><text x="146.0" y="60.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#5D6488" text-anchor="start" font-weight="400" >40 pcs</text><text x="146.0" y="82.0" font-family="Geist,system-ui,sans-serif" font-size="16" fill="#0E1330" text-anchor="start" font-weight="700" >₹841.00</text><text x="146.0" y="99.0" font-family="Geist,system-ui,sans-serif" font-size="12" fill="#A87900" text-anchor="start" font-weight="400" >★★★★☆</text><text x="210.0" y="99.0" font-family="Geist,system-ui,sans-serif" font-size="11" fill="#5D6488" text-anchor="start" font-weight="400" >(40)</text></svg></div></div><div class="colstack"><div class="callout sm"><b>Tag.</b> Every card is an <b>article</b>. The name is the only <b>h2</b> inside it.</div><div class="callout sm"><b>Attributes.</b> The sku sits in <b>data-sku</b> and the rating in <b>title</b>. The page displays neither value.</div><div class="callout sm"><b>Text.</b> The price is the text ₹841.00, with a currency sign and two decimals.</div><div class="callout sm"><b>Position.</b> The review count is a span inside a div that has no class of its own.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="HTML">
+  <div class="eyebrow">HTML &#183; Mechanism</div>
+  <h1 class="t">Mechanism
+    <small>A CSS selector is a pattern that names elements by tag, class, attribute or position. Counts are from page 1.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<table class="d lg"><tr><th>selector</th><th>reads as</th><th>matches on page 1</th></tr><tr><td><b>article</b></td><td>every element with this tag</td><td>25</td></tr><tr><td><b>.product</b></td><td>every element whose class list contains product</td><td>25</td></tr><tr><td><b>.sponsored</b></td><td>class list contains sponsored</td><td>1</td></tr><tr><td><b>article.product:not(.sponsored)</b></td><td>an article with class product and without class sponsored</td><td>24</td></tr><tr><td><b>[data-sku="SM1001"]</b></td><td>the attribute data-sku has this value</td><td>1</td></tr><tr><td><b>.price s</b></td><td>an s element anywhere inside an element of class price</td><td>&#8212;</td></tr><tr><td><b>article &gt; h2</b></td><td>an h2 that is a direct child of an article</td><td>25</td></tr></table><div class="cols nat"><div class="callout warn sm"><b>25 cards for 24 products.</b> Page 1 carries one sponsored card that repeats a product. The class product matches it too.</div><div class="callout sm"><b>One language.</b> Browsers, BeautifulSoup and browser automation tools all accept the same selectors.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="HTML">
+  <div class="eyebrow">HTML &#183; Test</div>
+  <h1 class="t">Test
+    <small>Four cards from page 4. Write a selector for: every price, the struck-out MRP alone, the cards with no rating, the price of SM1073.</small></h1>
+  <div class="wrap" style="zoom:1.12">
+<div class="sp-row"><input id="sp-in" value="article" spellcheck="false" autocomplete="off" aria-label="CSS selector"/><div class="out sm" id="sp-n"></div><span class="jsbadge">browser JS</span></div><div class="sp-pre" id="sp-pre"><button>article</button><button>.product</button><button>.sponsored</button><button>article.product:not(.sponsored)</button><button>.price</button><button>s.mrp</button><button>.rating</button><button>[data-sku=&quot;SM1073&quot;] .price</button><button>.norating</button><button>h2</button></div><pre id="sp-src"></pre><script type="application/json" id="sp-data">{"html":"<div class=\"grid\">\n    <article class=\"product\" data-sku=\"SM1071\">\n<h2 class=\"name\">Pothigai Ponni Rice</h2>\n<div class=\"cat\">rice</div>\n<div class=\"pack\">10000 g</div>\n<div class=\"price\">\u20b9650.00<s class=\"mrp\">\u20b9690.00</s></div>\n<div class=\"norating\">No ratings yet</div>\n</article>\n    <article class=\"product\" data-sku=\"SM1072\">\n<h2 class=\"name\">Marina Lime Soap</h2>\n<div class=\"cat\">soap</div>\n<div class=\"pack\">0.05 kg</div>\n<div class=\"price\">\u20b921.00<s class=\"mrp\">\u20b923.00</s></div>\n<div><span class=\"rating\" title=\"3.7 out of 5\">\u2605\u2605\u2605\u2605\u2606</span> <span class=\"count\">(212)</span></div>\n</article>\n    <article class=\"product sponsored\" data-sku=\"SM1020\">\n<div class=\"tag\">SPONSORED</div>\n<h2 class=\"name\">Marina Full Cream Milk</h2>\n<div class=\"cat\">milk</div>\n<div class=\"pack\">1 L</div>\n<div class=\"price\">\u20b948.00<s class=\"mrp\">\u20b955.00</s></div>\n<div class=\"norating\">No ratings yet</div>\n</article>\n    <article class=\"product\" data-sku=\"SM1073\">\n<h2 class=\"name\">Marina White Eggs</h2>\n<div class=\"cat\">eggs</div>\n<div class=\"pack\">12 pcs</div>\n<div class=\"price\">\u20b970.00</div>\n<div><span class=\"rating\" title=\"3.8 out of 5\">\u2605\u2605\u2605\u2605\u2606</span> <span class=\"count\">(3)</span></div>\n</article>\n</div>"}</script>
+  </div>
+</section>
+
+<section class="slide" data-sec="HTML">
+  <div class="eyebrow">HTML &#183; Example: BeautifulSoup on one card</div>
+  <h1 class="t">Example continued 1
+    <small>BeautifulSoup parses the response into a tree, and select_one returns the first element a selector matches.</small></h1>
+  <div class="wrap" style="zoom:1.38">
+<div class="cols w6040 nat"><pre class="code "><span class="py-kw">from</span> bs4 <span class="py-kw">import</span> BeautifulSoup
+r = requests.get(BASE + <span class="py-str">&#x27;catalogue/page-1.html&#x27;</span>, timeout=<span class="py-num">10</span>)
+soup = BeautifulSoup(r.text, <span class="py-str">&#x27;html.parser&#x27;</span>)
+card = soup.select_one(<span class="py-str">&#x27;article.product:not(.sponsored)&#x27;</span>)
+<span class="py-kw">print</span>(card[<span class="py-str">&#x27;data-sku&#x27;</span>])
+<span class="py-kw">print</span>(card.select_one(<span class="py-str">&#x27;.name&#x27;</span>).get_text())
+<span class="py-kw">print</span>(card.select_one(<span class="py-str">&#x27;.pack&#x27;</span>).get_text())
+<span class="py-kw">print</span>(repr(card.select_one(<span class="py-str">&#x27;.price&#x27;</span>).get_text()))
+<span class="py-kw">print</span>(card.select_one(<span class="py-str">&#x27;.rating&#x27;</span>)[<span class="py-str">&#x27;title&#x27;</span>])
+<span class="py-kw">print</span>(card.select_one(<span class="py-str">&#x27;.count&#x27;</span>).get_text())</pre><div class="colstack"><div class="outlbl">output</div><div class="out ">SM1001
+Sangam Medium Nappies
+40 pcs
+&#x27;₹841.00&#x27;
+4.5 out of 5
+(40)</div></div></div><div class="cols nat"><div class="callout sm"><b>get_text()</b> returns the text inside an element. <b>card['data-sku']</b> reads an attribute, as a dict lookup would.</div><div class="callout warn sm"><b>Every value is a str.</b> The price is the string '₹841.00' and the review count is the string '(40)'.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="HTML">
+  <div class="eyebrow">HTML &#183; Mechanism: every page</div>
+  <h1 class="t">Mechanism continued 1
+    <small>The loop of the API section again, with a parser inside it: follow the Next link, read every card, stop when the link is absent.</small></h1>
+  <div class="wrap" style="zoom:1.08">
+<div class="cols w6040 nat"><pre class="code sm"><span class="py-kw">def</span> text(card, css):
+    el = card.select_one(css)<span class="py-cm">            # None when the card has no such element</span>
+    <span class="py-kw">return</span> el.get_text(strip=<span class="py-kw">True</span>) <span class="py-kw">if</span> el <span class="py-kw">else</span> <span class="py-kw">None</span>
+
+rows, url = [], BASE + <span class="py-str">&#x27;catalogue/page-1.html&#x27;</span>
+while url:
+    r = requests.get(url, timeout=<span class="py-num">10</span>); r.raise_for_status()
+    soup = BeautifulSoup(r.text, <span class="py-str">&#x27;html.parser&#x27;</span>)
+    <span class="py-kw">for</span> c <span class="py-kw">in</span> soup.select(<span class="py-str">&#x27;article.product&#x27;</span>):
+        rt = c.select_one(<span class="py-str">&#x27;.rating&#x27;</span>)
+        rows.append({<span class="py-str">&#x27;sku&#x27;</span>: c[<span class="py-str">&#x27;data-sku&#x27;</span>], <span class="py-str">&#x27;name&#x27;</span>: text(c, <span class="py-str">&#x27;.name&#x27;</span>), <span class="py-str">&#x27;pack&#x27;</span>: text(c, <span class="py-str">&#x27;.pack&#x27;</span>),
+                     <span class="py-str">&#x27;price&#x27;</span>: text(c, <span class="py-str">&#x27;.price&#x27;</span>), <span class="py-str">&#x27;rating&#x27;</span>: rt[<span class="py-str">&#x27;title&#x27;</span>] <span class="py-kw">if</span> rt <span class="py-kw">else</span> <span class="py-kw">None</span>,
+                     <span class="py-str">&#x27;reviews&#x27;</span>: text(c, <span class="py-str">&#x27;.count&#x27;</span>), <span class="py-str">&#x27;sponsored&#x27;</span>: <span class="py-str">&#x27;sponsored&#x27;</span> <span class="py-kw">in</span> c[<span class="py-str">&#x27;class&#x27;</span>]})
+    nxt = soup.select_one(<span class="py-str">&#x27;a.next&#x27;</span>)
+    url = requests.compat.urljoin(url, nxt[<span class="py-str">&#x27;href&#x27;</span>]) <span class="py-kw">if</span> nxt <span class="py-kw">else</span> <span class="py-kw">None</span>
+    time.sleep(<span class="py-num">0.5</span>)
+web = pd.DataFrame(rows)
+<span class="py-kw">print</span>(len(web), <span class="py-str">&#x27;rows,&#x27;</span>, web.sku.nunique(), <span class="py-str">&#x27;different sku&#x27;</span>)
+<span class="py-kw">print</span>(web.dtypes.to_string())</pre><div class="colstack"><div class="outlbl">output</div><div class="out sm">179 rows, 168 different sku
+sku          object
+name         object
+pack         object
+price        object
+rating       object
+reviews      object
+sponsored      bool</div><div class="callout sm"><b>text()</b> returns None when a card lacks an element. A bare <b>select_one(...).get_text()</b> would stop the run at the first card without a rating.</div><div class="callout bad sm"><b>179 rows, 168 different sku.</b> The run raised no error and returned 11 rows too many.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Result">
+  <div class="eyebrow">Result &#183; Example</div>
+  <h1 class="t">Example
+    <small>Five consecutive rows of the scraped table show four different defects.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols w6040 nat"><div class="colstack"><div class="outlbl">web.iloc[22:27]</div><div class="out ">       sku    pack          price        rating  sponsored
+22  SM1022   300 g         ₹72.00  3.7 out of 5      False
+23  SM1023   200 g         ₹18.00  3.7 out of 5      False
+24  SM1024  0.2 kg  ₹97.00₹119.00  4.3 out of 5      False
+25  SM1116  0.5 kg         ₹97.00  3.5 out of 5       True
+26  SM1025   800 g   ₹57.00₹65.00          None      False</div></div><div class="colstack"><div class="callout sm"><b>Row 24, price.</b> The offer price and the struck-out MRP were joined into one string by get_text().</div><div class="callout sm"><b>Row 25.</b> A sponsored card. SM1116 appears again on its own page.</div><div class="callout sm"><b>Row 26, rating.</b> The card says "No ratings yet", so the rating is None.</div><div class="callout sm"><b>Pack.</b> 200 g and 0.2 kg are the same quantity written two ways.</div></div></div>
+  </div>
+</section>
+
+<section class="slide build" data-sec="Result">
+  <div class="eyebrow">Result &#183; Test</div>
+  <h1 class="t">Test
+    <small>Every catalogue page states "168 products". The scrape returned 179 rows, and the difference has two causes.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><svg viewBox="0 0 1120 196" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Row count falling from 179 to 172 to 168"><rect x="60.0" y="10.0" width="620.0" height="38.0" fill="#5D6488" stroke="none" stroke-width="1" rx="4"/><text x="74.0" y="35.0" font-family="Geist Mono,ui-monospace,monospace" font-size="17" fill="#FFFFFF" text-anchor="start" font-weight="700" >179</text><text x="692.0" y="34.0" font-family="Geist,system-ui,sans-serif" font-size="13" fill="#0E1330" text-anchor="start" font-weight="400" >rows scraped</text><g data-at="1"><rect x="60.0" y="66.0" width="595.8" height="38.0" fill="#A87900" stroke="none" stroke-width="1" rx="4"/><text x="74.0" y="91.0" font-family="Geist Mono,ui-monospace,monospace" font-size="17" fill="#FFFFFF" text-anchor="start" font-weight="700" >172</text><text x="667.8" y="90.0" font-family="Geist,system-ui,sans-serif" font-size="13" fill="#0E1330" text-anchor="start" font-weight="400" >after removing 7 sponsored cards</text></g><g data-at="2"><rect x="60.0" y="122.0" width="581.9" height="38.0" fill="#0E7A55" stroke="none" stroke-width="1" rx="4"/><text x="74.0" y="147.0" font-family="Geist Mono,ui-monospace,monospace" font-size="17" fill="#FFFFFF" text-anchor="start" font-weight="700" >168</text><text x="653.9" y="146.0" font-family="Geist,system-ui,sans-serif" font-size="13" fill="#0E1330" text-anchor="start" font-weight="400" >after removing 4 rows repeated across page breaks</text></g><g data-at="2"><line x1="641.9" y1="4.0" x2="641.9" y2="176.0" stroke="#E8382D" stroke-width="1.4" stroke-dasharray="4 3"/><text x="635.9" y="190.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#E8382D" text-anchor="end" font-weight="600" >168 stated on the page</text></g></svg></div><div class="cols nat"><div class="callout sm" data-at="1"><b>Sponsored cards.</b> One on each of the 7 pages. The selector <b>article.product:not(.sponsored)</b> leaves them out.</div><div class="callout sm" data-at="2"><b>Page breaks.</b> The last two cards of pages 3 and 5 open pages 4 and 6: SM1071, SM1072, SM1119, SM1120. <b>drop_duplicates('sku')</b> removes them.</div></div><div class="bld"><i></i><i></i></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Result">
+  <div class="eyebrow">Result &#183; Drawbacks</div>
+  <h1 class="t">Drawbacks
+    <small>HTML has no data types, so all six scraped columns are strings. Counts are over the 168 products.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="colstack"><div class="fig"><div class="cap">pack size: seven ways of writing three units</div><svg viewBox="0 0 520 195" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Number of products by the unit written in the pack size"><text x="80.0" y="20.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >g</text><rect x="90.0" y="6.0" width="280.0" height="20.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="378.0" y="20.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">63</text><text x="80.0" y="47.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >kg</text><rect x="90.0" y="33.0" width="164.4" height="20.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="262.4" y="47.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">37</text><text x="80.0" y="74.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >gm</text><rect x="90.0" y="60.0" width="88.9" height="20.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="186.9" y="74.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">20</text><text x="80.0" y="101.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >ml</text><rect x="90.0" y="87.0" width="84.4" height="20.0" fill="#0E7A55" stroke="none" stroke-width="1" /><text x="182.4" y="101.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">19</text><text x="80.0" y="128.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >L</text><rect x="90.0" y="114.0" width="22.2" height="20.0" fill="#0E7A55" stroke="none" stroke-width="1" /><text x="120.2" y="128.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">5</text><text x="80.0" y="155.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >pcs</text><rect x="90.0" y="141.0" width="71.1" height="20.0" fill="#A87900" stroke="none" stroke-width="1" /><text x="169.1" y="155.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">16</text><text x="80.0" y="182.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >pack of</text><rect x="90.0" y="168.0" width="35.6" height="20.0" fill="#A87900" stroke="none" stroke-width="1" /><text x="133.6" y="182.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">8</text></svg></div></div><div class="colstack"><div class="kv k3"><div class="lf bad"><small>two prices in one cell</small>76</div><div class="lf bad"><small>"Price on request"</small>5</div><div class="lf bad"><small>no rating</small>38</div></div><div class="callout sm"><b>The same quantity.</b> 0.1 kg, 100 g, 100gm all mean 100 grams.</div><div class="callout sm"><b>Module 4</b> turns these strings into numbers and one unit. Collection ends with the raw table saved as it arrived.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Result">
+  <div class="eyebrow">Result &#183; Verdict</div>
+  <h1 class="t">Verdict
+    <small>The two routes agree on the price of all 163 products that have one, and differ in what else they return.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<table class="d lg"><tr><th></th><th>route 2: JSON API</th><th>route 3: HTML pages</th></tr><tr><td>requests</td><td>7</td><td>7</td></tr><tr><td>bytes received, unpacked</td><td>24,105</td><td>65,796</td></tr><tr><td>rows returned</td><td>168</td><td>179, of which 11 are repeats</td></tr><tr><td>data types</td><td>numbers, booleans, null</td><td>strings only</td></tr><tr><td>fields</td><td>sku, name, category, price, mrp, in_stock</td><td>the same, with rating, reviews and pack size</td></tr><tr><td>breaks when</td><td>the owner changes the API</td><td>a class name or the page layout changes</td></tr></table><div class="cols nat"><div class="callout sm"><b>Use both.</b> Take price and stock from the API, take rating and pack size from the HTML, and join the two tables on sku.</div><div class="callout good sm"><b>A free check.</b> 163 of 163 prices are equal across the routes, and the same 5 products lack a price in both.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Check">
+  <div class="eyebrow">Classroom check</div>
+  <h1 class="t">Which route for each request
+    <small>Five requests from the store manager. Choose the highest route that has the fields.</small></h1>
+  <div class="wrap" style="zoom:1.32">
+<div class="match" id="match"><div class="q" data-a="file" data-why="A file already exists, so no scraping is needed."><div class="s">Every sale of the last six months. The store exports them each night.<small></small></div><select><option value="">choose a route</option><option value="file">route 1: file</option><option value="api">route 2: API</option><option value="html">route 3: HTML</option><option value="both">routes 2 and 3</option><option value="js">route 4: JavaScript page</option></select></div><div class="q" data-a="api" data-why="The JSON has price and in_stock as typed fields."><div class="s">The current price and stock of all 168 products.<small></small></div><select><option value="">choose a route</option><option value="file">route 1: file</option><option value="api">route 2: API</option><option value="html">route 3: HTML</option><option value="both">routes 2 and 3</option><option value="js">route 4: JavaScript page</option></select></div><div class="q" data-a="html" data-why="The JSON has no rating; the card has it in a title attribute."><div class="s">The star rating of each product.<small></small></div><select><option value="">choose a route</option><option value="file">route 1: file</option><option value="api">route 2: API</option><option value="html">route 3: HTML</option><option value="both">routes 2 and 3</option><option value="js">route 4: JavaScript page</option></select></div><div class="q" data-a="both" data-why="Price from the API, pack size from the HTML, joined on sku."><div class="s">Price per kilogram of every rice product.<small></small></div><select><option value="">choose a route</option><option value="file">route 1: file</option><option value="api">route 2: API</option><option value="html">route 3: HTML</option><option value="both">routes 2 and 3</option><option value="js">route 4: JavaScript page</option></select></div><div class="q" data-a="js" data-why="The page is filled by a script. Lecture 2."><div class="s">The offers that appear a moment after offers.html opens.<small></small></div><select><option value="">choose a route</option><option value="file">route 1: file</option><option value="api">route 2: API</option><option value="html">route 3: HTML</option><option value="both">routes 2 and 3</option><option value="js">route 4: JavaScript page</option></select></div></div><div class="wctl"><div class="out sm" id="match-score" style="flex:1;white-space:normal">0 of 5 chosen</div><span class="jsbadge">browser JS</span></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Summary">
+  <div class="eyebrow">Summary</div>
+  <h1 class="t">Summary
+    <small>Each idea of the lecture with the number it produced on the shop.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<table class="d lg"><tr><th>idea</th><th>on the shop</th></tr><tr><td>Four routes to data</td><td>file, API, HTML page, page built by JavaScript; take the highest that has the fields</td></tr><tr><td>HTTP exchange</td><td>GET page-1.html &#8594; 200, 9,177 bytes; GET page-9.html &#8594; 404 and 0 products</td></tr><tr><td>JSON API</td><td>7 requests, 168 typed rows, 6 fields, no rating and no pack size</td></tr><tr><td>Pagination</td><td>follow next until the server sends null, then compare the row count with the stated total</td></tr><tr><td>CSS selectors</td><td>.product matches 25 cards on page 1; article.product:not(.sponsored) matches 24</td></tr><tr><td>HTML scrape</td><td>179 rows &#8594; 172 without sponsored cards &#8594; 168 without repeats</td></tr><tr><td>What HTML returns</td><td>strings: 76 joined prices, 38 missing ratings, 7 spellings of 3 units</td></tr><tr><td>Two routes compared</td><td>163 of 163 prices equal</td></tr></table>
+  </div>
+</section>
+
+<section class="slide" data-sec="Practice">
+  <div class="eyebrow">Practice</div>
+  <h1 class="t">Practice on the shop
+    <small>The shop is at iitm-da.github.io/da5500w/module2/data/shop/ and products_clean.csv in the same folder holds the catalogue as generated.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="colstack"><div class="card big"><h3><span class="num">1</span>Count from the API</h3><p>Collect all seven JSON pages. How many products are out of stock, and how many are sold below their MRP?</p></div><div class="card big"><h3><span class="num">2</span>Average rating</h3><p>Scrape the rating of every product from the HTML pages, leaving out sponsored cards and repeats. How many products have a rating, and what is their mean?</p></div></div><div class="colstack"><div class="card big"><h3><span class="num">3</span>One selector</h3><p>Write a single CSS selector that matches the name of every sponsored card. Check that it returns one element on each page.</p></div><div class="card big"><h3><span class="num">4</span>Break the loop</h3><p>Change the starting address to page-9.html and remove raise_for_status(). How many rows does the loop return, and which one-line check would catch it?</p></div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="References">
+  <div class="eyebrow">References</div>
+  <h1 class="t">References</h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="refs"><p>Mitchell, R. <i>Web Scraping with Python</i>. O'Reilly. Chapters 1 and 2 cover a first scraper and HTML parsing.</p><p>Fielding, R., Nottingham, M. and Reschke, J. (2022). <i>HTTP Semantics</i>. RFC 9110. Methods, status codes and headers.</p><p>Bray, T. (2017). <i>The JavaScript Object Notation (JSON) Data Interchange Format</i>. RFC 8259.</p><p>Requests documentation: requests.readthedocs.io. BeautifulSoup documentation: crummy.com/software/BeautifulSoup/bs4/doc.</p><p>Han, J., Kamber, M. and Pei, J. (2012). <i>Data Mining: Concepts and Techniques</i>, 3rd edition. The textbook starts from data that has already been collected; this module comes before its chapter 2.</p></div>
+  </div>
+</section>
+</div></div>
+<div id="nav"><button id="prev" aria-label="Previous slide">&#8249;</button><button id="next" aria-label="Next slide">&#8250;</button></div>
+<div id="hint">&#8592; &#8594; navigate &#183; F fullscreen &#183; P print</div>
+<script>
+/* ============================================================
+   deck mechanics — identical to the other decks in the module
+   ============================================================ */
+(function(){
+  const slides=[...document.querySelectorAll('.slide')],
+        deck=document.getElementById('deck'), pbar=document.getElementById('pbar');
+  let i=0;
+  slides.forEach((s,idx)=>{
+    const r=document.createElement('div'); r.className='rail';
+    r.innerHTML='<div class="a">DA5500W &#183; Data Mining: Concepts and Techniques</div>'+
+      '<div class="n">Dr. Arun B Ayyar</div>'+
+      '<div class="b">'+(s.dataset.sec||'')+'</div>'+
+      '<div class="c">'+String(idx+1).padStart(2,'0')+' / '+slides.length+'</div>';
+    s.appendChild(r);
+  });
+  // ---- staged builds ------------------------------------------------
+  // A slide carrying .build holds its [data-at] pieces back. Arrow
+  // right releases the next one; only when they are all out does the
+  // deck advance. Entering backwards lands on the finished slide.
+  function maxStep(s){
+    let m=0;
+    s.querySelectorAll('[data-at]').forEach(e=>{ m=Math.max(m,+e.dataset.at||0); });
+    return m;
+  }
+  function paint(s){
+    const k=+s.dataset.step||0;
+    // data-to="k" retires a piece once the build moves past step k
+    s.querySelectorAll('[data-at]').forEach(e=>
+      e.classList.toggle('shown',(+e.dataset.at||0)<=k&&
+        (e.dataset.to===undefined||k<=+e.dataset.to)));
+    const d=s.querySelector('.bld');
+    if(d)[...d.children].forEach((c,n)=>c.classList.toggle('on',n<k));
+  }
+  function build(s,dir){
+    if(!s||!s.classList.contains('build'))return false;
+    const t=(+s.dataset.step||0)+dir;
+    if(t<0||t>maxStep(s))return false;
+    s.dataset.step=t; paint(s); return true;
+  }
+  function show(n){
+    const prev=i, back=n<i;
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+    pbar.style.width=(i/(slides.length-1)*100)+'%';
+    history.replaceState(null,'','#/'+(i+1));
+    const cur=slides[i];
+    if(cur&&cur.classList.contains('build')){
+      cur.dataset.step=back?maxStep(cur):0; paint(cur);
+    }
+    if(prev!==i && slides[prev]) slides[prev].dispatchEvent(new CustomEvent('hidden'));
+    if(cur) cur.dispatchEvent(new CustomEvent('shown'));
+  }
+  function fit(){ deck.style.transform='scale('+Math.min(innerWidth/1330,innerHeight/770)+')'; }
+  addEventListener('resize',fit); fit();
+  document.getElementById('next').onclick=()=>{ if(!build(slides[i],1))show(i+1); };
+  document.getElementById('prev').onclick=()=>{ if(!build(slides[i],-1))show(i-1); };
+  addEventListener('keydown',e=>{
+    if(/^(INPUT|TEXTAREA)$/.test(e.target.tagName))return;
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){
+      if(!build(slides[i],1))show(i+1); e.preventDefault();}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){
+      if(!build(slides[i],-1))show(i-1); e.preventDefault();}
+    else if(e.key==='Home')show(0);
+    else if(e.key==='End')show(slides.length-1);
+    else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}
+    else if(e.key==='p'||e.key==='P')print();
+  });
+  const m=location.hash.match(/#\/(\d+)/); show(m?+m[1]-1:0);
+})();
+
+
+
+/* ---------------- HTTP test: four recorded exchanges, response shown on send ---------------- */
+(function(){
+  const el=document.getElementById('hx-data'); if(!el) return;
+  const D=JSON.parse(el.textContent), seg=document.getElementById('hx-seg'), go=document.getElementById('hx-go');
+  const req=document.getElementById('hx-req'), res=document.getElementById('hx-res');
+  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  let k=0, sent=false;
+  function draw(){
+    const d=D[k], L=d.req.split('\n');
+    req.innerHTML='<b>'+esc(L[0])+'</b>\n'+esc(L.slice(1).join('\n'));
+    res.innerHTML=sent?'<em'+(d.ok?' class="ok"':'')+'>'+esc(d.status)+'</em>\n'+esc(d.heads)+'\n<i>'+esc(d.note)+'</i>\n\n'+esc(d.body)
+                      :'<i>press send</i>';
+  }
+  seg.addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    if(b===go){sent=true;} else {k=+b.dataset.k; sent=false; seg.querySelectorAll('button[data-k]').forEach(x=>x.classList.toggle('on',x===b));}
+    draw(); b.blur();
+  });
+  draw();
+})();
+
+/* ---------------- HTML test: a CSS selector run on four real cards ---------------- */
+(function(){
+  const el=document.getElementById('sp-data'); if(!el) return;
+  const doc=new DOMParser().parseFromString(JSON.parse(el.textContent).html,'text/html');
+  const inp=document.getElementById('sp-in'), src=document.getElementById('sp-src'), nOut=document.getElementById('sp-n');
+  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  function open(n){
+    let t='<span class="tg">&lt;'+n.tagName.toLowerCase()+'</span>';
+    for(const a of n.attributes) t+=' <span class="at">'+a.name+'</span>="'+esc(a.value)+'"';
+    return t+'<span class="tg">&gt;</span>';
+  }
+  function ser(n,d,hit){
+    const pad='  '.repeat(d), kids=[...n.children], m=hit.has(n);
+    const o=m?'<mark>'+open(n)+'</mark>':open(n), c='<span class="tg">&lt;/'+n.tagName.toLowerCase()+'&gt;</span>';
+    if(!kids.length) return pad+o+esc(n.textContent)+c+'\n';
+    let own=''; n.childNodes.forEach(x=>{ if(x.nodeType===3&&x.textContent.trim()) own+=x.textContent.trim(); });
+    return pad+o+esc(own)+'\n'+kids.map(x=>ser(x,d+1,hit)).join('')+pad+c+'\n';
+  }
+  function draw(){
+    let hit=new Set(), msg;
+    try{
+      const q=[...doc.body.querySelectorAll(inp.value)]; hit=new Set(q);
+      msg=q.length+' element'+(q.length===1?'':'s')+' matched';
+      if(q.length&&q.length<=6&&q.every(x=>!x.children.length)) msg+=': '+q.map(x=>x.textContent.trim()).join(' · ');
+    }catch(e){ msg='not a valid selector'; }
+    nOut.textContent=msg;
+    src.innerHTML=[...doc.body.querySelectorAll('article')].map(a=>'<span class="el">'+ser(a,0,hit)+'</span>').join('');
+  }
+  inp.addEventListener('input',draw);
+  inp.addEventListener('keydown',e=>e.stopPropagation());
+  document.getElementById('sp-pre').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return; inp.value=b.textContent; draw(); b.blur();
+  });
+  draw();
+})();
+
+/* ---------------- Classroom check: which route ---------------- */
+(function(){
+  const box=document.getElementById('match'); if(!box) return;
+  const score=document.getElementById('match-score');
+  box.addEventListener('change',e=>{
+    const sel=e.target.closest('select'); if(!sel) return;
+    const q=sel.closest('.q');
+    if(!sel.value){q.classList.remove('right','wrong');q.querySelector('small').textContent='';}
+    else{
+      const ok=sel.value===q.dataset.a;
+      q.classList.toggle('right',ok); q.classList.toggle('wrong',!ok);
+      q.querySelector('small').textContent=ok?q.dataset.why:'Check which fields that route returns.';
+    }
+    const qs=[...box.querySelectorAll('.q')], done=qs.filter(x=>x.querySelector('select').value);
+    score.textContent=done.length+' of '+qs.length+' chosen · '+qs.filter(x=>x.classList.contains('right')).length+' correct';
+  });
+  box.addEventListener('keydown',e=>e.stopPropagation());
+})();
+
+</script>
+</body>
+</html>

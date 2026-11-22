@@ -14,6 +14,10 @@ seen = collections.defaultdict(collections.deque)        # client address -> tim
 LOG = os.path.join(HERE, 'access.log')
 
 class Shop(http.server.SimpleHTTPRequestHandler):
+    extensions_map = {**http.server.SimpleHTTPRequestHandler.extensions_map,
+                      '.html': 'text/html; charset=utf-8', '.txt': 'text/plain; charset=utf-8',
+                      '.json': 'application/json; charset=utf-8'}
+
     def do_GET(self):
         now = time.monotonic(); q = seen[self.client_address[0]]
         while q and now - q[0] > WINDOW:

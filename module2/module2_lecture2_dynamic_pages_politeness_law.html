@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>DA5500W M2 L2: Dynamic Pages, Polite Collection and the Law</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400..700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --paper:#FFFFFF; --card:#FFFFFF; --ink:#0E1330; --soft:#5D6488;
+  --line:#CED3E6; --hair:#E2E5F0; --surround:#E4E7F1;
+  --code-bg:#0E1330; --code-ink:#D9E4E9;
+  --t-cls:#2B4BFF; --t-qnt:#9B2C7E; --t-grp:#0E7A55; --t-anc:#A87900;
+  --t-asr:#E8382D; --t-alt:#4B5A87; --t-dot:#6A4CA8; --t-ref:#0E7A55;
+  --sw:1280px; --sh:720px;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --disp:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+/* ligatures OFF: a deck full of ->, =>, != and <= must show them as typed */
+*,*::before,*::after{font-variant-ligatures:none;
+  font-feature-settings:"liga" 0,"clig" 0,"calt" 0,"dlig" 0}
+html,body{height:100%;background:var(--surround);overflow:hidden;
+  font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased}
+#stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#deck{width:var(--sw);height:var(--sh);position:relative;transform-origin:center center;
+  box-shadow:0 20px 70px rgba(0,0,0,.5)}
+.slide{position:absolute;inset:0;background:var(--paper);padding:44px 58px 62px;
+  display:none;flex-direction:column}
+.slide.on{display:flex}
+@media (prefers-reduced-motion:no-preference){
+  .slide.on{animation:fi .22s ease}
+  @keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+}
+/* ---------- headings ---------- */
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--soft);margin-bottom:9px;display:flex;gap:10px;align-items:center}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+h1.t{font-family:var(--disp);font-weight:700;font-size:34px;line-height:1.1;
+  letter-spacing:-.018em;margin-bottom:4px}
+h1.t.sm{font-size:29px}
+h1.t small{display:block;font-family:var(--body);font-weight:400;font-size:15px;
+  color:var(--soft);letter-spacing:0;margin-top:6px;line-height:1.42}
+h1.t small.tight{font-size:13.5px;line-height:1.4}
+h2.s{font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:-.005em;margin-bottom:7px}
+h2.s.xs{font-size:14px;margin-bottom:5px}
+.body{font-size:14.5px;line-height:1.5}
+.wrap{flex:1;min-height:0;margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;flex:1;min-height:0}
+.cols.w6040{grid-template-columns:1.5fr 1fr}
+.cols.w4060{grid-template-columns:1fr 1.5fr}
+.cols.w7030{grid-template-columns:2.2fr 1fr}
+.cols.w3070{grid-template-columns:1fr 2.2fr}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+.colstack{display:flex;flex-direction:column;gap:10px;min-height:0}
+ul.b{list-style:none;font-size:14px;line-height:1.46}
+ul.b li{position:relative;padding-left:15px;margin-bottom:8px}
+ul.b li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;
+  background:var(--line);border:1px solid var(--soft)}
+ul.b li strong{font-weight:600}
+ul.b.sm{font-size:12.6px;line-height:1.44}
+ul.b.sm li{margin-bottom:6px;padding-left:13px}
+ul.b.sm li::before{top:7px;width:5px;height:5px}
+ol.n{list-style:none;counter-reset:st;font-size:13px;line-height:1.45}
+ol.n li{position:relative;padding-left:26px;margin-bottom:9px;counter-increment:st}
+ol.n li::before{content:counter(st);position:absolute;left:0;top:1px;width:18px;height:18px;
+  background:var(--ink);color:#fff;font-family:var(--mono);font-size:10px;
+  display:flex;align-items:center;justify-content:center;border-radius:2px}
+/* ---------- code ---------- */
+pre.code{background:var(--code-bg);color:var(--code-ink);font-family:var(--mono);
+  font-size:12.5px;line-height:1.55;padding:12px 14px;overflow:hidden;
+  border-left:3px solid #2B4BFF;white-space:pre;tab-size:4}
+pre.code.sm{font-size:11.5px;line-height:1.5}
+pre.code.xs{font-size:10.5px;line-height:1.45}
+pre.code.xxs{font-size:9.6px;line-height:1.4}
+.out{background:var(--card);border:1px solid var(--hair);border-left:3px solid #8A90B0;
+  font-family:var(--mono);font-size:11.5px;line-height:1.5;padding:10px 13px;
+  white-space:pre;overflow:hidden;color:#1A2152}
+.out.xs{font-size:10.3px;line-height:1.42}
+.out.xxs{font-size:9.5px;line-height:1.38}
+.outlbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--soft);margin-bottom:4px}
+/* text-transform:none is load-bearing — .outlbl and .eyebrow are uppercase,
+   and an uppercased code token is a different token */
+code.k{font-family:var(--mono);font-size:.94em;background:var(--card);
+  border:1px solid var(--hair);padding:1px 5px;border-radius:2px;white-space:nowrap;
+  text-transform:none}
+/* python token colours, dark ground */
+pre.code .py-kw{color:#8FB8FF}
+pre.code .py-str{color:#B7E39B}
+pre.code .py-cm{color:#6F8896;font-style:italic}
+pre.code .py-fn{color:#F0C46B}
+pre.code .py-num{color:#F58ACE}
+pre.code .py-bi{color:#C0A6F5}
+/* http token colours */
+pre.code .h-mth{color:#F0C46B;font-weight:700}
+pre.code .h-url{color:#E9F2F6}
+pre.code .h-hdr{color:#6FB6F0}
+pre.code .h-val{color:#B7E39B}
+pre.code .h-ok{color:#55D6A2;font-weight:700}
+pre.code .h-bad{color:#FF9090;font-weight:700}
+pre.code .h-dim{color:#6F8896}
+/* json token colours */
+pre.code .j-key{color:#6FB6F0}
+pre.code .j-str{color:#B7E39B}
+pre.code .j-num{color:#F58ACE}
+pre.code .j-pun{color:#8CA3AF}
+/* light-ground variants for .out blocks */
+.out .h-hdr{color:#2B4BFF;font-weight:500}
+.out .h-ok{color:#0E7A55;font-weight:700}
+.out .h-bad{color:#E8382D;font-weight:700}
+.out .h-dim{color:#8A90B0}
+.out .j-key{color:#2B4BFF}
+.out .j-str{color:#0E7A55}
+.out .j-num{color:#9B2C7E}
+/* ---------- tables ---------- */
+table.d{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card)}
+table.d th,table.d td{border:1px solid var(--hair);padding:5.5px 9px;text-align:left;vertical-align:top}
+table.d th{background:var(--ink);color:#fff;font-weight:600;font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase}
+table.d td:first-child{font-family:var(--mono);white-space:nowrap}
+table.d th.m,table.d td.m{font-family:var(--mono);text-align:right;white-space:nowrap}
+table.d.sm{font-size:11.5px}
+table.d.sm th,table.d.sm td{padding:4px 8px}
+table.d.xs{font-size:10.6px}
+table.d.xs th,table.d.xs td{padding:3.5px 7px}
+table.d tr.hl td{background:#FDE9E7}
+table.d.tight th,table.d.tight td{padding:2.4px 7px}
+table.d.tight th{text-transform:none}
+table.d.tight tr.tot td{font-weight:700}
+
+table.d tr.ok td{background:#F3FBF7}
+table.d tr.wr td{background:#FFF6D1}
+table.d.free td:first-child{white-space:normal;font-family:var(--body)}
+table.d td.m{font-family:var(--mono)}
+table.d td.o{font-family:var(--mono);font-size:10.8px;color:#1A2152;white-space:nowrap}
+table.d td.c{text-align:center;font-family:var(--mono)}
+/* ---------- cards & callouts ---------- */
+.card{background:var(--card);border:1px solid var(--hair);border-top:3px solid var(--ink);
+  padding:11px 13px}
+.card h3{font-family:var(--disp);font-size:14.5px;font-weight:700;margin-bottom:5px}
+.card h3 .num{font-family:var(--mono);font-size:11px;color:var(--soft);margin-right:7px}
+.card p{font-size:12.5px;line-height:1.45;color:#1A2152}
+.card.sm{padding:9px 11px}
+.card.sm h3{font-size:13px}
+.card.sm p{font-size:11.6px;line-height:1.42}
+.card.b{border-top-color:var(--t-cls)}
+.card.g{border-top-color:var(--t-grp)}
+.card.r{border-top-color:var(--t-asr)}
+.card.o{border-top-color:var(--t-anc)}
+.card.p{border-top-color:var(--t-qnt)}
+.callout{background:var(--card);border:1px solid var(--hair);border-left:4px solid var(--t-cls);
+  padding:10px 14px;font-size:13.5px;line-height:1.46}
+.callout.sm{font-size:12.3px;padding:8px 12px;line-height:1.44}
+.callout.warn{border-left-color:var(--t-anc);background:#FFF6D1}
+.callout.bad{border-left-color:var(--t-asr);background:#FDE9E7}
+.callout.good{border-left-color:var(--t-grp);background:#F3FBF7}
+.callout b{font-weight:700}
+.tag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;
+  text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;border-radius:2px;
+  vertical-align:2px;margin-right:7px}
+.tag.r{color:var(--t-asr)}.tag.g{color:var(--t-grp)}.tag.b{color:var(--t-cls)}
+.tag.o{color:var(--t-anc)}.tag.p{color:var(--t-qnt)}
+.jsbadge{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  background:var(--t-anc);color:#fff;padding:2px 6px;border-radius:2px}
+.hit{background:#BFE3F2;border-radius:2px;padding:1px 0;
+  box-shadow:0 1px 0 #12556F inset,0 -2px 0 #12556F inset}
+.hit.bad{background:#F8D3D7;box-shadow:0 1px 0 #E8382D inset,0 -2px 0 #E8382D inset}
+.hit.wrn{background:#FFF6D1;box-shadow:0 1px 0 #A87900 inset,0 -2px 0 #A87900 inset}
+/* ---------- the route ladder (recurs in all four lectures) ---------- */
+.ladder{display:grid;grid-template-columns:38px 1fr;gap:0 12px}
+.ladder .rung{display:contents}
+.ladder .num{font-family:var(--mono);font-size:11px;color:#fff;background:var(--soft);
+  display:flex;align-items:center;justify-content:center;height:100%;border-radius:2px}
+.ladder .num.on{background:var(--t-asr)}
+.ladder .txt{background:var(--card);border:1px solid var(--hair);padding:8px 12px;margin-bottom:8px}
+.ladder .txt.on{border-left:3px solid var(--t-asr);background:#FDE9E7}
+.ladder .txt h4{font-family:var(--disp);font-size:13.5px;font-weight:700;margin-bottom:2px}
+.ladder .txt p{font-size:11.8px;line-height:1.42;color:#1A2152}
+/* ---------- motivation rows ---------- */
+.mrow{display:grid;grid-template-columns:118px 1fr 250px;gap:13px;align-items:center;
+  background:var(--card);border:1px solid var(--hair);border-left:3px solid var(--line);
+  padding:9px 13px}
+.mrow>.k{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--soft);line-height:1.5}
+.mrow>.v{font-family:var(--mono);font-size:10.4px;line-height:1.55;white-space:pre;
+  overflow:hidden;color:#1A2152}
+.mrow>.n{font-size:11.6px;line-height:1.4;color:#1A2152;border-left:1px solid var(--hair);
+  padding-left:13px;align-self:stretch;display:grid;align-content:center}
+.mrow>.n b{font-weight:700;color:var(--ink)}
+/* ---------- request/response wire diagram ---------- */
+.wire{display:grid;grid-template-columns:1fr 96px 1fr;align-items:center;gap:0}
+.wire .box{background:var(--card);border:1px solid var(--hair);border-top:3px solid var(--ink);
+  padding:10px 13px}
+.wire .box h4{font-family:var(--disp);font-size:13px;font-weight:700;margin-bottom:4px}
+.wire .arrows{display:flex;flex-direction:column;gap:16px;padding:0 6px}
+.wire .ar{position:relative;height:2px;background:var(--t-cls)}
+.wire .ar::after{content:"";position:absolute;right:-1px;top:-4px;border-left:8px solid var(--t-cls);
+  border-top:5px solid transparent;border-bottom:5px solid transparent}
+.wire .ar.back{background:var(--t-grp)}
+.wire .ar.back::after{right:auto;left:-1px;border-left:none;border-right:8px solid var(--t-grp)}
+.wire .ar b{position:absolute;left:50%;top:-17px;transform:translateX(-50%);
+  font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--soft);white-space:nowrap;background:var(--paper);padding:0 5px}
+/* ---------- widget: request inspector ---------- */
+.insp{display:grid;grid-template-columns:250px 1fr;gap:14px;flex:1;min-height:0}
+.insp .ctl{display:flex;flex-direction:column;gap:7px;min-height:0;overflow:auto}
+.insp .ctl .hdr{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--soft);margin-top:4px}
+.tgl{display:flex;align-items:flex-start;gap:8px;background:var(--card);border:1px solid var(--hair);
+  padding:6px 9px;cursor:pointer;font-size:11.5px;line-height:1.35}
+.tgl:hover{background:#E8ECFF}
+.tgl input{margin-top:2px;accent-color:var(--t-cls);flex:none}
+.tgl b{font-family:var(--mono);font-size:11px;font-weight:500;display:block}
+.tgl i{font-style:normal;color:var(--soft);font-size:10.4px;display:block;line-height:1.3}
+.tgl.on{border-left:3px solid var(--t-grp)}
+.insp .res{display:flex;flex-direction:column;gap:9px;min-height:0}
+#wire{flex:none}
+#verdict{flex:none;background:var(--card);border:1px solid var(--hair);
+  border-left:4px solid var(--soft);padding:11px 14px;font-size:12.6px;line-height:1.46}
+#verdict.ok{border-left-color:var(--t-grp);background:#F3FBF7}
+#verdict.bad{border-left-color:var(--t-asr);background:#FDE9E7}
+#verdict .st{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.01em;
+  display:block;margin-bottom:5px}
+#verdict.ok .st{color:var(--t-grp)}
+#verdict.bad .st{color:var(--t-asr)}
+#verdict .why{color:#1A2152}
+#verdict .why em{font-style:normal;font-family:var(--mono);font-size:11.6px;color:var(--ink)}
+/* ---------- cover ---------- */
+.cover{justify-content:center;padding:0 68px 70px}
+.cover .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--t-asr);margin-bottom:20px}
+.cover h1{font-family:var(--disp);font-weight:800;font-size:78px;line-height:.96;
+  letter-spacing:-.035em}
+.cover .pt{font-family:var(--disp);font-weight:700;font-size:28px;color:var(--soft);
+  letter-spacing:-.02em;margin-top:10px}
+.cover .rule{width:96px;height:4px;background:var(--ink);margin:24px 0 22px}
+.cover .sub{font-size:16.5px;color:#1A2152;max-width:640px;line-height:1.5}
+.cover .by{margin-top:26px;font-family:var(--disp);font-weight:700;font-size:19px;
+  color:var(--ink);letter-spacing:-.01em}
+.cover .by span{display:block;font-family:var(--mono);font-size:10px;font-weight:400;
+  letter-spacing:.2em;text-transform:uppercase;color:#8A90B0;margin-bottom:5px}
+.meta{margin-top:30px;font-family:var(--mono);font-size:11.5px;color:var(--soft)}
+.meta td{padding:4px 40px 4px 0;text-transform:uppercase;letter-spacing:.1em}
+.meta td:first-child{color:#8A90B0}
+.coverpat{position:absolute;right:0;top:0;bottom:0;width:430px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;gap:3px;opacity:.45;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 45%);
+  mask-image:linear-gradient(90deg,transparent,#000 45%)}
+.coverpat div{font-family:var(--mono);font-size:12.5px;white-space:nowrap;letter-spacing:.02em}
+.coverpat .h-mth{color:var(--t-anc);font-weight:700}
+.coverpat .h-hdr{color:var(--t-cls)}
+.coverpat .h-val{color:var(--t-grp)}
+.coverpat .h-bad{color:var(--t-asr);font-weight:700}
+.coverpat .h-dim{color:#9AA3CC}
+/* ---------- embedded demo ---------- */
+.demo-frame{flex:1;width:100%;min-height:0;display:block;border:1px solid var(--line);
+  background:var(--paper)}
+.demo-link{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--t-cls);
+  text-decoration:none;border-bottom:1px solid currentColor;margin-left:8px;white-space:nowrap}
+/* ---------- rail ---------- */
+.rail{position:absolute;left:0;right:0;bottom:0;height:30px;background:var(--card);
+  border-top:1.5px solid var(--ink);display:flex;align-items:center;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--soft)}
+.rail .a{padding:0 16px;flex:1}
+.rail .n{padding:0 16px;border-left:1px solid var(--hair);color:var(--ink);white-space:nowrap}
+.rail .b{padding:0 16px;border-left:1px solid var(--hair);color:var(--ink);font-weight:500;
+  max-width:340px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.rail .c{padding:0 16px;border-left:1px solid var(--hair);width:186px;text-align:right;
+  white-space:nowrap}
+#pbar{position:absolute;left:0;top:0;height:3px;background:var(--t-asr);z-index:20;transition:width .2s}
+/* ---------- nav ---------- */
+#nav{position:fixed;right:16px;bottom:12px;display:flex;gap:7px;z-index:40}
+#nav button{width:36px;height:36px;border:1px solid #46606E;background:#1B2E39;color:#CFDDE3;
+  font-size:16px;cursor:pointer;border-radius:3px}
+#nav button:hover{background:#26414F}
+#nav button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#hint{position:fixed;left:16px;bottom:15px;color:#6D8593;font-family:var(--mono);
+  font-size:10.5px;letter-spacing:.1em;z-index:40}
+@media print{
+  html,body{background:#fff;overflow:visible}
+  #stage{position:static;display:block}
+  #deck{width:auto;height:auto;transform:none!important;box-shadow:none}
+  .slide{display:flex!important;position:relative;width:1280px;height:720px;page-break-after:always}
+  #nav,#hint,#pbar{display:none}
+}
+</style>
+<style>
+/* ================= additions for the Data Cleaning series =================
+   Vocabulary specific to this module. Everything above is the shared theme,
+   copied verbatim from the Data Collection decks.                          */
+
+/* ---------- the spine: symptom -> mechanisms -> what it permits ---------- */
+.spine{display:grid;grid-template-columns:150px 1fr 1fr;gap:0 12px;align-items:stretch}
+.spine .hd{font-family:var(--mono);font-size:9.3px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--soft);padding-bottom:5px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.spine .sym{background:var(--ink);color:#fff;padding:8px 11px;margin-bottom:7px;
+  display:flex;flex-direction:column;justify-content:center}
+.spine .sym b{font-family:var(--disp);font-size:13.5px;font-weight:700;display:block;line-height:1.15}
+.spine .sym i{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.13em;
+  text-transform:uppercase;color:#9BB4C0;margin-top:3px}
+.spine .mid,.spine .rgt{background:var(--card);border:1px solid var(--hair);padding:8px 11px;
+  margin-bottom:7px;font-size:11.7px;line-height:1.4;color:#1A2152;display:flex;align-items:center}
+.spine .rgt{border-left:3px solid var(--t-grp)}
+.spine .mid{border-left:3px solid var(--t-anc)}
+.spine .now .sym{background:var(--t-asr)}
+.spine .now .mid,.spine .now .rgt{background:#FDE9E7}
+.spine b.q{font-weight:700;color:var(--ink)}
+
+/* ---------- three-mechanism cards ---------- */
+.mech{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;flex:1;min-height:0}
+.mech .m{background:var(--card);border:1px solid var(--hair);border-top:3px solid var(--ink);
+  padding:11px 13px;display:flex;flex-direction:column;gap:7px;min-height:0}
+.mech .m.a{border-top-color:var(--t-grp)}
+.mech .m.b{border-top-color:var(--t-anc)}
+.mech .m.c{border-top-color:var(--t-asr)}
+.mech .m h3{font-family:var(--disp);font-size:15px;font-weight:700;line-height:1.1}
+.mech .m h3 span{display:block;font-family:var(--mono);font-size:9.2px;font-weight:400;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--soft);margin-bottom:3px}
+.mech .m .def{font-size:12.2px;line-height:1.42;color:#1A2152}
+.mech .m .def b{font-weight:700;color:var(--ink)}
+.mech .m .ex{font-size:11.4px;line-height:1.4;color:var(--soft);border-top:1px solid var(--hair);
+  padding-top:6px;margin-top:auto}
+.mech .m .ex b{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--soft);display:block;margin-bottom:3px}
+
+/* ---------- figures (inline SVG, no image files) ---------- */
+.fig{background:var(--card);border:1px solid var(--hair);padding:10px 12px 8px;
+  display:flex;flex-direction:column;min-height:0}
+.fig .cap{font-family:var(--mono);font-size:9.3px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--soft);margin-bottom:7px}
+.fig .rd{font-size:11.6px;line-height:1.4;color:#1A2152;margin-top:7px;
+  border-top:1px solid var(--hair);padding-top:6px}
+.fig .rd b{font-weight:700;color:var(--ink)}
+.fig svg{display:block;max-height:100%}
+.fig .rd{margin-top:auto}
+
+/* ---------- the cleaning log ---------- */
+table.log{width:100%;border-collapse:collapse;font-size:11.6px;background:var(--card)}
+table.log th,table.log td{border:1px solid var(--hair);padding:5px 9px;text-align:left;
+  vertical-align:top;line-height:1.38}
+table.log th{background:var(--ink);color:#fff;font-weight:600;font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase}
+table.log td:nth-child(1){font-family:var(--mono);font-size:10.6px;white-space:nowrap;color:#1A2152}
+table.log td:nth-child(4){font-style:italic;color:var(--soft)}
+table.log td.n{font-family:var(--mono);text-align:right;white-space:nowrap}
+
+/* ---------- the missingness lab (slides 6, 23 and 35) ---------- */
+.lab{display:grid;grid-template-columns:1.62fr 1fr;gap:15px;flex:1;min-height:0}
+.lab .plot{background:var(--card);border:1px solid var(--hair);padding:9px 11px 7px;
+  display:flex;flex-direction:column;min-height:0}
+.lab .plot svg{flex:1;min-height:0;display:block}
+.plotnote{font-size:10.6px;color:var(--soft);line-height:1.35;margin-top:5px;
+  border-top:1px solid var(--hair);padding-top:5px}
+.plotnote b{color:var(--ink)}
+.seg{display:flex;gap:6px;flex:none;margin-bottom:7px}
+.seg button{font-family:var(--mono);font-size:11px;letter-spacing:.09em;padding:5px 13px;
+  border:1px solid var(--line);background:var(--paper);color:var(--soft);cursor:pointer;
+  border-radius:2px;transition:background .15s,color .15s,border-color .15s}
+.seg button:hover{background:#E2EBF0;color:var(--ink)}
+.seg button.on{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:700}
+.seg button.alt{margin-left:auto;font-size:10.4px;letter-spacing:.12em}
+.seg button:focus-visible{outline:2px solid var(--t-cls);outline-offset:1px}
+.meanbox{background:var(--card);border:1px solid var(--hair);padding:8px 10px;flex:none}
+.meanbox svg{display:block;width:100%}
+.pt{transition:fill .28s ease,stroke .28s ease,opacity .28s ease}
+g.knobpt{transition:transform .45s cubic-bezier(.4,0,.2,1)}
+@media (prefers-reduced-motion:reduce){g.knobpt{transition:none}}
+
+/* ---------- fill: let a short column spread over the stage instead of
+   piling its cards at the top. Cards grow and centre their own text; callouts,
+   tables and code keep their natural height.                                 */
+.colstack.fill{gap:12px}
+.colstack.fill > .card{flex:1 1 0;display:flex;flex-direction:column;justify-content:center}
+.colstack.fill > .callout,.colstack.fill > table,.colstack.fill > pre,
+.colstack.fill > .out,.colstack.fill > .outlbl,.colstack.fill > h2{flex:0 0 auto}
+
+/* ---------- roomy: table-dominant slides that would otherwise underfill ---------- */
+table.d.roomy td,table.d.roomy th{padding:19px 10px}
+table.d.roomy.tall td,table.d.roomy.tall th{padding:27px 10px}
+table.log.roomy td,table.log.roomy th{padding:17px 10px}
+.spine.roomy .sym,.spine.roomy .mid,.spine.roomy .rgt{padding:24px 12px;margin-bottom:10px}
+
+/* ---------- cover ornament: a wall of raw cells ---------- */
+.coverpat .c-miss{color:var(--t-asr);font-weight:700}
+.coverpat .c-val{color:var(--t-grp)}
+.coverpat .c-dim{color:#9AA3CC}
+.coverpat .c-hdr{color:var(--t-cls);font-weight:700}
+
+/* ---------- intuition-slide reveals: the figure arrives in the order the
+   lecturer speaks it, so the picture is not finished before the sentence is. */
+@media (prefers-reduced-motion:no-preference){
+  .slide.on .fig svg .hi{animation:hifade .55s ease .15s both}
+  .slide.on .fig svg .mk{animation:hifade .5s ease both}
+  .slide.on .fig svg .mk0{animation-delay:.55s}
+  .slide.on .fig svg .mk1{animation-delay:.95s}
+  .slide.on .fig svg .drawline{stroke-dasharray:900;stroke-dashoffset:900;
+    animation:drawin 1.15s .25s ease-out forwards}
+  @keyframes hifade{from{opacity:0}to{opacity:1}}
+  @keyframes drawin{to{stroke-dashoffset:0}}
+}
+
+.fig .expl{margin-top:auto;padding:12px 16px}
+.fig .expl p + p{margin-top:6px}
+/* ---------- staged builds: on a slide marked .build, one arrow press
+   reveals one more [data-at] piece before the deck moves to the next slide.
+   The lecturer speaks a term, then presses once, and that term appears. */
+.slide.build [data-at]{opacity:0}
+.slide.build [data-at].shown{opacity:1}
+@media (prefers-reduced-motion:no-preference){
+  .slide.build [data-at]{transition:opacity .34s ease}
+}
+.bld{position:absolute;right:58px;bottom:38px;display:flex;gap:5px;z-index:3}
+.bld i{width:17px;height:3px;background:var(--line);border-radius:2px;display:block;
+  transition:background .25s ease}
+.bld i.on{background:var(--t-asr)}
+</style>
+
+<style>
+/* deck additions */
+.seg{flex-wrap:wrap}
+.seg button{text-transform:none}
+.wctl{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap}
+.wctl .out{padding:6px 10px}
+.wctl label.rg{display:flex;flex-direction:column;justify-content:center;gap:3px;font-family:var(--mono);
+  font-size:10px;letter-spacing:.1em;color:var(--soft);min-width:230px}
+.wctl label.rg b{color:var(--ink);font-size:12px;letter-spacing:0}
+input[type=range]{width:100%;accent-color:#E8382D}
+.wbtn{font-family:var(--mono);font-size:11px;padding:5px 16px;border:1px solid var(--ink);background:var(--ink);
+  color:#fff;cursor:pointer;border-radius:2px;min-width:74px}
+.kv{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kv .lf{font-family:var(--mono);font-size:24px;font-weight:700;padding:8px 12px;background:var(--card);
+  border:1px solid var(--hair);border-left:4px solid var(--soft);line-height:1.2}
+.kv .lf small{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);font-weight:500}
+.kv .lf.bad{color:#E8382D;border-left-color:#E8382D}.kv .lf.ok{color:#0E7A55;border-left-color:#0E7A55}
+.kv .lf.b{color:#2B4BFF;border-left-color:#2B4BFF}
+.kv.k3{grid-template-columns:repeat(3,1fr)}
+ul.b.lg{font-size:15px;line-height:1.5}
+ul.b.lg li{margin-bottom:11px}
+table.d td.r,table.d th.r{text-align:right;font-family:var(--mono);white-space:nowrap}
+table.d tr.best td{background:#F3FBF7;font-weight:700}
+.cols.nat{flex:none}
+.wctl .jsbadge{align-self:center}
+.card.big{padding:14px 16px}
+.card.big h3{font-size:16.5px;margin-bottom:8px}
+.card.big p{font-size:13.6px;line-height:1.55}
+.refs{font-size:12.5px;line-height:1.5}
+.refs p{margin-bottom:8px;padding-left:16px;text-indent:-16px}
+
+.match{display:flex;flex-direction:column;gap:8px}
+.match .q{display:grid;grid-template-columns:1fr 250px;gap:10px;align-items:stretch}
+.match .q .s{background:var(--card);border:1px solid var(--hair);border-left:4px solid var(--soft);padding:9px 13px;
+  font-size:14px;line-height:1.4;border-radius:8px}
+.match .q .s small{display:block;font-size:12px;color:var(--soft);margin-top:2px;min-height:17px}
+.match select{font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:var(--card);border-radius:8px;
+  padding:0 8px;color:var(--ink)}
+.match .q.right .s{border-left-color:#0E7A55;background:#F3FBF7}
+.match .q.wrong .s{border-left-color:#E8382D;background:#FDE9E7}
+.dy{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dy .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--soft);margin-bottom:4px}
+.dy pre{font-family:var(--mono);font-size:11px;line-height:1.5;background:var(--card);border:1px solid var(--hair);
+  border-radius:8px;padding:10px 12px;margin:0;white-space:pre-wrap;min-height:270px;font-variant-ligatures:none}
+.dy pre b{color:#E8382D}
+#dy-dom{background:var(--card);border:1px solid var(--hair);border-radius:8px;padding:10px 12px;min-height:270px}
+#dy-dom h4{font-size:15px;margin:0 0 4px}#dy-dom p{font-size:12px;color:var(--soft);margin:0 0 8px}
+#dy-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+#dy-grid div{border:1px solid var(--hair);border-radius:6px;padding:5px 7px;font-size:10.5px;line-height:1.3}
+#dy-grid div b{display:block;font-family:var(--mono);font-size:11.5px}#dy-grid div i{color:#E8382D;font-style:normal;font-weight:700}
+.wctl label.rg.chk{flex-direction:row;align-items:center;gap:8px;min-width:0;font-size:12px;letter-spacing:0;color:var(--ink)}
+#rt-out{white-space:normal;flex:1}
+pre.code,.out{font-variant-ligatures:none}
+
+/* theme: masterclass */
+:root{--mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --disp:"Geist",system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --body:"Geist",system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+body{font-feature-settings:"ss01","liga" 0,"calt" 0}
+#deck{box-shadow:0 24px 70px rgba(14,19,48,.16)}
+h1.t{font-weight:600;letter-spacing:-.028em}
+h2.s{font-weight:600}
+.eyebrow{color:#2B4BFF}
+.eyebrow::after{background:#E2E5F0}
+#pbar{background:#2B4BFF}
+.card,.fig,.out{border-radius:8px}
+pre.code{border-radius:8px;border-left:0}
+/* cover: navy ground, as on the masterclass decks */
+.slide.cover{background:#0E1330;color:#fff}
+.cover h1{font-weight:600;letter-spacing:-.035em;color:#fff}
+.cover .kicker{color:#FFC800}
+.cover .pt{color:#AEB6E0;font-weight:500}
+.cover .rule{background:#2B4BFF}
+.cover .sub{color:#D5D9EE}
+.cover .by{color:#fff;font-weight:600}
+.cover .by span{color:#AEB6E0}
+.coverpat{opacity:.55}
+#nav button{background:#0E1330;border-color:#0E1330;color:#fff;border-radius:8px}
+#nav button:hover{background:#2B4BFF}
+#nav button:focus-visible{outline-color:#2B4BFF}
+#hint{color:#8A90B0}
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+<div id="pbar"></div>
+
+<section class="slide cover" data-sec="Cover">
+  <div class="coverpat">
+    <div><span class="h-dim">requests  </span><span class="h-val">offers.html &#8594; 0 cards</span></div>
+    <div><span class="h-dim">browser   </span><span class="h-val">offers.html &#8594; 12 cards</span></div>
+    <div>&#160;</div>
+    <div><span class="h-dim">no pause  </span><span class="h-bad">200 200 200 200 429 429 429</span></div>
+    <div><span class="h-dim">0.5 s     </span><span class="h-val">200 200 200 200 200 200 200</span></div>
+    <div>&#160;</div>
+    <div><span class="h-dim">robots    </span><span class="h-val">Disallow: /account/</span></div>
+    <div><span class="h-dim">law       </span><span class="h-val">access &#183; copy &#183; keep</span></div>
+  </div>
+  <div class="kicker">DA5500W &#183; Data Mining: Concepts and Techniques</div>
+  <h1>Dynamic Pages,<br/>Polite Collection<br/>and the Law</h1>
+  <div class="pt">Module 2 &#183; Lecture 2</div>
+  <div class="rule"></div>
+  <p class="sub">The offers page of the shop is empty until a script fills it. Collecting it raises three questions:
+  how to read such a page, how fast to ask, and whether asking is permitted.</p>
+  <div class="by"><span>Instructor</span>Dr. Arun B Ayyar</div>
+  <table class="meta">
+    <tr><td>Course</td><td>DA5500W &#183; Web-enabled MTech &#183; DSAI, IIT Madras</td></tr>
+    <tr><td>Data</td><td>the simulated shop of lecture 1 &#183; offers.html &#183; robots.txt &#183; a local server with a rate limit</td></tr>
+    <tr><td>Reading</td><td>Mitchell, Web Scraping with Python (O'Reilly); RFC 9309; IT Act 2000; DPDP Act 2023</td></tr>
+  </table>
+</section>
+
+<section class="slide" data-sec="Recap">
+  <div class="eyebrow">Recap</div>
+  <h1 class="t">Recap of lecture 1
+    <small>Lecture 1 collected the catalogue of the shop by two routes and compared the results.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="kv"><div class="lf "><small>products</small>168</div><div class="lf "><small>HTML rows &#8594; after repeats removed</small>179 &#8594; 168</div><div class="lf ok"><small>prices equal across routes</small>163 of 163</div><div class="lf bad"><small>fields the API lacks</small>3</div></div><div class="cols nat"><div class="callout"><b>Routes 2 and 3.</b> The JSON API returned typed rows. The HTML pages returned strings, with rating and pack size that the API lacks.</div><div class="callout"><b>Three things left open.</b> Route 4, where the page is built by JavaScript. How fast a scraper may ask. Whether the owner and the law permit the collection.</div></div>
+  </div>
+</section>
+
+<section class="slide build" data-sec="Dynamic pages">
+  <div class="eyebrow">Dynamic pages &#183; Concept</div>
+  <h1 class="t">Concept
+    <small>On a dynamic page the server sends a document without the data, and a script fetches the data after the page has loaded.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><div class="cap">offers.html of the shop</div><svg viewBox="0 0 1120 270" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Two exchanges: the page, then the data fetched by its script"><rect x="30.0" y="60.0" width="150.0" height="70.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="30.0" y="60.0" width="150.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="105.0" y="92.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >client</text><text x="105.0" y="110.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >requests or a browser</text><rect x="940.0" y="60.0" width="150.0" height="70.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="940.0" y="60.0" width="150.0" height="4.0" fill="#4B5A87" stroke="none" stroke-width="1" /><text x="1015.0" y="92.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >server</text><text x="1015.0" y="110.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >the shop</text><line x1="186.0" y1="76.0" x2="928.0" y2="76.0" stroke="#2B4BFF" stroke-width="2" /><path d="M934.0,76.0 L926.0,72.0 L926.0,80.0 z" fill="#2B4BFF"/><text x="560.0" y="66.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#2B4BFF" text-anchor="middle" font-weight="600" >GET offers.html</text><line x1="934.0" y1="100.0" x2="192.0" y2="100.0" stroke="#0E7A55" stroke-width="2" /><path d="M186.0,100.0 L194.0,104.0 L194.0,96.0 z" fill="#0E7A55"/><text x="560.0" y="118.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E7A55" text-anchor="middle" font-weight="600" >200 OK: a page with a heading, an empty grid and a script</text><g data-at="1"><rect x="30.0" y="150.0" width="150.0" height="40.0" fill="#FDE9E7" stroke="#E8382D" stroke-width="1" rx="6"/><text x="105.0" y="167.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#E8382D" text-anchor="middle" font-weight="700" >requests stops here</text><text x="105.0" y="182.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#E8382D" text-anchor="middle" font-weight="400" >0 offers</text></g><g data-at="2"><line x1="186.0" y1="216.0" x2="928.0" y2="216.0" stroke="#2B4BFF" stroke-width="2" /><path d="M934.0,216.0 L926.0,212.0 L926.0,220.0 z" fill="#2B4BFF"/><text x="560.0" y="208.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#2B4BFF" text-anchor="middle" font-weight="600" >the script runs in the browser:  GET api/offers.json</text><line x1="934.0" y1="240.0" x2="192.0" y2="240.0" stroke="#0E7A55" stroke-width="2" /><path d="M186.0,240.0 L194.0,244.0 L194.0,236.0 z" fill="#0E7A55"/><text x="560.0" y="258.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12.5" fill="#0E7A55" text-anchor="middle" font-weight="600" >200 OK: 12 offers as JSON</text></g><g data-at="3"><rect x="30.0" y="222.0" width="150.0" height="40.0" fill="#F3FBF7" stroke="#0E7A55" stroke-width="1" rx="6"/><text x="105.0" y="239.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#0E7A55" text-anchor="middle" font-weight="700" >a browser shows</text><text x="105.0" y="254.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#0E7A55" text-anchor="middle" font-weight="400" >12 offers</text></g></svg></div><div class="cols nat"><div class="callout sm" data-at="1"><b>The response</b> is what requests receives: the document as the server wrote it.</div><div class="callout sm" data-at="3"><b>The DOM</b> is the tree the browser holds after running the scripts. On a dynamic page the two differ.</div></div><div class="bld"><i></i><i></i><i></i></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Dynamic pages">
+  <div class="eyebrow">Dynamic pages &#183; Example</div>
+  <h1 class="t">Example
+    <small>The lecture 1 scraper on offers.html receives status 200 and finds no offer.</small></h1>
+  <div class="wrap" style="zoom:1.38">
+<div class="cols w6040 nat"><pre class="code "><span class="py-kw">import</span> requests
+<span class="py-kw">from</span> bs4 <span class="py-kw">import</span> BeautifulSoup
+BASE = <span class="py-str">&#x27;https://iitm-da.github.io/da5500w/module2/data/shop/&#x27;</span>
+r = requests.get(BASE + <span class="py-str">&#x27;offers.html&#x27;</span>, timeout=<span class="py-num">10</span>)
+soup = BeautifulSoup(r.text, <span class="py-str">&#x27;html.parser&#x27;</span>)
+<span class="py-kw">print</span>(r.status_code, len(r.content), <span class="py-str">&#x27;bytes&#x27;</span>)
+<span class="py-kw">print</span>(len(soup.select(<span class="py-str">&#x27;article&#x27;</span>)), <span class="py-str">&#x27;article elements&#x27;</span>)
+<span class="py-kw">print</span>(soup.find(id=<span class="py-str">&#x27;status&#x27;</span>).get_text())</pre><div class="colstack"><div class="outlbl">output</div><div class="out ">200 1182 bytes
+0 article elements
+Loading offers ...</div><div class="callout bad sm"><b>Status 200, 0 articles.</b> The request succeeded and the page holds the text "Loading offers ..." where a reader of the site sees offers.</div></div></div><div class="callout sm"><b>How to recognise it.</b> A value is visible in the browser and absent from r.text. View Source in the browser shows the same document that requests receives.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Dynamic pages">
+  <div class="eyebrow">Dynamic pages &#183; Test</div>
+  <h1 class="t">Test
+    <small>The left pane is the document the server sends. Before pressing run, say how many article elements the right pane will hold.</small></h1>
+  <div class="wrap" style="zoom:1.02">
+<div class="wctl"><button class="wbtn" id="dy-go">run the script &#9654;</button><div class="out sm" id="dy-n" style="flex:1"></div><span class="jsbadge">browser JS</span></div><div class="dy"><div><div class="lbl">RESPONSE: offers.html, FROM &lt;h1&gt; TO THE END OF THE SCRIPT</div><pre id="dy-src">&lt;h1&gt;Offers this week&lt;/h1&gt;
+&lt;p id=&quot;status&quot;&gt;Loading offers ...&lt;/p&gt;
+&lt;div class=&quot;grid&quot; id=&quot;offers&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+/* the offers are not in this file: the browser fetches them after the page has loaded */
+setTimeout(function () {
+  <b>fetch(&#x27;api/offers.json&#x27;)</b>.then(function (r) { return r.json(); }).then(function (d) {
+    var box = document.getElementById(&#x27;offers&#x27;);
+    d.offers.forEach(function (o) {
+      var a = document.createElement(&#x27;article&#x27;);
+      a.className = &#x27;product offer&#x27;; a.dataset.sku = o.sku;
+      a.innerHTML = &#x27;&lt;h2 class=&quot;name&quot;&gt;&#x27; + o.name + &#x27;&lt;/h2&gt;&lt;div class=&quot;price&quot;&gt;\u20B9&#x27; + o.price +
+        &#x27;&lt;s class=&quot;mrp&quot;&gt;\u20B9&#x27; + o.mrp + &#x27;&lt;/s&gt;&lt;/div&gt;&lt;div class=&quot;badge&quot;&gt;&#x27; + o.off_pct + &#x27;% off&lt;/div&gt;&#x27;;
+      box.appendChild(a);
+    });
+    document.getElementById(&#x27;status&#x27;).textContent = d.offers.length + &#x27; offers in week &#x27; + d.week;
+  });
+}, 400);
+&lt;/script&gt;</pre></div><div><div class="lbl">DOM: WHAT THE BROWSER HOLDS</div><div id="dy-dom"><h4>Offers this week</h4><p id="dy-st">Loading offers ...</p><div id="dy-grid"></div></div></div></div><script type="application/json" id="dy-data">[{"sku":"SM1162","name":"Pothigai Full Cream Milk","price":15,"mrp":19,"off_pct":21},{"sku":"SM1057","name":"Sangam Digestive Biscuits","price":12,"mrp":15,"off_pct":20},{"sku":"SM1077","name":"Marina Ponni Rice","price":537,"mrp":669,"off_pct":20},{"sku":"SM1079","name":"Kaveri Lager Beer","price":180,"mrp":225,"off_pct":20},{"sku":"SM1004","name":"Sangam Cream Biscuits","price":30,"mrp":37,"off_pct":19},{"sku":"SM1027","name":"Pothigai Salted Chips","price":38,"mrp":47,"off_pct":19},{"sku":"SM1028","name":"Marina White Eggs","price":145,"mrp":179,"off_pct":19},{"sku":"SM1046","name":"Marina Tomato Chips","price":30,"mrp":37,"off_pct":19},{"sku":"SM1080","name":"Marina Cooking Butter","price":22,"mrp":27,"off_pct":19},{"sku":"SM1099","name":"Adyar Fresh Skimmed Milk","price":22,"mrp":27,"off_pct":19},{"sku":"SM1127","name":"Sangam Dust Tea","price":61,"mrp":75,"off_pct":19},{"sku":"SM1160","name":"Sangam Moong Dal","price":151,"mrp":186,"off_pct":19}]</script>
+  </div>
+</section>
+
+<section class="slide" data-sec="Dynamic pages">
+  <div class="eyebrow">Dynamic pages &#183; Mechanism: repeat the request of the script</div>
+  <h1 class="t">Mechanism
+    <small>The script got its data over HTTP. The browser records that request, and Python can send the same one.</small></h1>
+  <div class="wrap" style="zoom:1.3599999999999999">
+<div class="cols nat"><div class="colstack"><ul class="b lg"><li><b>1. Open the developer tools</b> of the browser (F12) and choose the Network tab.</li><li><b>2. Reload offers.html</b> and filter the list to Fetch/XHR.</li><li><b>3. Read the one request listed:</b> its URL ends in api/offers.json and its response is JSON.</li><li><b>4. Send that request from Python.</b></li></ul></div><div class="colstack"><pre class="code ">t0 = time.perf_counter()
+d = requests.get(BASE + <span class="py-str">&#x27;api/offers.json&#x27;</span>, timeout=<span class="py-num">10</span>).json()
+<span class="py-kw">print</span>(len(d[<span class="py-str">&#x27;offers&#x27;</span>]), <span class="py-str">&#x27;offers in week&#x27;</span>, d[<span class="py-str">&#x27;week&#x27;</span>])
+<span class="py-kw">print</span>(d[<span class="py-str">&#x27;offers&#x27;</span>][<span class="py-num">0</span>])</pre><div class="outlbl">output</div><div class="out sm">12 offers in week 2026-W48
+{&#x27;sku&#x27;: &#x27;SM1162&#x27;, &#x27;name&#x27;: &#x27;Pothigai Full Cream Milk&#x27;, &#x27;price&#x27;: 15, &#x27;mrp&#x27;: 19, &#x27;off_pct&#x27;: 21}</div><div class="callout good sm"><b>Route 4 became route 2.</b> One request, typed fields, no browser.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Dynamic pages">
+  <div class="eyebrow">Dynamic pages &#183; Mechanism: drive a browser</div>
+  <h1 class="t">Mechanism continued 1
+    <small>When the request of the script cannot be repeated, Selenium starts a real browser, lets the script run and reads the DOM.</small></h1>
+  <div class="wrap" style="zoom:1.22">
+<div class="cols w6040 nat"><pre class="code sm"><span class="py-kw">from</span> selenium <span class="py-kw">import</span> webdriver
+<span class="py-kw">from</span> selenium.webdriver.common.by <span class="py-kw">import</span> By
+<span class="py-kw">from</span> selenium.webdriver.support.ui <span class="py-kw">import</span> WebDriverWait
+<span class="py-kw">from</span> selenium.webdriver.support <span class="py-kw">import</span> expected_conditions <span class="py-kw">as</span> EC
+
+opts = webdriver.ChromeOptions()
+opts.add_argument(<span class="py-str">&#x27;--headless=new&#x27;</span>)
+driver = webdriver.Chrome(options=opts)
+try:
+    driver.get(BASE + <span class="py-str">&#x27;offers.html&#x27;</span>)
+    CARD = (By.CSS_SELECTOR, <span class="py-str">&#x27;article.offer&#x27;</span>)
+    <span class="py-kw">print</span>(len(driver.find_elements(*CARD)), <span class="py-str">&#x27;cards straight after get()&#x27;</span>)
+    WebDriverWait(driver, <span class="py-num">10</span>).until(EC.presence_of_element_located(CARD))
+    cards = driver.find_elements(*CARD)
+    <span class="py-kw">print</span>(len(cards), <span class="py-str">&#x27;cards after the wait&#x27;</span>)
+    name = cards[<span class="py-num">0</span>].find_element(By.CSS_SELECTOR, <span class="py-str">&#x27;.name&#x27;</span>).text
+    <span class="py-kw">print</span>(cards[<span class="py-num">0</span>].get_attribute(<span class="py-str">&#x27;data-sku&#x27;</span>), <span class="py-str">&#x27;|&#x27;</span>, name)
+    auto = driver.execute_script(<span class="py-str">&#x27;return navigator.webdriver&#x27;</span>)
+    <span class="py-kw">print</span>(<span class="py-str">&#x27;navigator.webdriver =&#x27;</span>, auto)
+finally:
+    driver.quit()<span class="py-cm">                      # always close the browser</span></pre><div class="colstack"><div class="outlbl">output, Selenium 4.44.0 with headless Chrome</div><div class="out sm">0 cards straight after get()
+12 cards after the wait
+SM1162 | Pothigai Full Cream Milk
+navigator.webdriver = True</div><div class="callout warn sm"><b>0 cards straight after get().</b> get() returns when the document has loaded. The script adds the cards 400 ms later.</div><div class="callout sm"><b>An explicit wait</b> names the element the code needs and polls until it exists or ten seconds pass.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Dynamic pages">
+  <div class="eyebrow">Dynamic pages &#183; Cost</div>
+  <h1 class="t">Cost
+    <small>The same 12 offers took 16 ms through the JSON address and 1.51 s through a browser, on a local copy of the shop.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="colstack"><div class="fig"><div class="cap">time to collect the offers, local server</div><svg viewBox="0 0 560 94" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Time to collect the offers by two routes"><text x="140.0" y="25.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >requests + JSON</text><rect x="150.0" y="6.0" width="2.7" height="30.0" fill="#0E7A55" stroke="none" stroke-width="1" /><text x="160.7" y="25.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">16 ms</text><text x="140.0" y="69.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >headless browser</text><rect x="150.0" y="50.0" width="260.0" height="30.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="418.0" y="69.5" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">1,510 ms</text></svg></div><div class="callout sm"><b>About 96 times slower.</b> The browser starts a process, loads the page and its stylesheet, runs the script and waits for it.</div></div><div class="colstack"><div class="callout sm"><b>More to maintain.</b> The browser and its driver have to be installed and kept at matching versions on every machine that runs the scraper.</div><div class="callout warn sm"><b>Visible to the page.</b> Scripts on the page can ask the browser whether it is automated. In this run <b>navigator.webdriver</b> was True.</div><div class="callout sm"><b>Order of attempts.</b> Look for the JSON request first. Drive a browser only when that request cannot be repeated.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Politeness">
+  <div class="eyebrow">Politeness &#183; Concept</div>
+  <h1 class="t">Concept
+    <small>A scraper shares the server with the customers of the site. A rate limit is the server refusing a client that asks too fast.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><div class="cap">the rule of shop_server.py: at most 4 requests from one client in any one second</div><svg viewBox="0 0 1120 160" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Requests on a one-second timeline, with and without a pause"><line x1="60.0" y1="80.0" x2="1060.0" y2="80.0" stroke="#CED3E6" stroke-width="1.4" /><line x1="60.0" y1="74.0" x2="60.0" y2="86.0" stroke="#5D6488" stroke-width="1.2" /><text x="60.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >0.0 s</text><line x1="160.0" y1="74.0" x2="160.0" y2="86.0" stroke="#5D6488" stroke-width="1.2" /><text x="160.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >0.1 s</text><line x1="260.0" y1="74.0" x2="260.0" y2="86.0" stroke="#5D6488" stroke-width="1.2" /><text x="260.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >0.2 s</text><line x1="360.0" y1="74.0" x2="360.0" y2="86.0" stroke="#5D6488" stroke-width="1.2" /><text x="360.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >0.3 s</text><line x1="460.0" y1="74.0" x2="460.0" y2="86.0" stroke="#5D6488" stroke-width="1.2" /><text x="460.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >0.4 s</text><line x1="560.0" y1="74.0" x2="560.0" y2="86.0" stroke="#5D6488" stroke-width="1.2" /><text x="560.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >0.5 s</text><line x1="660.0" y1="74.0" x2="660.0" y2="86.0" stroke="#5D6488" stroke-width="1.2" /><text x="660.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >0.6 s</text><line x1="760.0" y1="74.0" x2="760.0" y2="86.0" stroke="#5D6488" stroke-width="1.2" /><text x="760.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >0.7 s</text><line x1="860.0" y1="74.0" x2="860.0" y2="86.0" stroke="#5D6488" stroke-width="1.2" /><text x="860.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >0.8 s</text><line x1="960.0" y1="74.0" x2="960.0" y2="86.0" stroke="#5D6488" stroke-width="1.2" /><text x="960.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >0.9 s</text><line x1="1060.0" y1="74.0" x2="1060.0" y2="86.0" stroke="#5D6488" stroke-width="1.2" /><text x="1060.0" y="104.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >1.0 s</text><circle cx="80" cy="50" r="9" fill="#0E7A55"/><text x="80.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700" >1</text><circle cx="106" cy="50" r="9" fill="#0E7A55"/><text x="106.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700" >2</text><circle cx="132" cy="50" r="9" fill="#0E7A55"/><text x="132.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700" >3</text><circle cx="158" cy="50" r="9" fill="#0E7A55"/><text x="158.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700" >4</text><circle cx="184" cy="50" r="9" fill="#E8382D"/><text x="184.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700" >5</text><circle cx="210" cy="50" r="9" fill="#E8382D"/><text x="210.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700" >6</text><circle cx="236" cy="50" r="9" fill="#E8382D"/><text x="236.0" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700" >7</text><text x="300.0" y="54.0" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="400" >seven requests with no pause: the first four are served, the next three are refused</text><circle cx="80" cy="140" r="9" fill="#0E7A55"/><text x="80.0" y="144.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700" >1</text><circle cx="480" cy="140" r="9" fill="#0E7A55"/><text x="480.0" y="144.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700" >2</text><circle cx="880" cy="140" r="9" fill="#0E7A55"/><text x="880.0" y="144.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700" >3</text><text x="110.0" y="144.0" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="400" >one request every 0.4 s: all are served</text></svg></div><div class="cols nat"><div class="callout sm"><b>Status 429</b> Too Many Requests is the refusal. Its <b>Retry-After</b> header says how many seconds to wait.</div><div class="callout sm"><b>A local server.</b> The published shop is on a static host that applies no limit of its own. <b>shop_server.py</b>, in the module2/data folder, serves the same files with the limit.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Politeness">
+  <div class="eyebrow">Politeness &#183; Example</div>
+  <h1 class="t">Example
+    <small>Seven pages requested with no pause: the loop finishes without an error and returns 96 of 168 rows.</small></h1>
+  <div class="wrap" style="zoom:1.12">
+<div class="cols w6040 nat"><pre class="code ">BASE = <span class="py-str">&#x27;http://localhost:8000/&#x27;</span><span class="py-cm">        # the shop served by shop_server.py</span>
+rows, codes = [], []
+<span class="py-kw">for</span> k <span class="py-kw">in</span> range(<span class="py-num">1</span>, <span class="py-num">8</span>):
+    r = requests.get(BASE + f<span class="py-str">&#x27;api/products/page-{k}.json&#x27;</span>, timeout=<span class="py-num">10</span>)
+    codes.append(r.status_code)
+    rows += r.json().get(<span class="py-str">&#x27;items&#x27;</span>, [])
+<span class="py-kw">print</span>(codes)
+<span class="py-kw">print</span>(len(rows), <span class="py-str">&#x27;rows&#x27;</span>)</pre><div class="colstack"><div class="outlbl">output</div><div class="out ">[200, 200, 200, 200, 429, 429, 429]
+96 rows</div><div class="fig"><div class="cap">rows returned by each of the seven requests</div><svg viewBox="0 0 420 86" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Seven responses: four served, three refused"><rect x="10.0" y="6.0" width="50.0" height="50.0" fill="#0E7A55" stroke="none" stroke-width="1" rx="6"/><text x="35.0" y="28.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#FFFFFF" text-anchor="middle" font-weight="700" >200</text><text x="35.0" y="46.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#FFFFFF" text-anchor="middle" font-weight="400" >24</text><text x="35.0" y="74.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >page 1</text><rect x="68.0" y="6.0" width="50.0" height="50.0" fill="#0E7A55" stroke="none" stroke-width="1" rx="6"/><text x="93.0" y="28.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#FFFFFF" text-anchor="middle" font-weight="700" >200</text><text x="93.0" y="46.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#FFFFFF" text-anchor="middle" font-weight="400" >24</text><text x="93.0" y="74.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >page 2</text><rect x="126.0" y="6.0" width="50.0" height="50.0" fill="#0E7A55" stroke="none" stroke-width="1" rx="6"/><text x="151.0" y="28.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#FFFFFF" text-anchor="middle" font-weight="700" >200</text><text x="151.0" y="46.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#FFFFFF" text-anchor="middle" font-weight="400" >24</text><text x="151.0" y="74.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >page 3</text><rect x="184.0" y="6.0" width="50.0" height="50.0" fill="#0E7A55" stroke="none" stroke-width="1" rx="6"/><text x="209.0" y="28.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#FFFFFF" text-anchor="middle" font-weight="700" >200</text><text x="209.0" y="46.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#FFFFFF" text-anchor="middle" font-weight="400" >24</text><text x="209.0" y="74.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >page 4</text><rect x="242.0" y="6.0" width="50.0" height="50.0" fill="#E8382D" stroke="none" stroke-width="1" rx="6"/><text x="267.0" y="28.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#FFFFFF" text-anchor="middle" font-weight="700" >429</text><text x="267.0" y="46.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#FFFFFF" text-anchor="middle" font-weight="400" >0</text><text x="267.0" y="74.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >page 5</text><rect x="300.0" y="6.0" width="50.0" height="50.0" fill="#E8382D" stroke="none" stroke-width="1" rx="6"/><text x="325.0" y="28.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#FFFFFF" text-anchor="middle" font-weight="700" >429</text><text x="325.0" y="46.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#FFFFFF" text-anchor="middle" font-weight="400" >0</text><text x="325.0" y="74.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >page 6</text><rect x="358.0" y="6.0" width="50.0" height="50.0" fill="#E8382D" stroke="none" stroke-width="1" rx="6"/><text x="383.0" y="28.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#FFFFFF" text-anchor="middle" font-weight="700" >429</text><text x="383.0" y="46.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#FFFFFF" text-anchor="middle" font-weight="400" >0</text><text x="383.0" y="74.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >page 7</text></svg></div><div class="outlbl">body of each 429 response</div><div class="out sm">{&quot;error&quot;: &quot;too many requests&quot;}</div></div></div><div class="cols nat"><div class="callout bad sm"><b>No exception.</b> A 429 response still has a body, and it is valid JSON. <b>.get('items', [])</b> finds no items in it and adds an empty list.</div><div class="callout sm"><b>The check from lecture 1</b> catches it: 96 rows against the 168 the server states.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Politeness">
+  <div class="eyebrow">Politeness &#183; Mechanism</div>
+  <h1 class="t">Mechanism
+    <small>A fetch function that reads the status: wait and retry on 429 and 5xx, stop on every other error.</small></h1>
+  <div class="wrap" style="zoom:1.32">
+<div class="cols w6040 nat"><pre class="code sm">UA = {<span class="py-str">&#x27;User-Agent&#x27;</span>: <span class="py-str">&#x27;da5500w-student (name@example.org)&#x27;</span>}
+
+<span class="py-kw">def</span> get(url, tries=<span class="py-num">5</span>):
+    <span class="py-kw">for</span> attempt <span class="py-kw">in</span> range(tries):
+        r = requests.get(url, timeout=<span class="py-num">10</span>, headers=UA)
+        <span class="py-kw">if</span> r.status_code == <span class="py-num">429</span> or r.status_code &gt;= <span class="py-num">500</span>:
+<span class="py-cm">            # wait as the server says, or 1, 2, 4 ... seconds</span>
+            wait = float(r.headers.get(<span class="py-str">&#x27;Retry-After&#x27;</span>, <span class="py-num">2</span> ** attempt))
+            page = url.split(<span class="py-str">&#x27;/&#x27;</span>)[-<span class="py-num">1</span>]
+            <span class="py-kw">print</span>(f<span class="py-str">&#x27;  {r.status_code} on {page}, waiting {wait:g} s&#x27;</span>)
+            time.sleep(wait)
+            continue
+        r.raise_for_status()<span class="py-cm">           # 403 or 404: stop, do not retry</span>
+        <span class="py-kw">return</span> r
+    raise RuntimeError(f<span class="py-str">&#x27;gave up on {url}&#x27;</span>)
+
+rows = []
+<span class="py-kw">for</span> k <span class="py-kw">in</span> range(<span class="py-num">1</span>, <span class="py-num">8</span>):
+    rows += get(BASE + f<span class="py-str">&#x27;api/products/page-{k}.json&#x27;</span>).json()[<span class="py-str">&#x27;items&#x27;</span>]
+<span class="py-kw">print</span>(len(rows), <span class="py-str">&#x27;rows&#x27;</span>)</pre><div class="colstack"><div class="outlbl">output</div><div class="out ">  429 on page-5.json, waiting 1 s
+168 rows</div><div class="callout good sm"><b>168 rows in 1.48 s.</b> The function met one 429, waited the second the server asked for and carried on.</div><div class="callout sm"><b>Better still, never meet the limit.</b> With <b>time.sleep(0.5)</b> after each request the seven statuses were all 200 and the run took 3.6 s.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Politeness">
+  <div class="eyebrow">Politeness &#183; Test</div>
+  <h1 class="t">Test
+    <small>Forty requests against the rule of 4 per second. Find the shortest pause that produces no 429.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="wctl"><label class="rg">PAUSE BETWEEN REQUESTS <b id="rt-pv"></b><input type="range" id="rt-p" min="0" max="600" step="25" value="0"/></label><label class="rg chk"><input type="checkbox" id="rt-ra"/> wait as Retry-After says (1 s)</label><div class="out sm" id="rt-out"></div><span class="jsbadge">browser JS</span></div><div class="fig"><div class="cap">each mark is one request: green served, red refused with 429 (simulated in the browser with the rule of the server)</div><svg id="rt-svg" viewBox="0 0 1120 150" width="100%" role="img" aria-label="Forty requests on a timeline, coloured by status"></svg></div><div class="callout sm"><b>Reading it.</b> A refused request returned no rows. Without the retry the table is short by 24 rows for each red mark.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Politeness">
+  <div class="eyebrow">Politeness &#183; Assumptions</div>
+  <h1 class="t">Assumptions
+    <small>The retry function assumes the server announces its limit. Many servers block a fast client with no 429 and no Retry-After.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="colstack"><div class="outlbl">access.log of the shop server: time, status, path, User-Agent</div><div class="out sm">00:25:21 200 /catalogue/page-1.html da5500w-student (name@example.org)
+00:25:22 200 /catalogue/page-2.html da5500w-student (name@example.org)
+00:25:22 200 /catalogue/page-3.html da5500w-student (name@example.org)</div><div class="callout sm"><b>What the owner sees.</b> Every request is one line in a log, with the User-Agent the scraper sent. This lecture wrote 42 lines.</div></div><div class="colstack"><ul class="b lg"><li><b>Pause between requests.</b> One request a second is a safe default for a small site.</li><li><b>Fetch each page once.</b> Save the response to disk and parse from the saved copy.</li><li><b>Name the scraper</b> in the User-Agent, with a contact address.</li><li><b>Stop on 403.</b> A refusal is an answer from the owner. Switching address to continue is covered under the law section.</li></ul></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="robots.txt">
+  <div class="eyebrow">robots.txt &#183; Concept</div>
+  <h1 class="t">Concept
+    <small>robots.txt is a text file at the root of a site in which the owner states which paths automatic clients should leave alone.</small></h1>
+  <div class="wrap" style="zoom:1.3599999999999999">
+<div class="cols nat"><div class="colstack"><div class="outlbl">robots.txt of the shop</div><div class="out sm"># robots.txt of the simulated shop (DA5500W Module 2)
+# A real site serves this file from the root of its host.
+User-agent: *
+Disallow: /account/
+Disallow: /api/
+Allow: /api/products/
+Disallow: /search
+Crawl-delay: 2
+
+User-agent: GPTBot
+Disallow: /
+
+Sitemap: https://iitm-da.github.io/da5500w/module2/data/shop/sitemap.xml</div></div><div class="colstack"><table class="d"><tr><th>line</th><th>meaning</th></tr><tr><td><b>User-agent</b></td><td>starts a group of rules; * is every client without a group of its own</td></tr><tr><td><b>Disallow</b></td><td>a path prefix the group should not fetch; / means the whole site</td></tr><tr><td><b>Allow</b></td><td>an exception inside a disallowed prefix</td></tr><tr><td><b>Crawl-delay</b></td><td>seconds between requests; widely used, outside the standard</td></tr><tr><td><b>Sitemap</b></td><td>where the owner lists the pages meant to be fetched</td></tr></table><div class="callout sm"><b>Standard.</b> The convention dates from 1994 and was published as RFC 9309 in 2022. Everything the file does not disallow is allowed.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="robots.txt">
+  <div class="eyebrow">robots.txt &#183; Test</div>
+  <h1 class="t">Test
+    <small>The standard library of Python reads the file and answers for a client and a path.</small></h1>
+  <div class="wrap" style="zoom:1.28">
+<div class="cols w6040 nat"><pre class="code sm"><span class="py-kw">from</span> urllib <span class="py-kw">import</span> robotparser
+rp = robotparser.RobotFileParser()
+rp.parse(open(<span class="py-str">&#x27;robots.txt&#x27;</span>).read().splitlines())
+asks = [(<span class="py-str">&#x27;*&#x27;</span>, <span class="py-str">&#x27;/catalogue/page-1.html&#x27;</span>), (<span class="py-str">&#x27;*&#x27;</span>, <span class="py-str">&#x27;/account/orders&#x27;</span>),
+        (<span class="py-str">&#x27;*&#x27;</span>, <span class="py-str">&#x27;/api/offers.json&#x27;</span>), (<span class="py-str">&#x27;*&#x27;</span>, <span class="py-str">&#x27;/api/products/page-1.json&#x27;</span>),
+        (<span class="py-str">&#x27;GPTBot&#x27;</span>, <span class="py-str">&#x27;/catalogue/page-1.html&#x27;</span>)]
+<span class="py-kw">for</span> ua, path <span class="py-kw">in</span> asks:
+    <span class="py-kw">print</span>(f<span class="py-str">&#x27;{ua:7} {path:28} {rp.can_fetch(ua, path)}&#x27;</span>)
+<span class="py-kw">print</span>(<span class="py-str">&#x27;crawl delay:&#x27;</span>, rp.crawl_delay(<span class="py-str">&#x27;*&#x27;</span>))</pre><div class="colstack"><div class="outlbl">output, Python 3.12.7</div><div class="out sm">*       /catalogue/page-1.html       True
+*       /account/orders              False
+*       /api/offers.json             False
+*       /api/products/page-1.json    False
+GPTBot  /catalogue/page-1.html       False
+crawl delay: 2</div><div class="fig"><div class="cap">the answers for *, as a map of the site</div><svg viewBox="0 0 420 124" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Paths of the shop marked allowed or disallowed for all clients"><rect x="8.0" y="6.0" width="196.0" height="32.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="8.0" y="6.0" width="6.0" height="32.0" fill="#0E7A55" stroke="none" stroke-width="1" /><text x="24.0" y="26.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="start" font-weight="600" >/catalogue/</text><text x="196.0" y="26.0" font-family="Geist,system-ui,sans-serif" font-size="10.5" fill="#0E7A55" text-anchor="end" font-weight="700" >allowed</text><rect x="216.0" y="6.0" width="196.0" height="32.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="216.0" y="6.0" width="6.0" height="32.0" fill="#0E7A55" stroke="none" stroke-width="1" /><text x="232.0" y="26.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="start" font-weight="600" >/offers.html</text><text x="404.0" y="26.0" font-family="Geist,system-ui,sans-serif" font-size="10.5" fill="#0E7A55" text-anchor="end" font-weight="700" >allowed</text><rect x="8.0" y="46.0" width="196.0" height="32.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="8.0" y="46.0" width="6.0" height="32.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="24.0" y="66.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="start" font-weight="600" >/account/</text><text x="196.0" y="66.0" font-family="Geist,system-ui,sans-serif" font-size="10.5" fill="#E8382D" text-anchor="end" font-weight="700" >disallowed</text><rect x="216.0" y="46.0" width="196.0" height="32.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="216.0" y="46.0" width="6.0" height="32.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="232.0" y="66.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="start" font-weight="600" >/api/</text><text x="404.0" y="66.0" font-family="Geist,system-ui,sans-serif" font-size="10.5" fill="#E8382D" text-anchor="end" font-weight="700" >disallowed</text><rect x="8.0" y="86.0" width="196.0" height="32.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="8.0" y="86.0" width="6.0" height="32.0" fill="#A87900" stroke="none" stroke-width="1" /><text x="24.0" y="106.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="start" font-weight="600" >/api/products/</text><text x="196.0" y="106.0" font-family="Geist,system-ui,sans-serif" font-size="10.5" fill="#A87900" text-anchor="end" font-weight="700" >next slide</text><rect x="216.0" y="86.0" width="196.0" height="32.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><rect x="216.0" y="86.0" width="6.0" height="32.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="232.0" y="106.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="start" font-weight="600" >/search</text><text x="404.0" y="106.0" font-family="Geist,system-ui,sans-serif" font-size="10.5" fill="#E8382D" text-anchor="end" font-weight="700" >disallowed</text></svg></div></div></div><div class="cols nat"><div class="callout sm"><b>Lecture 1 was within the file.</b> The catalogue pages are allowed, and a two-second delay is requested. The loops paused for half a second, so they were four times too fast.</div><div class="callout warn sm"><b>api/offers.json is disallowed.</b> The shortcut of slide 6 works and the owner has asked crawlers to stay out of /api/. The offers page itself is allowed.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="robots.txt">
+  <div class="eyebrow">robots.txt &#183; Drawbacks</div>
+  <h1 class="t">Drawbacks
+    <small>The file says Allow: /api/products/ and the parser answered False. Two parsers can read one file differently.</small></h1>
+  <div class="wrap" style="zoom:1.3">
+<div class="cols nat"><div class="colstack"><pre class="code sm">orders = ([<span class="py-str">&#x27;Disallow: /api/&#x27;</span>, <span class="py-str">&#x27;Allow: /api/products/&#x27;</span>],
+          [<span class="py-str">&#x27;Allow: /api/products/&#x27;</span>, <span class="py-str">&#x27;Disallow: /api/&#x27;</span>])
+<span class="py-kw">for</span> rules <span class="py-kw">in</span> orders:
+    rp = robotparser.RobotFileParser()
+    rp.parse([<span class="py-str">&#x27;User-agent: *&#x27;</span>] + rules)
+    <span class="py-kw">print</span>(rules[<span class="py-num">0</span>], <span class="py-str">&#x27;first -&gt;&#x27;</span>, rp.can_fetch(<span class="py-str">&#x27;*&#x27;</span>, <span class="py-str">&#x27;/api/products/page-1.json&#x27;</span>))</pre><div class="outlbl">output</div><div class="out sm">Disallow: /api/ first -&gt; False
+Allow: /api/products/ first -&gt; True</div></div><div class="colstack"><table class="d"><tr><th>parser</th><th>when Allow and Disallow both match</th></tr><tr><td><b>urllib.robotparser</b></td><td>the first matching line in the file decides</td></tr><tr><td><b>RFC 9309</b></td><td>the longest matching path decides, so /api/products/ beats /api/</td></tr></table><div class="callout sm"><b>Under the standard</b> the product pages of the API are allowed, which is what the owner wrote. The standard library errs towards not fetching.</div><div class="callout sm"><b>For real work</b> use a parser that follows RFC 9309, such as protego, and test it on one Allow inside one Disallow.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="robots.txt">
+  <div class="eyebrow">robots.txt &#183; Assumptions</div>
+  <h1 class="t">Assumptions
+    <small>robots.txt works only if the client chooses to obey it. Nothing in HTTP enforces the file.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols3"><div class="card b"><h3>It is a request</h3><p>A client that ignores the file still receives the pages. The file controls nothing by itself.</p></div><div class="card o"><h3>It is evidence</h3><p>When access is disputed, the file shows what the owner asked for and whether the scraper had been told.</p></div><div class="card g"><h3>Rule for this course</h3><p>Read the file before the first request. Honour Disallow for * and treat Crawl-delay as the minimum pause.</p></div></div><div class="callout sm"><b>When the path you need is disallowed,</b> the file has answered the question. The next step is an email to the owner asking for the data.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Law">
+  <div class="eyebrow">Law &#183; Concept</div>
+  <h1 class="t">Concept
+    <small>"Is scraping legal" is three separate questions, about the request, the copy and the people in the data.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><div class="cap">the three questions, in the order they are asked</div><svg viewBox="0 0 1120 204" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Three legal questions: access, copy, keep"><rect x="14.0" y="6.0" width="348.0" height="190.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="8"/><rect x="14.0" y="6.0" width="348.0" height="5.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="32.0" y="42.0" font-family="Geist Mono,ui-monospace,monospace" font-size="20" fill="#2B4BFF" text-anchor="start" font-weight="700" >Q1</text><text x="76.0" y="41.0" font-family="Geist,system-ui,sans-serif" font-size="16.5" fill="#0E1330" text-anchor="start" font-weight="700" >May I access it?</text><text x="32.0" y="66.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#5D6488" text-anchor="start" font-weight="400" >about the request</text><text x="32.0" y="98.0" font-family="Geist,system-ui,sans-serif" font-size="13" fill="#0E1330" text-anchor="start" font-weight="400" >A login, a block, or a letter telling</text><text x="32.0" y="117.0" font-family="Geist,system-ui,sans-serif" font-size="13" fill="#0E1330" text-anchor="start" font-weight="400" >you to stop closes the gate.</text><line x1="32.0" y1="150.0" x2="344.0" y2="150.0" stroke="#E2E5F0" stroke-width="1" /><text x="32.0" y="174.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#5D6488" text-anchor="start" font-weight="400" >US: CFAA.  India: IT Act, sections 43 and 66</text><line x1="364.0" y1="100.0" x2="378.0" y2="100.0" stroke="#5D6488" stroke-width="1.6" /><path d="M384.0,100.0 L376.0,96.0 L376.0,104.0 z" fill="#5D6488"/><rect x="386.0" y="6.0" width="348.0" height="190.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="8"/><rect x="386.0" y="6.0" width="348.0" height="5.0" fill="#A87900" stroke="none" stroke-width="1" /><text x="404.0" y="42.0" font-family="Geist Mono,ui-monospace,monospace" font-size="20" fill="#A87900" text-anchor="start" font-weight="700" >Q2</text><text x="448.0" y="41.0" font-family="Geist,system-ui,sans-serif" font-size="16.5" fill="#0E1330" text-anchor="start" font-weight="700" >May I copy it?</text><text x="404.0" y="66.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#5D6488" text-anchor="start" font-weight="400" >about the response</text><text x="404.0" y="98.0" font-family="Geist,system-ui,sans-serif" font-size="13" fill="#0E1330" text-anchor="start" font-weight="400" >Facts are free to copy. The wording,</text><text x="404.0" y="117.0" font-family="Geist,system-ui,sans-serif" font-size="13" fill="#0E1330" text-anchor="start" font-weight="400" >photos and layout of a site are protected.</text><line x1="404.0" y1="150.0" x2="716.0" y2="150.0" stroke="#E2E5F0" stroke-width="1" /><text x="404.0" y="174.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#5D6488" text-anchor="start" font-weight="400" >copyright law; the terms of the site</text><line x1="736.0" y1="100.0" x2="750.0" y2="100.0" stroke="#5D6488" stroke-width="1.6" /><path d="M756.0,100.0 L748.0,96.0 L748.0,104.0 z" fill="#5D6488"/><rect x="758.0" y="6.0" width="348.0" height="190.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="8"/><rect x="758.0" y="6.0" width="348.0" height="5.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="776.0" y="42.0" font-family="Geist Mono,ui-monospace,monospace" font-size="20" fill="#E8382D" text-anchor="start" font-weight="700" >Q3</text><text x="820.0" y="41.0" font-family="Geist,system-ui,sans-serif" font-size="16.5" fill="#0E1330" text-anchor="start" font-weight="700" >May I keep and use it?</text><text x="776.0" y="66.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#5D6488" text-anchor="start" font-weight="400" >about the rows about people</text><text x="776.0" y="98.0" font-family="Geist,system-ui,sans-serif" font-size="13" fill="#0E1330" text-anchor="start" font-weight="400" >Personal data carries duties however</text><text x="776.0" y="117.0" font-family="Geist,system-ui,sans-serif" font-size="13" fill="#0E1330" text-anchor="start" font-weight="400" >it was obtained.</text><line x1="776.0" y1="150.0" x2="1088.0" y2="150.0" stroke="#E2E5F0" stroke-width="1" /><text x="776.0" y="174.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#5D6488" text-anchor="start" font-weight="400" >India: DPDP Act 2023.  EU: GDPR</text></svg></div><div class="cols nat"><div class="callout sm"><b>Judged separately.</b> A project can pass Q1 with a public page and fail Q3 on its first column.</div><div class="callout warn sm"><b>Scope.</b> This section is an orientation for a data analyst and is no substitute for legal advice. The statements were checked in August 2026.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Law">
+  <div class="eyebrow">Law &#183; Example: Q1, access, in four US cases</div>
+  <h1 class="t">Example
+    <small>Four United States cases mark where access stops being authorised.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<table class="d"><tr><th>case</th><th>what happened</th><th>what it settled</th></tr><tr><td><b>Van Buren v. United States</b><br/>Supreme Court, 2021</td><td>A police officer used his own database access to look up a licence plate for payment.</td><td>The CFAA covers entering parts of a system closed to you, whatever the purpose.</td></tr><tr><td><b>hiQ v. LinkedIn</b><br/>Ninth Circuit, 2019 to 2022</td><td>hiQ scraped public profiles. It had also used fake accounts.</td><td>A public page is open to all. hiQ still lost on contract: $500,000 and an injunction.</td></tr><tr><td><b>Craigslist v. 3Taps</b><br/>2013</td><td>Craigslist sent a letter and blocked 3Taps, which continued through proxies.</td><td>A letter and a block revoke permission.</td></tr><tr><td><b>Meta v. Bright Data</b><br/>2024</td><td>Bright Data scraped public pages while logged out.</td><td>The terms bind users of the service, and a logged-out visitor is outside them.</td></tr></table><div class="callout sm"><b>The four together.</b> A public page, read while logged out, without going around a block and before any instruction to stop: that collection is outside all four cases.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Law">
+  <div class="eyebrow">Law &#183; Example: Q1 in India</div>
+  <h1 class="t">Example continued 1
+    <small>The Information Technology Act, 2000 has a civil section and a criminal section on access to a computer system.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="card b big"><h3>Section 43: civil</h3><p>A person who, <b>without permission of the owner</b>, accesses a computer system or downloads, copies or extracts data from it is liable to pay compensation. No intent is required.</p></div><div class="card r big"><h3>Section 66: criminal</h3><p>The same acts done <b>dishonestly or fraudulently</b>: imprisonment up to three years, or a fine up to ₹5 lakh, or both. Without that intent the section does not apply.</p></div></div><div class="cols nat"><div class="callout warn sm"><b>Untested.</b> No reported Indian judgment applies section 43 to the scraping of a public website. The Act does not define "without permission".</div><div class="callout sm"><b>Working rule.</b> Plan for the stricter reading: public pages, logged out, robots.txt honoured, and a stop at the first refusal.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Law">
+  <div class="eyebrow">Law &#183; Example: Q3, personal data</div>
+  <h1 class="t">Example continued 2
+    <small>The Digital Personal Data Protection Act, 2023 applies as soon as one column describes an identifiable person.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="colstack"><table class="d"><tr><th>term</th><th>meaning</th></tr><tr><td><b>Personal data</b></td><td>data about an identifiable individual: a name with a phone number</td></tr><tr><td><b>Data Fiduciary</b></td><td>whoever decides why and how the data is processed, which includes the person who scrapes it</td></tr><tr><td><b>Lawful basis</b></td><td>consent, or one of a short list of legitimate uses in section 7</td></tr></table><div class="callout warn sm"><b>"Publicly available" is narrow.</b> Section 3(c)(ii) exempts data made public by the person it describes, or by someone the law obliges to publish it. Data that another party put online is not exempt.</div></div><div class="colstack"><div class="fig"><div class="cap">DPDP Rules: what applies from when</div><svg viewBox="0 0 520 150" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Three dates on which parts of the DPDP Rules take effect"><line x1="40.0" y1="40.0" x2="480.0" y2="40.0" stroke="#CED3E6" stroke-width="2" /><circle cx="80" cy="40" r="8" fill="#5D6488"/><text x="80.0" y="22.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="middle" font-weight="700" >13 Nov 2025</text><text x="80.0" y="72.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#0E1330" text-anchor="middle" font-weight="400" >Rules notified;</text><text x="80.0" y="88.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#0E1330" text-anchor="middle" font-weight="400" >Board constituted</text><circle cx="260" cy="40" r="8" fill="#E8382D"/><text x="260.0" y="22.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="middle" font-weight="700" >13 Nov 2026</text><text x="260.0" y="72.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#0E1330" text-anchor="middle" font-weight="400" >enforcement and</text><text x="260.0" y="88.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#0E1330" text-anchor="middle" font-weight="400" >penalties begin</text><circle cx="440" cy="40" r="8" fill="#A87900"/><text x="440.0" y="22.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E1330" text-anchor="middle" font-weight="700" >13 May 2027</text><text x="440.0" y="72.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#0E1330" text-anchor="middle" font-weight="400" >notice, consent, breach</text><text x="440.0" y="88.0" font-family="Geist,system-ui,sans-serif" font-size="11.5" fill="#0E1330" text-anchor="middle" font-weight="400" >reporting, all the rest</text><rect x="214.0" y="104.0" width="92.0" height="22.0" fill="#FDE9E7" stroke="#E8382D" stroke-width="1" rx="5"/><text x="260.0" y="119.0" font-family="Geist,system-ui,sans-serif" font-size="11" fill="#E8382D" text-anchor="middle" font-weight="700" >in force now</text></svg></div><div class="callout sm"><b>Penalties</b> in the Schedule reach ₹250 crore for failing to secure personal data.</div><div class="callout good sm"><b>Habit.</b> Decide at parse time which fields are personal, and drop or hash them before the table is saved.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Law">
+  <div class="eyebrow">Law &#183; Mechanism</div>
+  <h1 class="t">Mechanism
+    <small>The three questions asked in order before the first request of a project, each with the outcomes that stop or change it.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><svg viewBox="0 0 1120 232" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Decision table for access, copy and keep"><rect x="14.0" y="4.0" width="348.0" height="30.0" fill="#2B4BFF" stroke="none" stroke-width="1" rx="6"/><text x="30.0" y="24.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#FFFFFF" text-anchor="start" font-weight="700" >Q1  ACCESS</text><rect x="14.0" y="44.0" width="348.0" height="38.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><text x="28.0" y="60.0" font-family="Geist,system-ui,sans-serif" font-size="12" fill="#0E1330" text-anchor="start" font-weight="400" >login needed, and the terms forbid it</text><text x="28.0" y="75.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#E8382D" text-anchor="start" font-weight="700" >→ stop</text><rect x="14.0" y="90.0" width="348.0" height="38.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><text x="28.0" y="106.0" font-family="Geist,system-ui,sans-serif" font-size="12" fill="#0E1330" text-anchor="start" font-weight="400" >blocked, or told to stop</text><text x="28.0" y="121.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#E8382D" text-anchor="start" font-weight="700" >→ stop</text><rect x="14.0" y="136.0" width="348.0" height="38.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><text x="28.0" y="152.0" font-family="Geist,system-ui,sans-serif" font-size="12" fill="#0E1330" text-anchor="start" font-weight="400" >robots.txt disallows the path</text><text x="28.0" y="167.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#E8382D" text-anchor="start" font-weight="700" >→ stop; write to the owner</text><rect x="14.0" y="182.0" width="348.0" height="38.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><text x="28.0" y="198.0" font-family="Geist,system-ui,sans-serif" font-size="12" fill="#0E1330" text-anchor="start" font-weight="400" >none of these</text><text x="28.0" y="213.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E7A55" text-anchor="start" font-weight="700" >→ continue</text><line x1="364.0" y1="19.0" x2="378.0" y2="19.0" stroke="#5D6488" stroke-width="1.6" /><path d="M384.0,19.0 L376.0,15.0 L376.0,23.0 z" fill="#5D6488"/><rect x="386.0" y="4.0" width="348.0" height="30.0" fill="#A87900" stroke="none" stroke-width="1" rx="6"/><text x="402.0" y="24.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#FFFFFF" text-anchor="start" font-weight="700" >Q2  COPY</text><rect x="386.0" y="44.0" width="348.0" height="38.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><text x="400.0" y="60.0" font-family="Geist,system-ui,sans-serif" font-size="12" fill="#0E1330" text-anchor="start" font-weight="400" >facts: prices, names, ratings</text><text x="400.0" y="75.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E7A55" text-anchor="start" font-weight="700" >→ keep, with the source</text><rect x="386.0" y="90.0" width="348.0" height="38.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><text x="400.0" y="106.0" font-family="Geist,system-ui,sans-serif" font-size="12" fill="#0E1330" text-anchor="start" font-weight="400" >whole text or images</text><text x="400.0" y="121.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E7A55" text-anchor="start" font-weight="700" >→ keep a derived feature only</text><rect x="386.0" y="136.0" width="348.0" height="38.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><text x="400.0" y="152.0" font-family="Geist,system-ui,sans-serif" font-size="12" fill="#0E1330" text-anchor="start" font-weight="400" >republishing or selling the set</text><text x="400.0" y="167.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#E8382D" text-anchor="start" font-weight="700" >→ needs a licence</text><line x1="736.0" y1="19.0" x2="750.0" y2="19.0" stroke="#5D6488" stroke-width="1.6" /><path d="M756.0,19.0 L748.0,15.0 L748.0,23.0 z" fill="#5D6488"/><rect x="758.0" y="4.0" width="348.0" height="30.0" fill="#E8382D" stroke="none" stroke-width="1" rx="6"/><text x="774.0" y="24.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#FFFFFF" text-anchor="start" font-weight="700" >Q3  KEEP</text><rect x="758.0" y="44.0" width="348.0" height="38.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><text x="772.0" y="60.0" font-family="Geist,system-ui,sans-serif" font-size="12" fill="#0E1330" text-anchor="start" font-weight="400" >no column about a person</text><text x="772.0" y="75.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E7A55" text-anchor="start" font-weight="700" >→ done</text><rect x="758.0" y="90.0" width="348.0" height="38.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><text x="772.0" y="106.0" font-family="Geist,system-ui,sans-serif" font-size="12" fill="#0E1330" text-anchor="start" font-weight="400" >personal, and not needed</text><text x="772.0" y="121.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E7A55" text-anchor="start" font-weight="700" >→ drop at parse time</text><rect x="758.0" y="136.0" width="348.0" height="38.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="6"/><text x="772.0" y="152.0" font-family="Geist,system-ui,sans-serif" font-size="12" fill="#0E1330" text-anchor="start" font-weight="400" >personal, and needed</text><text x="772.0" y="167.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E7A55" text-anchor="start" font-weight="700" >→ hash; write purpose and deletion date</text></svg></div><div class="callout sm"><b>The settled case.</b> A logged-out collection of public pages that honours robots.txt, keeps facts and drops personal fields passes all three questions under the United States and Indian law described here.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Law">
+  <div class="eyebrow">Law &#183; Test</div>
+  <h1 class="t">Test
+    <small>Five collection plans on the shop. For each, name the first question that stops it.</small></h1>
+  <div class="wrap" style="zoom:1.26">
+<div class="match" id="match"><div class="q" data-a="none" data-why="Public pages, allowed by robots.txt, facts only, no personal data."><div class="s">Collect the price of all 168 products from the catalogue pages, logged out, one request every two seconds.<small></small></div><select><option value="">choose</option><option value="none">passes all three</option><option value="q1">stopped at Q1: access</option><option value="q2">stopped at Q2: copy</option><option value="q3">stopped at Q3: keep</option></select></div><div class="q" data-a="q1" data-why="A block revokes permission; going around it is the 3Taps case."><div class="s">The shop blocks your address after a burst of 429s. You continue through a proxy.<small></small></div><select><option value="">choose</option><option value="none">passes all three</option><option value="q1">stopped at Q1: access</option><option value="q2">stopped at Q2: copy</option><option value="q3">stopped at Q3: keep</option></select></div><div class="q" data-a="q1" data-why="A login is a gate, and robots.txt disallows /account/."><div class="s">Read the order history under /account/ with a login a friend lent you.<small></small></div><select><option value="">choose</option><option value="none">passes all three</option><option value="q1">stopped at Q1: access</option><option value="q2">stopped at Q2: copy</option><option value="q3">stopped at Q3: keep</option></select></div><div class="q" data-a="q2" data-why="Descriptions and photos are expression, and this republishes them."><div class="s">Copy every product description and photo into the website of your own shop.<small></small></div><select><option value="">choose</option><option value="none">passes all three</option><option value="q1">stopped at Q1: access</option><option value="q2">stopped at Q2: copy</option><option value="q3">stopped at Q3: keep</option></select></div><div class="q" data-a="q3" data-why="Names with cities are personal data under the DPDP Act."><div class="s">Collect reviewer names and cities from product reviews to build a profile of each reviewer.<small></small></div><select><option value="">choose</option><option value="none">passes all three</option><option value="q1">stopped at Q1: access</option><option value="q2">stopped at Q2: copy</option><option value="q3">stopped at Q3: keep</option></select></div></div><div class="wctl"><div class="out sm" id="match-score" style="flex:1;white-space:normal">0 of 5 chosen</div><span class="jsbadge">browser JS</span></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Record">
+  <div class="eyebrow">Record &#183; Example</div>
+  <h1 class="t">Example
+    <small>Each fetch is saved as it arrived, with one log row that says where it came from and when.</small></h1>
+  <div class="wrap" style="zoom:1.22">
+<div class="cols w6040 nat"><pre class="code sm"><span class="py-kw">import</span> hashlib, datetime, pathlib
+pathlib.Path(<span class="py-str">&#x27;raw&#x27;</span>).mkdir(exist_ok=<span class="py-kw">True</span>)
+log = []
+<span class="py-kw">for</span> k <span class="py-kw">in</span> range(<span class="py-num">1</span>, <span class="py-num">4</span>):
+    url = BASE + f<span class="py-str">&#x27;catalogue/page-{k}.html&#x27;</span>
+    r = get(url)
+    name = f<span class="py-str">&#x27;raw/page-{k}.html&#x27;</span>
+    pathlib.Path(name).write_bytes(r.content)<span class="py-cm">      # the page as it arrived</span>
+    log.append({<span class="py-str">&#x27;url&#x27;</span>: url.split(<span class="py-str">&#x27;shop/&#x27;</span>)[-<span class="py-num">1</span>],
+                <span class="py-str">&#x27;fetched&#x27;</span>: datetime.datetime.now().isoformat(timespec=<span class="py-str">&#x27;seconds&#x27;</span>),
+                <span class="py-str">&#x27;status&#x27;</span>: r.status_code, <span class="py-str">&#x27;bytes&#x27;</span>: len(r.content),
+                <span class="py-str">&#x27;sha256&#x27;</span>: hashlib.sha256(r.content).hexdigest()[:<span class="py-num">12</span>]})
+    time.sleep(<span class="py-num">0.5</span>)
+<span class="py-kw">print</span>(pd.DataFrame(log).to_string(index=<span class="py-kw">False</span>))</pre><div class="colstack"><div class="callout sm"><b>Raw first.</b> Parsing reads the saved file. A selector can then be corrected without asking the server again.</div><div class="callout sm"><b>sha256</b> is a fingerprint of the bytes. A different value on a later fetch shows that the page changed.</div><div class="callout sm"><b>With the data</b> goes a short note: source, date, robots.txt as read, fields removed, purpose.</div></div></div><div class="outlbl">the log, three pages</div><div class="out sm">                  url             fetched  status  bytes       sha256
+catalogue/page-1.html 2026-11-23T00:25:21     200   9177 a6959a09cf6a
+catalogue/page-2.html 2026-11-23T00:25:22     200   9065 ee47a283190c
+catalogue/page-3.html 2026-11-23T00:25:22     200   9463 5068883c92e7</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Summary">
+  <div class="eyebrow">Summary</div>
+  <h1 class="t">Summary
+    <small>Each idea of the lecture with the number it produced on the shop.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<table class="d lg"><tr><th>idea</th><th>on the shop</th></tr><tr><td>Dynamic page</td><td>offers.html: 0 article elements in the response, 12 in the DOM</td></tr><tr><td>Repeat the request of the script</td><td>api/offers.json returns the 12 offers in 16 ms</td></tr><tr><td>Drive a browser</td><td>Selenium: 0 cards after get(), 12 after an explicit wait, 1.51 s</td></tr><tr><td>Rate limit</td><td>no pause: statuses 200 &#215; 4 then 429 &#215; 3, and 96 of 168 rows with no error</td></tr><tr><td>Retry and pacing</td><td>Retry-After honoured: 168 rows; a pause of 0.5 s: no 429</td></tr><tr><td>robots.txt</td><td>/account/ and /api/ disallowed, crawl delay 2 s; two parsers disagree on /api/products/</td></tr><tr><td>Law</td><td>access, copy, keep: IT Act sections 43 and 66; DPDP Act for personal data</td></tr><tr><td>Record</td><td>raw page saved, with url, time, status, bytes and sha256 for each fetch</td></tr></table>
+  </div>
+</section>
+
+<section class="slide" data-sec="Practice">
+  <div class="eyebrow">Practice</div>
+  <h1 class="t">Practice on the shop
+    <small>Questions 1 and 2 use the published shop. Questions 3 and 4 need shop_server.py and the shop folder from module2/data.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="colstack"><div class="card big"><h3><span class="num">1</span>Largest discount</h3><p>Collect the offers by driving a browser. Which product has the largest percentage off, and what is the percentage?</p></div><div class="card big"><h3><span class="num">2</span>Read the robots file</h3><p>Using urllib.robotparser on the robots.txt of the shop, is /search?q=rice allowed for *? Is /offers.html allowed for GPTBot?</p></div></div><div class="colstack"><div class="card big"><h3><span class="num">3</span>Count the refusals</h3><p>Request all seven catalogue pages from the local server with a pause of 0.1 s and no retry. How many responses have status 429?</p></div><div class="card big"><h3><span class="num">4</span>Write the note</h3><p>For the catalogue scrape of lecture 1, write the five-line note that goes with the data: source, date, robots.txt as read, fields removed, purpose.</p></div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="References">
+  <div class="eyebrow">References</div>
+  <h1 class="t">References</h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="refs"><p>Mitchell, R. <i>Web Scraping with Python</i>. O'Reilly. The chapters on JavaScript pages and on the legalities of scraping.</p><p>Koster, M., Illyes, G., Zeller, H. and Sassman, L. (2022). <i>Robots Exclusion Protocol</i>. RFC 9309.</p><p>Selenium documentation, selenium.dev/documentation: WebDriver, locators and waits.</p><p>Van Buren v. United States, 593 U.S. 374 (2021). hiQ Labs v. LinkedIn (9th Cir. 2022). Craigslist v. 3Taps (N.D. Cal. 2013). Meta Platforms v. Bright Data (N.D. Cal. 2024).</p><p>The Information Technology Act, 2000, sections 43 and 66. The Digital Personal Data Protection Act, 2023, and the Rules notified on 13 November 2025.</p></div>
+  </div>
+</section>
+</div></div>
+<div id="nav"><button id="prev" aria-label="Previous slide">&#8249;</button><button id="next" aria-label="Next slide">&#8250;</button></div>
+<div id="hint">&#8592; &#8594; navigate &#183; F fullscreen &#183; P print</div>
+<script>
+/* ============================================================
+   deck mechanics — identical to the other decks in the module
+   ============================================================ */
+(function(){
+  const slides=[...document.querySelectorAll('.slide')],
+        deck=document.getElementById('deck'), pbar=document.getElementById('pbar');
+  let i=0;
+  slides.forEach((s,idx)=>{
+    const r=document.createElement('div'); r.className='rail';
+    r.innerHTML='<div class="a">DA5500W &#183; Data Mining: Concepts and Techniques</div>'+
+      '<div class="n">Dr. Arun B Ayyar</div>'+
+      '<div class="b">'+(s.dataset.sec||'')+'</div>'+
+      '<div class="c">'+String(idx+1).padStart(2,'0')+' / '+slides.length+'</div>';
+    s.appendChild(r);
+  });
+  // ---- staged builds ------------------------------------------------
+  // A slide carrying .build holds its [data-at] pieces back. Arrow
+  // right releases the next one; only when they are all out does the
+  // deck advance. Entering backwards lands on the finished slide.
+  function maxStep(s){
+    let m=0;
+    s.querySelectorAll('[data-at]').forEach(e=>{ m=Math.max(m,+e.dataset.at||0); });
+    return m;
+  }
+  function paint(s){
+    const k=+s.dataset.step||0;
+    // data-to="k" retires a piece once the build moves past step k
+    s.querySelectorAll('[data-at]').forEach(e=>
+      e.classList.toggle('shown',(+e.dataset.at||0)<=k&&
+        (e.dataset.to===undefined||k<=+e.dataset.to)));
+    const d=s.querySelector('.bld');
+    if(d)[...d.children].forEach((c,n)=>c.classList.toggle('on',n<k));
+  }
+  function build(s,dir){
+    if(!s||!s.classList.contains('build'))return false;
+    const t=(+s.dataset.step||0)+dir;
+    if(t<0||t>maxStep(s))return false;
+    s.dataset.step=t; paint(s); return true;
+  }
+  function show(n){
+    const prev=i, back=n<i;
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+    pbar.style.width=(i/(slides.length-1)*100)+'%';
+    history.replaceState(null,'','#/'+(i+1));
+    const cur=slides[i];
+    if(cur&&cur.classList.contains('build')){
+      cur.dataset.step=back?maxStep(cur):0; paint(cur);
+    }
+    if(prev!==i && slides[prev]) slides[prev].dispatchEvent(new CustomEvent('hidden'));
+    if(cur) cur.dispatchEvent(new CustomEvent('shown'));
+  }
+  function fit(){ deck.style.transform='scale('+Math.min(innerWidth/1330,innerHeight/770)+')'; }
+  addEventListener('resize',fit); fit();
+  document.getElementById('next').onclick=()=>{ if(!build(slides[i],1))show(i+1); };
+  document.getElementById('prev').onclick=()=>{ if(!build(slides[i],-1))show(i-1); };
+  addEventListener('keydown',e=>{
+    if(/^(INPUT|TEXTAREA)$/.test(e.target.tagName))return;
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){
+      if(!build(slides[i],1))show(i+1); e.preventDefault();}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){
+      if(!build(slides[i],-1))show(i-1); e.preventDefault();}
+    else if(e.key==='Home')show(0);
+    else if(e.key==='End')show(slides.length-1);
+    else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}
+    else if(e.key==='p'||e.key==='P')print();
+  });
+  const m=location.hash.match(/#\/(\d+)/); show(m?+m[1]-1:0);
+})();
+
+
+
+/* ---------------- Dynamic page test: run the page's script and count the cards ---------------- */
+(function(){
+  const el=document.getElementById('dy-data'); if(!el) return;
+  const D=JSON.parse(el.textContent), go=document.getElementById('dy-go'), grid=document.getElementById('dy-grid');
+  const st=document.getElementById('dy-st'), n=document.getElementById('dy-n');
+  let timer=null, done=false;
+  function count(){ n.textContent='document.querySelectorAll("article").length = '+grid.children.length; }
+  function reset(){ clearTimeout(timer); grid.innerHTML=''; st.textContent='Loading offers ...'; done=false; go.textContent='run the script ▶'; count(); }
+  go.addEventListener('click',()=>{
+    go.blur();
+    if(done){reset();return;}
+    go.textContent='waiting 400 ms ...';
+    timer=setTimeout(()=>{
+      grid.innerHTML=D.map(o=>'<div><b>'+o.sku+'</b>'+o.name+'<br>₹'+o.price+' <i>'+o.off_pct+'% off</i></div>').join('');
+      st.textContent=D.length+' offers in week 2026-W48'; done=true; go.textContent='reset'; count();
+    },400);
+  });
+  go.closest('.slide').addEventListener('hidden',reset);
+  count();
+})();
+
+/* ---------------- Politeness test: forty requests against "4 per second" ---------------- */
+(function(){
+  const svg=document.getElementById('rt-svg'); if(!svg) return;
+  const P=document.getElementById('rt-p'), RA=document.getElementById('rt-ra'), out=document.getElementById('rt-out');
+  const N=40, LIMIT=4, WIN=1, COST=0.01;          /* each request takes 10 ms, as on the local server */
+  function sim(pause,retry){
+    let t=0, ok=[], ev=[], served=0;
+    while(served<N && ev.length<400){
+      ok=ok.filter(x=>t-x<WIN);
+      if(ok.length>=LIMIT){ ev.push([t,0]); if(retry){t+=1;continue;} served++; }   /* without retry the page is lost */
+      else { ok.push(t); ev.push([t,1]); served++; }
+      t+=COST+pause;
+    }
+    return ev;
+  }
+  function draw(){
+    const pause=+P.value/1000, ev=sim(pause,RA.checked), T=Math.max(ev[ev.length-1][0],1);
+    document.getElementById('rt-pv').textContent=P.value+' ms';
+    const X=t=>40+t/T*1040, bad=ev.filter(e=>!e[1]).length, good=ev.length-bad;
+    let h='<line x1="40" y1="92" x2="1080" y2="92" stroke="#CED3E6" stroke-width="1.4"/>';
+    const step=T<=4?0.5:(T<=12?1:(T<=30?2:5));
+    for(let s=0;s<=T+1e-9;s+=step) h+='<line x1="'+X(s)+'" y1="86" x2="'+X(s)+'" y2="98" stroke="#5D6488"/><text x="'+X(s)+'" y="116" font-size="11" text-anchor="middle" fill="#5D6488" font-family="Geist Mono,monospace">'+s+' s</text>';
+    ev.forEach(e=>{ h+='<rect x="'+(X(e[0])-2.5)+'" y="'+(e[1]?44:20)+'" width="5" height="'+(e[1]?40:64)+'" rx="2" fill="'+(e[1]?'#0E7A55':'#E8382D')+'"/>'; });
+    svg.innerHTML=h;
+    const lost=RA.checked?0:bad;
+    out.textContent=good+' served · '+bad+' refused with 429 · '+(N-lost)*24+' of '+N*24+' rows collected · '+ev[ev.length-1][0].toFixed(1)+' s';
+  }
+  P.addEventListener('input',draw); RA.addEventListener('change',draw);
+  P.addEventListener('keydown',e=>e.stopPropagation());
+  draw();
+})();
+
+/* ---------------- Law test: which question stops the plan ---------------- */
+(function(){
+  const box=document.getElementById('match'); if(!box) return;
+  const score=document.getElementById('match-score');
+  box.addEventListener('change',e=>{
+    const sel=e.target.closest('select'); if(!sel) return;
+    const q=sel.closest('.q');
+    if(!sel.value){q.classList.remove('right','wrong');q.querySelector('small').textContent='';}
+    else{
+      const ok=sel.value===q.dataset.a;
+      q.classList.toggle('right',ok); q.classList.toggle('wrong',!ok);
+      q.querySelector('small').textContent=ok?q.dataset.why:'Ask the three questions in order.';
+    }
+    const qs=[...box.querySelectorAll('.q')], done=qs.filter(x=>x.querySelector('select').value);
+    score.textContent=done.length+' of '+qs.length+' chosen · '+qs.filter(x=>x.classList.contains('right')).length+' correct';
+  });
+  box.addEventListener('keydown',e=>e.stopPropagation());
+})();
+
+</script>
+</body>
+</html>
