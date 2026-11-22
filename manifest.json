@@ -1,7 +1,7 @@
 {
  "repo": "iitm-da/da5500w",
  "branch": "master",
- "generated": "2026-11-22 16:45 UTC",
+ "generated": "2026-11-22 17:12 UTC",
  "items": [
   {
    "path": "module1/module1_lecture1_what_is_data_mining.html",
@@ -9,7 +9,7 @@
    "folder": "module1",
    "section": "Module 1 \u00b7 Introduction: data, patterns and the KDD process",
    "kind": "deck",
-   "size": 214511,
+   "size": 228665,
    "updated": "2026-11-22"
   },
   {
@@ -18,7 +18,7 @@
    "folder": "module1",
    "section": "Module 1 \u00b7 Introduction: data, patterns and the KDD process",
    "kind": "deck",
-   "size": 151528,
+   "size": 260695,
    "updated": "2026-11-22"
   }
  ]
