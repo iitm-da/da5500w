@@ -1,6 +1,6 @@
 {
- "repo": "",
- "branch": "",
+ "repo": "iitm-da/da5500w",
+ "branch": "master",
  "generated": "2026-11-22 16:27 UTC",
  "items": [
   {
@@ -10,7 +10,7 @@
    "section": "Module 1 \u00b7 Introduction and data types",
    "kind": "deck",
    "size": 214521,
-   "updated": ""
+   "updated": "2026-11-22"
   }
  ]
 }
