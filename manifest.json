@@ -1,7 +1,7 @@
 {
  "repo": "iitm-da/da5500w",
  "branch": "master",
- "generated": "2026-11-22 18:41 UTC",
+ "generated": "2026-11-22 18:56 UTC",
  "items": [
   {
    "path": "module1/module1_lecture1_what_is_data_mining.html",
@@ -20,6 +20,24 @@
    "kind": "deck",
    "size": 260695,
    "updated": "2026-11-22"
+  },
+  {
+   "path": "module2/module2_lecture1_getting_data_from_the_web.html",
+   "name": "module2_lecture1_getting_data_from_the_web.html",
+   "folder": "module2",
+   "section": "Module 2 \u00b7 Getting data: APIs, scraping, ethics",
+   "kind": "deck",
+   "size": 116874,
+   "updated": "2026-11-23"
+  },
+  {
+   "path": "module2/module2_lecture2_dynamic_pages_politeness_law.html",
+   "name": "module2_lecture2_dynamic_pages_politeness_law.html",
+   "folder": "module2",
+   "section": "Module 2 \u00b7 Getting data: APIs, scraping, ethics",
+   "kind": "deck",
+   "size": 107887,
+   "updated": "2026-11-23"
   }
  ]
 }
