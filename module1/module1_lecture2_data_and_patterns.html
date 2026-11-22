@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>DA5500W M1 L2: Kinds of Data, Kinds of Patterns</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400..700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --paper:#FFFFFF; --card:#FFFFFF; --ink:#0E1330; --soft:#5D6488;
+  --line:#CED3E6; --hair:#E2E5F0; --surround:#E4E7F1;
+  --code-bg:#0E1330; --code-ink:#D9E4E9;
+  --t-cls:#2B4BFF; --t-qnt:#9B2C7E; --t-grp:#0E7A55; --t-anc:#A87900;
+  --t-asr:#E8382D; --t-alt:#4B5A87; --t-dot:#6A4CA8; --t-ref:#0E7A55;
+  --sw:1280px; --sh:720px;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --disp:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+/* ligatures OFF: a deck full of ->, =>, != and <= must show them as typed */
+*,*::before,*::after{font-variant-ligatures:none;
+  font-feature-settings:"liga" 0,"clig" 0,"calt" 0,"dlig" 0}
+html,body{height:100%;background:var(--surround);overflow:hidden;
+  font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased}
+#stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#deck{width:var(--sw);height:var(--sh);position:relative;transform-origin:center center;
+  box-shadow:0 20px 70px rgba(0,0,0,.5)}
+.slide{position:absolute;inset:0;background:var(--paper);padding:44px 58px 62px;
+  display:none;flex-direction:column}
+.slide.on{display:flex}
+@media (prefers-reduced-motion:no-preference){
+  .slide.on{animation:fi .22s ease}
+  @keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+}
+/* ---------- headings ---------- */
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--soft);margin-bottom:9px;display:flex;gap:10px;align-items:center}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+h1.t{font-family:var(--disp);font-weight:700;font-size:34px;line-height:1.1;
+  letter-spacing:-.018em;margin-bottom:4px}
+h1.t.sm{font-size:29px}
+h1.t small{display:block;font-family:var(--body);font-weight:400;font-size:15px;
+  color:var(--soft);letter-spacing:0;margin-top:6px;line-height:1.42}
+h1.t small.tight{font-size:13.5px;line-height:1.4}
+h2.s{font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:-.005em;margin-bottom:7px}
+h2.s.xs{font-size:14px;margin-bottom:5px}
+.body{font-size:14.5px;line-height:1.5}
+.wrap{flex:1;min-height:0;margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;flex:1;min-height:0}
+.cols.w6040{grid-template-columns:1.5fr 1fr}
+.cols.w4060{grid-template-columns:1fr 1.5fr}
+.cols.w7030{grid-template-columns:2.2fr 1fr}
+.cols.w3070{grid-template-columns:1fr 2.2fr}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+.colstack{display:flex;flex-direction:column;gap:10px;min-height:0}
+ul.b{list-style:none;font-size:14px;line-height:1.46}
+ul.b li{position:relative;padding-left:15px;margin-bottom:8px}
+ul.b li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;
+  background:var(--line);border:1px solid var(--soft)}
+ul.b li strong{font-weight:600}
+ul.b.sm{font-size:12.6px;line-height:1.44}
+ul.b.sm li{margin-bottom:6px;padding-left:13px}
+ul.b.sm li::before{top:7px;width:5px;height:5px}
+ol.n{list-style:none;counter-reset:st;font-size:13px;line-height:1.45}
+ol.n li{position:relative;padding-left:26px;margin-bottom:9px;counter-increment:st}
+ol.n li::before{content:counter(st);position:absolute;left:0;top:1px;width:18px;height:18px;
+  background:var(--ink);color:#fff;font-family:var(--mono);font-size:10px;
+  display:flex;align-items:center;justify-content:center;border-radius:2px}
+/* ---------- code ---------- */
+pre.code{background:var(--code-bg);color:var(--code-ink);font-family:var(--mono);
+  font-size:12.5px;line-height:1.55;padding:12px 14px;overflow:hidden;
+  border-left:3px solid #2B4BFF;white-space:pre;tab-size:4}
+pre.code.sm{font-size:11.5px;line-height:1.5}
+pre.code.xs{font-size:10.5px;line-height:1.45}
+pre.code.xxs{font-size:9.6px;line-height:1.4}
+.out{background:var(--card);border:1px solid var(--hair);border-left:3px solid #8A90B0;
+  font-family:var(--mono);font-size:11.5px;line-height:1.5;padding:10px 13px;
+  white-space:pre;overflow:hidden;color:#1A2152}
+.out.xs{font-size:10.3px;line-height:1.42}
+.out.xxs{font-size:9.5px;line-height:1.38}
+.outlbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--soft);margin-bottom:4px}
+/* text-transform:none is load-bearing — .outlbl and .eyebrow are uppercase,
+   and an uppercased code token is a different token */
+code.k{font-family:var(--mono);font-size:.94em;background:var(--card);
+  border:1px solid var(--hair);padding:1px 5px;border-radius:2px;white-space:nowrap;
+  text-transform:none}
+/* python token colours, dark ground */
+pre.code .py-kw{color:#8FB8FF}
+pre.code .py-str{color:#B7E39B}
+pre.code .py-cm{color:#6F8896;font-style:italic}
+pre.code .py-fn{color:#F0C46B}
+pre.code .py-num{color:#F58ACE}
+pre.code .py-bi{color:#C0A6F5}
+/* http token colours */
+pre.code .h-mth{color:#F0C46B;font-weight:700}
+pre.code .h-url{color:#E9F2F6}
+pre.code .h-hdr{color:#6FB6F0}
+pre.code .h-val{color:#B7E39B}
+pre.code .h-ok{color:#55D6A2;font-weight:700}
+pre.code .h-bad{color:#FF9090;font-weight:700}
+pre.code .h-dim{color:#6F8896}
+/* json token colours */
+pre.code .j-key{color:#6FB6F0}
+pre.code .j-str{color:#B7E39B}
+pre.code .j-num{color:#F58ACE}
+pre.code .j-pun{color:#8CA3AF}
+/* light-ground variants for .out blocks */
+.out .h-hdr{color:#2B4BFF;font-weight:500}
+.out .h-ok{color:#0E7A55;font-weight:700}
+.out .h-bad{color:#E8382D;font-weight:700}
+.out .h-dim{color:#8A90B0}
+.out .j-key{color:#2B4BFF}
+.out .j-str{color:#0E7A55}
+.out .j-num{color:#9B2C7E}
+/* ---------- tables ---------- */
+table.d{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card)}
+table.d th,table.d td{border:1px solid var(--hair);padding:5.5px 9px;text-align:left;vertical-align:top}
+table.d th{background:var(--ink);color:#fff;font-weight:600;font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase}
+table.d td:first-child{font-family:var(--mono);white-space:nowrap}
+table.d th.m,table.d td.m{font-family:var(--mono);text-align:right;white-space:nowrap}
+table.d.sm{font-size:11.5px}
+table.d.sm th,table.d.sm td{padding:4px 8px}
+table.d.xs{font-size:10.6px}
+table.d.xs th,table.d.xs td{padding:3.5px 7px}
+table.d tr.hl td{background:#FDE9E7}
+table.d.tight th,table.d.tight td{padding:2.4px 7px}
+table.d.tight th{text-transform:none}
+table.d.tight tr.tot td{font-weight:700}
+
+table.d tr.ok td{background:#F3FBF7}
+table.d tr.wr td{background:#FFF6D1}
+table.d.free td:first-child{white-space:normal;font-family:var(--body)}
+table.d td.m{font-family:var(--mono)}
+table.d td.o{font-family:var(--mono);font-size:10.8px;color:#1A2152;white-space:nowrap}
+table.d td.c{text-align:center;font-family:var(--mono)}
+/* ---------- cards & callouts ---------- */
+.card{background:var(--card);border:1px solid var(--hair);border-top:3px solid var(--ink);
+  padding:11px 13px}
+.card h3{font-family:var(--disp);font-size:14.5px;font-weight:700;margin-bottom:5px}
+.card h3 .num{font-family:var(--mono);font-size:11px;color:var(--soft);margin-right:7px}
+.card p{font-size:12.5px;line-height:1.45;color:#1A2152}
+.card.sm{padding:9px 11px}
+.card.sm h3{font-size:13px}
+.card.sm p{font-size:11.6px;line-height:1.42}
+.card.b{border-top-color:var(--t-cls)}
+.card.g{border-top-color:var(--t-grp)}
+.card.r{border-top-color:var(--t-asr)}
+.card.o{border-top-color:var(--t-anc)}
+.card.p{border-top-color:var(--t-qnt)}
+.callout{background:var(--card);border:1px solid var(--hair);border-left:4px solid var(--t-cls);
+  padding:10px 14px;font-size:13.5px;line-height:1.46}
+.callout.sm{font-size:12.3px;padding:8px 12px;line-height:1.44}
+.callout.warn{border-left-color:var(--t-anc);background:#FFF6D1}
+.callout.bad{border-left-color:var(--t-asr);background:#FDE9E7}
+.callout.good{border-left-color:var(--t-grp);background:#F3FBF7}
+.callout b{font-weight:700}
+.tag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;
+  text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;border-radius:2px;
+  vertical-align:2px;margin-right:7px}
+.tag.r{color:var(--t-asr)}.tag.g{color:var(--t-grp)}.tag.b{color:var(--t-cls)}
+.tag.o{color:var(--t-anc)}.tag.p{color:var(--t-qnt)}
+.jsbadge{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  background:var(--t-anc);color:#fff;padding:2px 6px;border-radius:2px}
+.hit{background:#BFE3F2;border-radius:2px;padding:1px 0;
+  box-shadow:0 1px 0 #12556F inset,0 -2px 0 #12556F inset}
+.hit.bad{background:#F8D3D7;box-shadow:0 1px 0 #E8382D inset,0 -2px 0 #E8382D inset}
+.hit.wrn{background:#FFF6D1;box-shadow:0 1px 0 #A87900 inset,0 -2px 0 #A87900 inset}
+/* ---------- the route ladder (recurs in all four lectures) ---------- */
+.ladder{display:grid;grid-template-columns:38px 1fr;gap:0 12px}
+.ladder .rung{display:contents}
+.ladder .num{font-family:var(--mono);font-size:11px;color:#fff;background:var(--soft);
+  display:flex;align-items:center;justify-content:center;height:100%;border-radius:2px}
+.ladder .num.on{background:var(--t-asr)}
+.ladder .txt{background:var(--card);border:1px solid var(--hair);padding:8px 12px;margin-bottom:8px}
+.ladder .txt.on{border-left:3px solid var(--t-asr);background:#FDE9E7}
+.ladder .txt h4{font-family:var(--disp);font-size:13.5px;font-weight:700;margin-bottom:2px}
+.ladder .txt p{font-size:11.8px;line-height:1.42;color:#1A2152}
+/* ---------- motivation rows ---------- */
+.mrow{display:grid;grid-template-columns:118px 1fr 250px;gap:13px;align-items:center;
+  background:var(--card);border:1px solid var(--hair);border-left:3px solid var(--line);
+  padding:9px 13px}
+.mrow>.k{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--soft);line-height:1.5}
+.mrow>.v{font-family:var(--mono);font-size:10.4px;line-height:1.55;white-space:pre;
+  overflow:hidden;color:#1A2152}
+.mrow>.n{font-size:11.6px;line-height:1.4;color:#1A2152;border-left:1px solid var(--hair);
+  padding-left:13px;align-self:stretch;display:grid;align-content:center}
+.mrow>.n b{font-weight:700;color:var(--ink)}
+/* ---------- request/response wire diagram ---------- */
+.wire{display:grid;grid-template-columns:1fr 96px 1fr;align-items:center;gap:0}
+.wire .box{background:var(--card);border:1px solid var(--hair);border-top:3px solid var(--ink);
+  padding:10px 13px}
+.wire .box h4{font-family:var(--disp);font-size:13px;font-weight:700;margin-bottom:4px}
+.wire .arrows{display:flex;flex-direction:column;gap:16px;padding:0 6px}
+.wire .ar{position:relative;height:2px;background:var(--t-cls)}
+.wire .ar::after{content:"";position:absolute;right:-1px;top:-4px;border-left:8px solid var(--t-cls);
+  border-top:5px solid transparent;border-bottom:5px solid transparent}
+.wire .ar.back{background:var(--t-grp)}
+.wire .ar.back::after{right:auto;left:-1px;border-left:none;border-right:8px solid var(--t-grp)}
+.wire .ar b{position:absolute;left:50%;top:-17px;transform:translateX(-50%);
+  font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--soft);white-space:nowrap;background:var(--paper);padding:0 5px}
+/* ---------- widget: request inspector ---------- */
+.insp{display:grid;grid-template-columns:250px 1fr;gap:14px;flex:1;min-height:0}
+.insp .ctl{display:flex;flex-direction:column;gap:7px;min-height:0;overflow:auto}
+.insp .ctl .hdr{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--soft);margin-top:4px}
+.tgl{display:flex;align-items:flex-start;gap:8px;background:var(--card);border:1px solid var(--hair);
+  padding:6px 9px;cursor:pointer;font-size:11.5px;line-height:1.35}
+.tgl:hover{background:#E8ECFF}
+.tgl input{margin-top:2px;accent-color:var(--t-cls);flex:none}
+.tgl b{font-family:var(--mono);font-size:11px;font-weight:500;display:block}
+.tgl i{font-style:normal;color:var(--soft);font-size:10.4px;display:block;line-height:1.3}
+.tgl.on{border-left:3px solid var(--t-grp)}
+.insp .res{display:flex;flex-direction:column;gap:9px;min-height:0}
+#wire{flex:none}
+#verdict{flex:none;background:var(--card);border:1px solid var(--hair);
+  border-left:4px solid var(--soft);padding:11px 14px;font-size:12.6px;line-height:1.46}
+#verdict.ok{border-left-color:var(--t-grp);background:#F3FBF7}
+#verdict.bad{border-left-color:var(--t-asr);background:#FDE9E7}
+#verdict .st{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.01em;
+  display:block;margin-bottom:5px}
+#verdict.ok .st{color:var(--t-grp)}
+#verdict.bad .st{color:var(--t-asr)}
+#verdict .why{color:#1A2152}
+#verdict .why em{font-style:normal;font-family:var(--mono);font-size:11.6px;color:var(--ink)}
+/* ---------- cover ---------- */
+.cover{justify-content:center;padding:0 68px 70px}
+.cover .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--t-asr);margin-bottom:20px}
+.cover h1{font-family:var(--disp);font-weight:800;font-size:78px;line-height:.96;
+  letter-spacing:-.035em}
+.cover .pt{font-family:var(--disp);font-weight:700;font-size:28px;color:var(--soft);
+  letter-spacing:-.02em;margin-top:10px}
+.cover .rule{width:96px;height:4px;background:var(--ink);margin:24px 0 22px}
+.cover .sub{font-size:16.5px;color:#1A2152;max-width:640px;line-height:1.5}
+.cover .by{margin-top:26px;font-family:var(--disp);font-weight:700;font-size:19px;
+  color:var(--ink);letter-spacing:-.01em}
+.cover .by span{display:block;font-family:var(--mono);font-size:10px;font-weight:400;
+  letter-spacing:.2em;text-transform:uppercase;color:#8A90B0;margin-bottom:5px}
+.meta{margin-top:30px;font-family:var(--mono);font-size:11.5px;color:var(--soft)}
+.meta td{padding:4px 40px 4px 0;text-transform:uppercase;letter-spacing:.1em}
+.meta td:first-child{color:#8A90B0}
+.coverpat{position:absolute;right:0;top:0;bottom:0;width:430px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;gap:3px;opacity:.45;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 45%);
+  mask-image:linear-gradient(90deg,transparent,#000 45%)}
+.coverpat div{font-family:var(--mono);font-size:12.5px;white-space:nowrap;letter-spacing:.02em}
+.coverpat .h-mth{color:var(--t-anc);font-weight:700}
+.coverpat .h-hdr{color:var(--t-cls)}
+.coverpat .h-val{color:var(--t-grp)}
+.coverpat .h-bad{color:var(--t-asr);font-weight:700}
+.coverpat .h-dim{color:#9AA3CC}
+/* ---------- embedded demo ---------- */
+.demo-frame{flex:1;width:100%;min-height:0;display:block;border:1px solid var(--line);
+  background:var(--paper)}
+.demo-link{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--t-cls);
+  text-decoration:none;border-bottom:1px solid currentColor;margin-left:8px;white-space:nowrap}
+/* ---------- rail ---------- */
+.rail{position:absolute;left:0;right:0;bottom:0;height:30px;background:var(--card);
+  border-top:1.5px solid var(--ink);display:flex;align-items:center;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--soft)}
+.rail .a{padding:0 16px;flex:1}
+.rail .n{padding:0 16px;border-left:1px solid var(--hair);color:var(--ink);white-space:nowrap}
+.rail .b{padding:0 16px;border-left:1px solid var(--hair);color:var(--ink);font-weight:500;
+  max-width:340px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.rail .c{padding:0 16px;border-left:1px solid var(--hair);width:186px;text-align:right;
+  white-space:nowrap}
+#pbar{position:absolute;left:0;top:0;height:3px;background:var(--t-asr);z-index:20;transition:width .2s}
+/* ---------- nav ---------- */
+#nav{position:fixed;right:16px;bottom:12px;display:flex;gap:7px;z-index:40}
+#nav button{width:36px;height:36px;border:1px solid #46606E;background:#1B2E39;color:#CFDDE3;
+  font-size:16px;cursor:pointer;border-radius:3px}
+#nav button:hover{background:#26414F}
+#nav button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#hint{position:fixed;left:16px;bottom:15px;color:#6D8593;font-family:var(--mono);
+  font-size:10.5px;letter-spacing:.1em;z-index:40}
+@media print{
+  html,body{background:#fff;overflow:visible}
+  #stage{position:static;display:block}
+  #deck{width:auto;height:auto;transform:none!important;box-shadow:none}
+  .slide{display:flex!important;position:relative;width:1280px;height:720px;page-break-after:always}
+  #nav,#hint,#pbar{display:none}
+}
+</style>
+<style>
+/* ================= additions for the Data Cleaning series =================
+   Vocabulary specific to this module. Everything above is the shared theme,
+   copied verbatim from the Data Collection decks.                          */
+
+/* ---------- the spine: symptom -> mechanisms -> what it permits ---------- */
+.spine{display:grid;grid-template-columns:150px 1fr 1fr;gap:0 12px;align-items:stretch}
+.spine .hd{font-family:var(--mono);font-size:9.3px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--soft);padding-bottom:5px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.spine .sym{background:var(--ink);color:#fff;padding:8px 11px;margin-bottom:7px;
+  display:flex;flex-direction:column;justify-content:center}
+.spine .sym b{font-family:var(--disp);font-size:13.5px;font-weight:700;display:block;line-height:1.15}
+.spine .sym i{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.13em;
+  text-transform:uppercase;color:#9BB4C0;margin-top:3px}
+.spine .mid,.spine .rgt{background:var(--card);border:1px solid var(--hair);padding:8px 11px;
+  margin-bottom:7px;font-size:11.7px;line-height:1.4;color:#1A2152;display:flex;align-items:center}
+.spine .rgt{border-left:3px solid var(--t-grp)}
+.spine .mid{border-left:3px solid var(--t-anc)}
+.spine .now .sym{background:var(--t-asr)}
+.spine .now .mid,.spine .now .rgt{background:#FDE9E7}
+.spine b.q{font-weight:700;color:var(--ink)}
+
+/* ---------- three-mechanism cards ---------- */
+.mech{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;flex:1;min-height:0}
+.mech .m{background:var(--card);border:1px solid var(--hair);border-top:3px solid var(--ink);
+  padding:11px 13px;display:flex;flex-direction:column;gap:7px;min-height:0}
+.mech .m.a{border-top-color:var(--t-grp)}
+.mech .m.b{border-top-color:var(--t-anc)}
+.mech .m.c{border-top-color:var(--t-asr)}
+.mech .m h3{font-family:var(--disp);font-size:15px;font-weight:700;line-height:1.1}
+.mech .m h3 span{display:block;font-family:var(--mono);font-size:9.2px;font-weight:400;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--soft);margin-bottom:3px}
+.mech .m .def{font-size:12.2px;line-height:1.42;color:#1A2152}
+.mech .m .def b{font-weight:700;color:var(--ink)}
+.mech .m .ex{font-size:11.4px;line-height:1.4;color:var(--soft);border-top:1px solid var(--hair);
+  padding-top:6px;margin-top:auto}
+.mech .m .ex b{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--soft);display:block;margin-bottom:3px}
+
+/* ---------- figures (inline SVG, no image files) ---------- */
+.fig{background:var(--card);border:1px solid var(--hair);padding:10px 12px 8px;
+  display:flex;flex-direction:column;min-height:0}
+.fig .cap{font-family:var(--mono);font-size:9.3px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--soft);margin-bottom:7px}
+.fig .rd{font-size:11.6px;line-height:1.4;color:#1A2152;margin-top:7px;
+  border-top:1px solid var(--hair);padding-top:6px}
+.fig .rd b{font-weight:700;color:var(--ink)}
+.fig svg{display:block;max-height:100%}
+.fig .rd{margin-top:auto}
+
+/* ---------- the cleaning log ---------- */
+table.log{width:100%;border-collapse:collapse;font-size:11.6px;background:var(--card)}
+table.log th,table.log td{border:1px solid var(--hair);padding:5px 9px;text-align:left;
+  vertical-align:top;line-height:1.38}
+table.log th{background:var(--ink);color:#fff;font-weight:600;font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase}
+table.log td:nth-child(1){font-family:var(--mono);font-size:10.6px;white-space:nowrap;color:#1A2152}
+table.log td:nth-child(4){font-style:italic;color:var(--soft)}
+table.log td.n{font-family:var(--mono);text-align:right;white-space:nowrap}
+
+/* ---------- the missingness lab (slides 6, 23 and 35) ---------- */
+.lab{display:grid;grid-template-columns:1.62fr 1fr;gap:15px;flex:1;min-height:0}
+.lab .plot{background:var(--card);border:1px solid var(--hair);padding:9px 11px 7px;
+  display:flex;flex-direction:column;min-height:0}
+.lab .plot svg{flex:1;min-height:0;display:block}
+.plotnote{font-size:10.6px;color:var(--soft);line-height:1.35;margin-top:5px;
+  border-top:1px solid var(--hair);padding-top:5px}
+.plotnote b{color:var(--ink)}
+.seg{display:flex;gap:6px;flex:none;margin-bottom:7px}
+.seg button{font-family:var(--mono);font-size:11px;letter-spacing:.09em;padding:5px 13px;
+  border:1px solid var(--line);background:var(--paper);color:var(--soft);cursor:pointer;
+  border-radius:2px;transition:background .15s,color .15s,border-color .15s}
+.seg button:hover{background:#E2EBF0;color:var(--ink)}
+.seg button.on{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:700}
+.seg button.alt{margin-left:auto;font-size:10.4px;letter-spacing:.12em}
+.seg button:focus-visible{outline:2px solid var(--t-cls);outline-offset:1px}
+.meanbox{background:var(--card);border:1px solid var(--hair);padding:8px 10px;flex:none}
+.meanbox svg{display:block;width:100%}
+.pt{transition:fill .28s ease,stroke .28s ease,opacity .28s ease}
+g.knobpt{transition:transform .45s cubic-bezier(.4,0,.2,1)}
+@media (prefers-reduced-motion:reduce){g.knobpt{transition:none}}
+
+/* ---------- fill: let a short column spread over the stage instead of
+   piling its cards at the top. Cards grow and centre their own text; callouts,
+   tables and code keep their natural height.                                 */
+.colstack.fill{gap:12px}
+.colstack.fill > .card{flex:1 1 0;display:flex;flex-direction:column;justify-content:center}
+.colstack.fill > .callout,.colstack.fill > table,.colstack.fill > pre,
+.colstack.fill > .out,.colstack.fill > .outlbl,.colstack.fill > h2{flex:0 0 auto}
+
+/* ---------- roomy: table-dominant slides that would otherwise underfill ---------- */
+table.d.roomy td,table.d.roomy th{padding:19px 10px}
+table.d.roomy.tall td,table.d.roomy.tall th{padding:27px 10px}
+table.log.roomy td,table.log.roomy th{padding:17px 10px}
+.spine.roomy .sym,.spine.roomy .mid,.spine.roomy .rgt{padding:24px 12px;margin-bottom:10px}
+
+/* ---------- cover ornament: a wall of raw cells ---------- */
+.coverpat .c-miss{color:var(--t-asr);font-weight:700}
+.coverpat .c-val{color:var(--t-grp)}
+.coverpat .c-dim{color:#9AA3CC}
+.coverpat .c-hdr{color:var(--t-cls);font-weight:700}
+
+/* ---------- intuition-slide reveals: the figure arrives in the order the
+   lecturer speaks it, so the picture is not finished before the sentence is. */
+@media (prefers-reduced-motion:no-preference){
+  .slide.on .fig svg .hi{animation:hifade .55s ease .15s both}
+  .slide.on .fig svg .mk{animation:hifade .5s ease both}
+  .slide.on .fig svg .mk0{animation-delay:.55s}
+  .slide.on .fig svg .mk1{animation-delay:.95s}
+  .slide.on .fig svg .drawline{stroke-dasharray:900;stroke-dashoffset:900;
+    animation:drawin 1.15s .25s ease-out forwards}
+  @keyframes hifade{from{opacity:0}to{opacity:1}}
+  @keyframes drawin{to{stroke-dashoffset:0}}
+}
+
+.fig .expl{margin-top:auto;padding:12px 16px}
+.fig .expl p + p{margin-top:6px}
+/* ---------- staged builds: on a slide marked .build, one arrow press
+   reveals one more [data-at] piece before the deck moves to the next slide.
+   The lecturer speaks a term, then presses once, and that term appears. */
+.slide.build [data-at]{opacity:0}
+.slide.build [data-at].shown{opacity:1}
+@media (prefers-reduced-motion:no-preference){
+  .slide.build [data-at]{transition:opacity .34s ease}
+}
+.bld{position:absolute;right:58px;bottom:38px;display:flex;gap:5px;z-index:3}
+.bld i{width:17px;height:3px;background:var(--line);border-radius:2px;display:block;
+  transition:background .25s ease}
+.bld i.on{background:var(--t-asr)}
+</style>
+
+<style>
+/* deck additions */
+.seg{flex-wrap:wrap}
+.seg button{text-transform:none}
+.wctl{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap}
+.wctl .out{padding:6px 10px}
+.wctl label.rg{display:flex;flex-direction:column;justify-content:center;gap:3px;font-family:var(--mono);
+  font-size:10px;letter-spacing:.1em;color:var(--soft);min-width:230px}
+.wctl label.rg b{color:var(--ink);font-size:12px;letter-spacing:0}
+input[type=range]{width:100%;accent-color:#E8382D}
+.wbtn{font-family:var(--mono);font-size:11px;padding:5px 16px;border:1px solid var(--ink);background:var(--ink);
+  color:#fff;cursor:pointer;border-radius:2px;min-width:74px}
+.kv{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kv .lf{font-family:var(--mono);font-size:24px;font-weight:700;padding:8px 12px;background:var(--card);
+  border:1px solid var(--hair);border-left:4px solid var(--soft);line-height:1.2}
+.kv .lf small{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);font-weight:500}
+.kv .lf.bad{color:#E8382D;border-left-color:#E8382D}.kv .lf.ok{color:#0E7A55;border-left-color:#0E7A55}
+.kv .lf.b{color:#2B4BFF;border-left-color:#2B4BFF}
+.kv.k3{grid-template-columns:repeat(3,1fr)}
+ul.b.lg{font-size:15px;line-height:1.5}
+ul.b.lg li{margin-bottom:11px}
+table.d td.r,table.d th.r{text-align:right;font-family:var(--mono);white-space:nowrap}
+table.d tr.best td{background:#F3FBF7;font-weight:700}
+.cols.nat{flex:none}
+.wctl .jsbadge{align-self:center}
+.card.big{padding:14px 16px}
+.card.big h3{font-size:16.5px;margin-bottom:8px}
+.card.big p{font-size:13.6px;line-height:1.55}
+.refs{font-size:12.5px;line-height:1.5}
+.refs p{margin-bottom:8px;padding-left:16px;text-indent:-16px}
+
+.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.match{display:flex;flex-direction:column;gap:7px}
+.match .q{display:grid;grid-template-columns:1fr 210px;gap:10px;align-items:stretch}
+.match .q .s{background:var(--card);border:1px solid var(--hair);border-left:4px solid var(--soft);padding:8px 13px;
+  font-size:13.5px;line-height:1.4;border-radius:8px}
+.match .q .s small{display:block;font-size:11.5px;color:var(--soft);margin-top:2px;min-height:16px}
+.match select{font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:var(--card);border-radius:8px;
+  padding:0 8px;color:var(--ink)}
+.match .q.right .s{border-left-color:#0E7A55;background:#F3FBF7}
+.match .q.wrong .s{border-left-color:#E8382D;background:#FDE9E7}
+.wctl label.rg.nar{min-width:260px;flex:none}
+#cl-groups{white-space:normal;flex:1}
+
+/* theme: masterclass */
+:root{--mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --disp:"Geist",system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --body:"Geist",system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+body{font-feature-settings:"ss01","liga" 0,"calt" 0}
+#deck{box-shadow:0 24px 70px rgba(14,19,48,.16)}
+h1.t{font-weight:600;letter-spacing:-.028em}
+h2.s{font-weight:600}
+.eyebrow{color:#2B4BFF}
+.eyebrow::after{background:#E2E5F0}
+#pbar{background:#2B4BFF}
+.card,.fig,.out{border-radius:8px}
+pre.code{border-radius:8px;border-left:0}
+/* cover: navy ground, as on the masterclass decks */
+.slide.cover{background:#0E1330;color:#fff}
+.cover h1{font-weight:600;letter-spacing:-.035em;color:#fff}
+.cover .kicker{color:#FFC800}
+.cover .pt{color:#AEB6E0;font-weight:500}
+.cover .rule{background:#2B4BFF}
+.cover .sub{color:#D5D9EE}
+.cover .by{color:#fff;font-weight:600}
+.cover .by span{color:#AEB6E0}
+.coverpat{opacity:.55}
+#nav button{background:#0E1330;border-color:#0E1330;color:#fff;border-radius:8px}
+#nav button:hover{background:#2B4BFF}
+#nav button:focus-visible{outline-color:#2B4BFF}
+#hint{color:#8A90B0}
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+<div id="pbar"></div>
+
+<section class="slide cover" data-sec="Cover">
+  <div class="coverpat">
+    <div><span class="h-dim">table     </span><span class="h-val">C00001  62  Chennai</span></div>
+    <div><span class="h-dim">basket    </span><span class="h-val">bread butter jam</span></div>
+    <div><span class="h-dim">series    </span><span class="h-val">66 71 58 64 90 ...</span></div>
+    <div><span class="h-dim">sequence  </span><span class="h-val">28 Jan &#8594; 17 Feb &#8594; 26 Feb</span></div>
+    <div><span class="h-dim">graph     </span><span class="h-val">butter &#8212; jam</span></div>
+    <div><span class="h-dim">text      </span><span class="h-val">"no curd on the shelf"</span></div>
+    <div>&#160;</div>
+    <div><span class="h-bad">describe &#183; associate &#183; classify</span></div>
+    <div><span class="h-bad">predict &#183; cluster &#183; detect</span></div>
+  </div>
+  <div class="kicker">DA5500W &#183; Data Mining: Concepts and Techniques</div>
+  <h1>Kinds of Data,<br/>Kinds of Patterns</h1>
+  <div class="pt">Module 1 &#183; Lecture 2</div>
+  <div class="rule"></div>
+  <p class="sub">The supermarket files read as six kinds of data, and seven mining tasks run on them. Each task shows its
+  input, its output and the module that teaches it.</p>
+  <div class="by"><span>Instructor</span>Dr. Arun B Ayyar</div>
+  <table class="meta">
+    <tr><td>Course</td><td>DA5500W &#183; Web-enabled MTech &#183; DSAI, IIT Madras</td></tr>
+    <tr><td>Data</td><td>the lecture 1 supermarket &#183; 12,000 baskets &#183; 2,000 customers &#183; 600 comments</td></tr>
+    <tr><td>Reading</td><td>Han, Kamber &amp; Pei, 3rd edition, sections 1.3 and 1.4</td></tr>
+  </table>
+</section>
+
+<section class="slide" data-sec="Recap">
+  <div class="eyebrow">Recap</div>
+  <h1 class="t">Recap of lecture 1
+    <small>Lecture 1 used one kind of data, the basket, and one mining task, association. This lecture widens both.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="kv"><div class="lf "><small>baskets</small>12,000</div><div class="lf "><small>items</small>14</div><div class="lf "><small>rules written &#8594; kept</small>1,274 &#8594; 22</div><div class="lf bad"><small>lift of butter &#8594; jam</small>3.38</div></div><div class="cols nat"><div class="callout"><b>The KDD process.</b> Cleaning, integration, selection and transformation produced a table of baskets by items. Mining wrote the rules, and evaluation kept 22.</div><div class="callout"><b>Two questions left open.</b> What other forms does data take, and what can be mined besides rules of the form X &#8594; y?</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Data types">
+  <div class="eyebrow">Data types &#183; Concept</div>
+  <h1 class="t">Concept
+    <small>Two questions sort any dataset: what is one record, and how are the records related to each other.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><div class="cap">three ways records relate</div><svg viewBox="0 0 1120 210" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Records that are independent, ordered, or linked"><rect x="20.0" y="30.0" width="260.0" height="20.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="20.0" y="30.0" width="6.0" height="20.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><rect x="20.0" y="56.0" width="260.0" height="20.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="20.0" y="56.0" width="6.0" height="20.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><rect x="20.0" y="82.0" width="260.0" height="20.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="20.0" y="82.0" width="6.0" height="20.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><rect x="20.0" y="108.0" width="260.0" height="20.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="20.0" y="108.0" width="6.0" height="20.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><rect x="20.0" y="134.0" width="260.0" height="20.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="20.0" y="134.0" width="6.0" height="20.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="150.0" y="180.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >independent records</text><text x="150.0" y="198.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >a table of customers</text><circle cx="400" cy="90" r="11" fill="#E8382D"/><line x1="412.0" y1="90.0" x2="432.0" y2="90.0" stroke="#5D6488" stroke-width="1.6" /><path d="M438.0,90.0 L430.0,86.0 L430.0,94.0 z" fill="#5D6488"/><circle cx="450" cy="90" r="11" fill="#E8382D"/><line x1="462.0" y1="90.0" x2="482.0" y2="90.0" stroke="#5D6488" stroke-width="1.6" /><path d="M488.0,90.0 L480.0,86.0 L480.0,94.0 z" fill="#5D6488"/><circle cx="500" cy="90" r="11" fill="#E8382D"/><line x1="512.0" y1="90.0" x2="532.0" y2="90.0" stroke="#5D6488" stroke-width="1.6" /><path d="M538.0,90.0 L530.0,86.0 L530.0,94.0 z" fill="#5D6488"/><circle cx="550" cy="90" r="11" fill="#E8382D"/><line x1="562.0" y1="90.0" x2="582.0" y2="90.0" stroke="#5D6488" stroke-width="1.6" /><path d="M588.0,90.0 L580.0,86.0 L580.0,94.0 z" fill="#5D6488"/><circle cx="600" cy="90" r="11" fill="#E8382D"/><line x1="612.0" y1="90.0" x2="632.0" y2="90.0" stroke="#5D6488" stroke-width="1.6" /><path d="M638.0,90.0 L630.0,86.0 L630.0,94.0 z" fill="#5D6488"/><circle cx="650" cy="90" r="11" fill="#E8382D"/><text x="525.0" y="180.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >ordered records</text><text x="525.0" y="198.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >sales by day, visits by one customer</text><line x1="870.0" y1="50.0" x2="950.0" y2="40.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="950.0" y1="40.0" x2="1010.0" y2="90.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="1010.0" y1="90.0" x2="960.0" y2="140.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="960.0" y1="140.0" x2="880.0" y2="130.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="880.0" y1="130.0" x2="830.0" y2="90.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="830.0" y1="90.0" x2="870.0" y2="50.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="870.0" y1="50.0" x2="960.0" y2="140.0" stroke="#8A90B0" stroke-width="1.4" /><line x1="950.0" y1="40.0" x2="880.0" y2="130.0" stroke="#8A90B0" stroke-width="1.4" /><circle cx="870" cy="50" r="11" fill="#0E7A55"/><circle cx="950" cy="40" r="11" fill="#0E7A55"/><circle cx="1010" cy="90" r="11" fill="#0E7A55"/><circle cx="960" cy="140" r="11" fill="#0E7A55"/><circle cx="880" cy="130" r="11" fill="#0E7A55"/><circle cx="830" cy="90" r="11" fill="#0E7A55"/><text x="920.0" y="180.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >linked records</text><text x="920.0" y="198.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >items bought together, people who follow people</text></svg></div><div class="cols nat"><div class="callout sm"><b>What is one record.</b> A row with fixed columns, a set of items, a number with a time stamp, a sentence, a node with its links.</div><div class="callout sm"><b>Why it matters.</b> Most methods in modules 5 to 7 expect a table of independent rows. Data in any other form has to be converted to one, or needs a method built for its form.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Data types">
+  <div class="eyebrow">Data types &#183; Example: relational table</div>
+  <h1 class="t">Example
+    <small>customers.csv is a relational table: 2,000 rows, one per customer, with the same four attributes in every row.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="colstack"><div class="outlbl">customers.csv, after cleaning</div><div class="out sm">cust_id        age            city           member_since 
+C00001         62.0           Chennai        2025         
+C00002         42.0           Bengaluru      2019         
+C00003         35.0           Chennai        2026         
+C00004         50.0           Bengaluru      2023         
+C00005         43.0           Madurai        2022         </div><div class="callout sm">Each row describes one customer and does not depend on any other row. 23 ages are missing after cleaning.</div></div><div class="colstack"><table class="d"><tr><th>attribute</th><th>type</th><th>what is allowed</th></tr><tr><td>cust_id</td><td>identifier</td><td>equality only</td></tr><tr><td>city</td><td>nominal</td><td>count, mode (4 values)</td></tr><tr><td>age</td><td>numeric</td><td>mean 46.8, order, distance</td></tr><tr><td>member_since</td><td>numeric</td><td>order, difference in years</td></tr></table><div class="callout sm"><b>Attribute types</b> decide which statistics and distance measures apply. Module 3 covers them.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Data types">
+  <div class="eyebrow">Data types &#183; Example: transactions</div>
+  <h1 class="t">Example continued 1
+    <small>A transaction is a set of items with no fixed length. The 12,000 baskets hold between 1 and 10 different items, 3.34 on average.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="fig"><div class="cap">baskets by size</div><svg viewBox="0 0 560 240" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Baskets by number of different items"><line x1="34.0" y1="208.0" x2="552.0" y2="208.0" stroke="#CED3E6" stroke-width="1" /><rect x="40.2" y="136.5" width="39.4" height="71.5" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="59.9" y="222.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >1</text><text x="59.9" y="132.5" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >1,311</text><rect x="92.0" y="75.9" width="39.4" height="132.1" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="111.7" y="222.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >2</text><text x="111.7" y="71.9" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >2,423</text><rect x="143.8" y="38.4" width="39.4" height="169.6" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="163.5" y="222.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >3</text><text x="163.5" y="34.4" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >3,111</text><rect x="195.6" y="65.3" width="39.4" height="142.7" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="215.3" y="222.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >4</text><text x="215.3" y="61.3" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >2,616</text><rect x="247.4" y="124.0" width="39.4" height="84.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="267.1" y="222.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >5</text><text x="267.1" y="120.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >1,540</text><rect x="299.2" y="169.8" width="39.4" height="38.2" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="318.9" y="222.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >6</text><text x="318.9" y="165.8" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >701</text><rect x="351.0" y="195.6" width="39.4" height="12.4" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="370.7" y="222.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >7</text><text x="370.7" y="191.6" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >228</text><rect x="402.8" y="204.9" width="39.4" height="3.1" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="422.5" y="222.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >8</text><text x="422.5" y="200.9" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >57</text><rect x="454.6" y="207.3" width="39.4" height="0.7" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="474.3" y="222.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >9</text><text x="474.3" y="203.3" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >12</text><rect x="506.4" y="207.9" width="39.4" height="0.1" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="526.1" y="222.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >10</text><text x="526.1" y="203.9" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >1</text><text x="280.0" y="236.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >different items in the basket</text></svg></div><div class="colstack"><div class="fig"><div class="cap">four baskets</div><svg viewBox="0 0 400 126" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Four baskets as sets of items"><text x="0.0" y="22.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="start" font-weight="400" >T000004</text><rect x="70.0" y="8.0" width="47.0" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="93.5" y="21.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >bread</text><rect x="122.0" y="8.0" width="47.0" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="145.5" y="21.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >chips</text><rect x="174.0" y="8.0" width="40.4" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="194.2" y="21.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >milk</text><text x="0.0" y="52.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="start" font-weight="400" >T000041</text><rect x="70.0" y="38.0" width="47.0" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="93.5" y="51.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >bread</text><rect x="122.0" y="38.0" width="60.2" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="152.1" y="51.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >nappies</text><rect x="187.2" y="38.0" width="40.4" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="207.4" y="51.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >rice</text><text x="0.0" y="82.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="start" font-weight="400" >T000078</text><rect x="70.0" y="68.0" width="47.0" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="93.5" y="81.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >bread</text><rect x="122.0" y="68.0" width="53.6" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="148.8" y="81.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >butter</text><rect x="180.6" y="68.0" width="40.4" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="200.8" y="81.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >eggs</text><rect x="226.0" y="68.0" width="33.8" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="242.9" y="81.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >jam</text><rect x="264.8" y="68.0" width="40.4" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="285.0" y="81.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >milk</text><text x="0.0" y="112.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="start" font-weight="400" >T000124</text><rect x="70.0" y="98.0" width="47.0" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="93.5" y="111.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >chips</text><rect x="122.0" y="98.0" width="33.8" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="138.9" y="111.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >dal</text><rect x="160.8" y="98.0" width="40.4" height="20.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="4"/><text x="181.0" y="111.8" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="400" >eggs</text></svg></div><div class="callout sm"><b>A set has no columns.</b> To use a method that expects a table, each basket becomes a row of fourteen 0/1 values, as in step 4 of lecture 1.</div><div class="callout sm"><b>Mined with</b> frequent patterns and association rules, module 5.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Data types">
+  <div class="eyebrow">Data types &#183; Example: time series</div>
+  <h1 class="t">Example continued 2
+    <small>Counting baskets per day turns the file into a time series of 181 values, between 46 and 90 with a mean of 66.3.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols w6040 nat"><div class="fig"><div class="cap">baskets per day</div><svg viewBox="0 0 640 204" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Baskets per day, January to June 2026"><rect x="34.0" y="12.0" width="596.0" height="166.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><line x1="34.0" y1="178.0" x2="630.0" y2="178.0" stroke="#E2E5F0" stroke-width="1" /><text x="28.0" y="181.5" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="end" font-weight="400" >0</text><line x1="34.0" y1="136.5" x2="630.0" y2="136.5" stroke="#E2E5F0" stroke-width="1" /><text x="28.0" y="140.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="end" font-weight="400" >25</text><line x1="34.0" y1="95.0" x2="630.0" y2="95.0" stroke="#E2E5F0" stroke-width="1" /><text x="28.0" y="98.5" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="end" font-weight="400" >50</text><line x1="34.0" y1="53.5" x2="630.0" y2="53.5" stroke="#E2E5F0" stroke-width="1" /><text x="28.0" y="57.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="end" font-weight="400" >75</text><line x1="34.0" y1="12.0" x2="630.0" y2="12.0" stroke="#E2E5F0" stroke-width="1" /><text x="28.0" y="15.5" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="end" font-weight="400" >100</text><text x="34.0" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >Jan</text><text x="136.6" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >Feb</text><text x="229.4" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >Mar</text><text x="332.0" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >Apr</text><text x="431.3" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >May</text><text x="534.0" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >Jun</text><text x="40.0" y="25.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="start" font-weight="400" >baskets per day</text><polyline points="34.0,60.1 37.3,56.8 40.6,75.1 43.9,71.8 47.2,45.2 50.6,75.1 53.9,63.5 57.2,53.5 60.5,65.1 63.8,65.1 67.1,83.4 70.4,55.2 73.7,78.4 77.0,75.1 80.4,56.8 83.7,70.1 87.0,55.2 90.3,60.1 93.6,76.7 96.9,71.8 100.2,63.5 103.5,73.4 106.8,66.8 110.2,61.8 113.5,48.5 116.8,68.4 120.1,31.9 123.4,66.8 126.7,83.4 130.0,56.8 133.3,78.4 136.6,75.1 140.0,70.1 143.3,55.2 146.6,68.4 149.9,53.5 153.2,45.2 156.5,80.1 159.8,66.8 163.1,61.8 166.4,83.4 169.8,96.7 173.1,68.4 176.4,71.8 179.7,56.8 183.0,60.1 186.3,81.7 189.6,66.8 192.9,71.8 196.2,95.0 199.6,56.8 202.9,86.7 206.2,71.8 209.5,71.8 212.8,76.7 216.1,60.1 219.4,50.2 222.7,63.5 226.0,96.7 229.4,60.1 232.7,61.8 236.0,80.1 239.3,55.2 242.6,50.2 245.9,66.8 249.2,56.8 252.5,76.7 255.8,63.5 259.2,65.1 262.5,55.2 265.8,46.9 269.1,88.4 272.4,28.6 275.7,66.8 279.0,76.7 282.3,85.0 285.6,58.5 289.0,66.8 292.3,61.8 295.6,76.7 298.9,76.7 302.2,51.8 305.5,65.1 308.8,76.7 312.1,60.1 315.4,78.4 318.8,70.1 322.1,60.1 325.4,68.4 328.7,66.8 332.0,53.5 335.3,81.7 338.6,61.8 341.9,101.6 345.2,45.2 348.6,66.8 351.9,65.1 355.2,81.7 358.5,81.7 361.8,73.4 365.1,68.4 368.4,68.4 371.7,68.4 375.0,75.1 378.4,66.8 381.7,56.8 385.0,95.0 388.3,65.1 391.6,70.1 394.9,76.7 398.2,76.7 401.5,58.5 404.8,50.2 408.2,81.7 411.5,86.7 414.8,65.1 418.1,96.7 421.4,53.5 424.7,66.8 428.0,85.0 431.3,61.8 434.6,63.5 438.0,73.4 441.3,80.1 444.6,63.5 447.9,66.8 451.2,60.1 454.5,78.4 457.8,71.8 461.1,60.1 464.4,45.2 467.8,71.8 471.1,53.5 474.4,53.5 477.7,53.5 481.0,70.1 484.3,66.8 487.6,58.5 490.9,66.8 494.2,71.8 497.6,68.4 500.9,86.7 504.2,80.1 507.5,71.8 510.8,76.7 514.1,75.1 517.4,80.1 520.7,75.1 524.0,70.1 527.4,93.3 530.7,63.5 534.0,85.0 537.3,60.1 540.6,73.4 543.9,80.1 547.2,68.4 550.5,75.1 553.8,58.5 557.2,71.8 560.5,66.8 563.8,58.5 567.1,75.1 570.4,53.5 573.7,48.5 577.0,76.7 580.3,78.4 583.6,83.4 587.0,75.1 590.3,65.1 593.6,51.8 596.9,61.8 600.2,86.7 603.5,68.4 606.8,61.8 610.1,60.1 613.4,86.7 616.8,65.1 620.1,85.0 623.4,61.8 626.7,31.9 630.0,48.5" fill="none" stroke="#2B4BFF" stroke-width="1.6" stroke-opacity="1" stroke-linejoin="round"/></svg></div><div class="fig"><div class="cap">baskets by hour of the day</div><svg viewBox="0 0 460 204" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Baskets by hour of day, all days together"><line x1="34.0" y1="178.0" x2="452.0" y2="178.0" stroke="#CED3E6" stroke-width="1" /><rect x="37.6" y="136.8" width="22.7" height="41.2" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="48.9" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >8h</text><rect x="67.4" y="125.1" width="22.7" height="52.9" fill="#8A90B0" stroke="none" stroke-width="1" /><rect x="97.3" y="116.0" width="22.7" height="62.0" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="108.6" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >10h</text><rect x="127.2" y="99.3" width="22.7" height="78.7" fill="#8A90B0" stroke="none" stroke-width="1" /><rect x="157.0" y="93.2" width="22.7" height="84.8" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="168.4" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >12h</text><rect x="186.9" y="111.7" width="22.7" height="66.3" fill="#8A90B0" stroke="none" stroke-width="1" /><rect x="216.7" y="119.0" width="22.7" height="59.0" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="228.1" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >14h</text><rect x="246.6" y="124.4" width="22.7" height="53.6" fill="#8A90B0" stroke="none" stroke-width="1" /><rect x="276.4" y="111.5" width="22.7" height="66.5" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="287.8" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >16h</text><rect x="306.3" y="85.6" width="22.7" height="92.4" fill="#8A90B0" stroke="none" stroke-width="1" /><rect x="336.2" y="50.8" width="22.7" height="127.2" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="347.5" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >18h</text><rect x="366.0" y="35.1" width="22.7" height="142.9" fill="#E8382D" stroke="none" stroke-width="1" /><rect x="395.9" y="70.1" width="22.7" height="107.9" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="407.2" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >20h</text><rect x="425.7" y="111.1" width="22.7" height="66.9" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="377.4" y="20.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#E8382D" text-anchor="middle" font-weight="700" >1,555 baskets, 7 pm to 8 pm</text></svg></div></div><div class="cols nat"><div class="callout sm"><b>Order carries the information.</b> Shuffle the 181 values and the daily mean stays 66.3, while any trend or weekly cycle is destroyed.</div><div class="callout sm"><b>Mined with</b> trend, seasonality and forecasting methods, module 8. In this file the day-to-day series is flat and the hour of the day is where the structure lies.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Data types">
+  <div class="eyebrow">Data types &#183; Example: sequence</div>
+  <h1 class="t">Example continued 3
+    <small>The 7 baskets of customer C01921, placed in the order they were bought, form a sequence.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><div class="cap">customer C01921 &#183; January to June 2026</div><svg viewBox="0 0 1120 190" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Seven baskets of one customer on a time line from January to June"><line x1="40.0" y1="96.0" x2="1080.0" y2="96.0" stroke="#CED3E6" stroke-width="2" /><circle cx="195.1" cy="96" r="6" fill="#E8382D"/><line x1="195.1" y1="96.0" x2="195.1" y2="76.0" stroke="#8A90B0" stroke-width="1" /><text x="195.1" y="24.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="700" >28 Jan · 20:00</text><text x="195.1" y="40.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.6" fill="#5D6488" text-anchor="middle" font-weight="400" >biscuits chips milk</text><circle cx="310.1" cy="96" r="6" fill="#E8382D"/><line x1="310.1" y1="96.0" x2="310.1" y2="118.0" stroke="#8A90B0" stroke-width="1" /><text x="310.1" y="128.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="700" >17 Feb · 17:00</text><text x="310.1" y="144.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.6" fill="#5D6488" text-anchor="middle" font-weight="400" >butter dal jam</text><text x="310.1" y="158.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.6" fill="#5D6488" text-anchor="middle" font-weight="400" >milk nappies soap</text><text x="310.1" y="172.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.6" fill="#5D6488" text-anchor="middle" font-weight="400" >tea</text><circle cx="361.8" cy="96" r="6" fill="#E8382D"/><line x1="361.8" y1="96.0" x2="361.8" y2="76.0" stroke="#8A90B0" stroke-width="1" /><text x="361.8" y="24.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="700" >26 Feb · 18:00</text><text x="361.8" y="40.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.6" fill="#5D6488" text-anchor="middle" font-weight="400" >bread chips curd</text><text x="361.8" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.6" fill="#5D6488" text-anchor="middle" font-weight="400" >nappies</text><circle cx="643.3" cy="96" r="6" fill="#E8382D"/><line x1="643.3" y1="96.0" x2="643.3" y2="118.0" stroke="#8A90B0" stroke-width="1" /><text x="643.3" y="128.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="700" >16 Apr · 18:00</text><text x="643.3" y="144.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.6" fill="#5D6488" text-anchor="middle" font-weight="400" >curd milk</text><circle cx="666.3" cy="96" r="6" fill="#E8382D"/><line x1="666.3" y1="96.0" x2="666.3" y2="76.0" stroke="#8A90B0" stroke-width="1" /><text x="666.3" y="24.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="700" >20 Apr · 14:00</text><text x="666.3" y="40.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.6" fill="#5D6488" text-anchor="middle" font-weight="400" >biscuits bread butter</text><text x="666.3" y="54.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.6" fill="#5D6488" text-anchor="middle" font-weight="400" >milk</text><circle cx="976.6" cy="96" r="6" fill="#E8382D"/><line x1="976.6" y1="96.0" x2="976.6" y2="118.0" stroke="#8A90B0" stroke-width="1" /><text x="976.6" y="128.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="700" >13 Jun · 13:00</text><text x="976.6" y="144.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.6" fill="#5D6488" text-anchor="middle" font-weight="400" >bread curd eggs</text><text x="976.6" y="158.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.6" fill="#5D6488" text-anchor="middle" font-weight="400" >jam milk</text><circle cx="988.1" cy="96" r="6" fill="#E8382D"/><line x1="988.1" y1="96.0" x2="988.1" y2="76.0" stroke="#8A90B0" stroke-width="1" /><text x="988.1" y="24.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#0E1330" text-anchor="middle" font-weight="700" >15 Jun · 18:00</text><text x="988.1" y="40.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.6" fill="#5D6488" text-anchor="middle" font-weight="400" >bread soap</text></svg></div><div class="cols nat"><div class="callout sm"><b>A sequence is ordered events, with or without exact times.</b> 1,995 customers have at least one basket; the median is 6 baskets and the largest is 16.</div><div class="callout sm"><b>A question only a sequence can answer.</b> Do customers who buy nappies start buying something else a few weeks later? Sequential pattern mining, module 8.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Data types">
+  <div class="eyebrow">Data types &#183; Example: graph</div>
+  <h1 class="t">Example continued 4
+    <small>Make each item a node and join two items when they share baskets. The 14 items give 91 possible links.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="fig"><div class="cap">items as nodes &#183; red link: lift at least 1.2</div><svg viewBox="0 0 560 300" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Items as nodes; butter and jam, and beer and nappies, joined by strong links"><line x1="280.0" y1="32.0" x2="331.2" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="32.0" x2="372.3" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="32.0" x2="395.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="32.0" x2="395.0" y2="176.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="32.0" x2="372.3" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="32.0" x2="331.2" y2="256.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="32.0" x2="280.0" y2="268.0" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="32.0" x2="228.8" y2="256.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="32.0" x2="187.7" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="32.0" x2="165.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="32.0" x2="187.7" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="32.0" x2="228.8" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="43.7" x2="372.3" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="43.7" x2="395.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="43.7" x2="395.0" y2="176.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="43.7" x2="372.3" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="43.7" x2="331.2" y2="256.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="43.7" x2="280.0" y2="268.0" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="43.7" x2="228.8" y2="256.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="43.7" x2="187.7" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="43.7" x2="165.0" y2="176.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="43.7" x2="165.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="43.7" x2="187.7" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="43.7" x2="228.8" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="76.4" x2="395.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="76.4" x2="395.0" y2="176.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="76.4" x2="372.3" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="76.4" x2="331.2" y2="256.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="76.4" x2="280.0" y2="268.0" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="76.4" x2="228.8" y2="256.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="76.4" x2="187.7" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="76.4" x2="165.0" y2="176.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="76.4" x2="165.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="76.4" x2="187.7" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="76.4" x2="228.8" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="123.7" x2="395.0" y2="176.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="123.7" x2="372.3" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="123.7" x2="331.2" y2="256.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="123.7" x2="280.0" y2="268.0" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="123.7" x2="187.7" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="123.7" x2="165.0" y2="176.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="123.7" x2="165.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="123.7" x2="187.7" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="123.7" x2="228.8" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="176.3" x2="372.3" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="176.3" x2="331.2" y2="256.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="176.3" x2="280.0" y2="268.0" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="176.3" x2="228.8" y2="256.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="176.3" x2="187.7" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="176.3" x2="165.0" y2="176.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="176.3" x2="165.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="176.3" x2="187.7" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="395.0" y1="176.3" x2="228.8" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="223.6" x2="331.2" y2="256.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="223.6" x2="280.0" y2="268.0" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="223.6" x2="228.8" y2="256.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="223.6" x2="187.7" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="223.6" x2="165.0" y2="176.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="223.6" x2="165.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="223.6" x2="187.7" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="372.3" y1="223.6" x2="228.8" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="256.3" x2="280.0" y2="268.0" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="256.3" x2="228.8" y2="256.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="256.3" x2="187.7" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="256.3" x2="165.0" y2="176.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="256.3" x2="165.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="256.3" x2="187.7" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="331.2" y1="256.3" x2="228.8" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="268.0" x2="228.8" y2="256.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="268.0" x2="187.7" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="268.0" x2="165.0" y2="176.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="268.0" x2="165.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="268.0" x2="187.7" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="268.0" x2="228.8" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="228.8" y1="256.3" x2="187.7" y2="223.6" stroke="#E2E5F0" stroke-width="0.8" /><line x1="228.8" y1="256.3" x2="165.0" y2="176.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="228.8" y1="256.3" x2="165.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="228.8" y1="256.3" x2="187.7" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="228.8" y1="256.3" x2="228.8" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="187.7" y1="223.6" x2="165.0" y2="176.3" stroke="#E2E5F0" stroke-width="0.8" /><line x1="187.7" y1="223.6" x2="165.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="187.7" y1="223.6" x2="187.7" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="187.7" y1="223.6" x2="228.8" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="165.0" y1="176.3" x2="165.0" y2="123.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="165.0" y1="176.3" x2="187.7" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="165.0" y1="176.3" x2="228.8" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="165.0" y1="123.7" x2="187.7" y2="76.4" stroke="#E2E5F0" stroke-width="0.8" /><line x1="165.0" y1="123.7" x2="228.8" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="187.7" y1="76.4" x2="228.8" y2="43.7" stroke="#E2E5F0" stroke-width="0.8" /><line x1="280.0" y1="32.0" x2="165.0" y2="176.3" stroke="#E8382D" stroke-width="3.2" /><line x1="395.0" y1="123.7" x2="228.8" y2="256.3" stroke="#E8382D" stroke-width="3.2" /><circle cx="280.0" cy="32.0" r="7" fill="#E8382D"/><text x="294.0" y="36.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="700" >beer</text><circle cx="331.2" cy="43.7" r="7" fill="#4B5A87"/><text x="345.2" y="47.7" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="400" >biscuits</text><circle cx="372.3" cy="76.4" r="7" fill="#4B5A87"/><text x="386.3" y="80.4" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="400" >bread</text><circle cx="395.0" cy="123.7" r="7" fill="#E8382D"/><text x="409.0" y="127.7" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="700" >butter</text><circle cx="395.0" cy="176.3" r="7" fill="#4B5A87"/><text x="409.0" y="180.3" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="400" >chips</text><circle cx="372.3" cy="223.6" r="7" fill="#4B5A87"/><text x="386.3" y="227.6" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="400" >curd</text><circle cx="331.2" cy="256.3" r="7" fill="#4B5A87"/><text x="345.2" y="260.3" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="400" >dal</text><circle cx="280.0" cy="268.0" r="7" fill="#4B5A87"/><text x="294.0" y="272.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="400" >eggs</text><circle cx="228.8" cy="256.3" r="7" fill="#E8382D"/><text x="214.8" y="260.3" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="700" >jam</text><circle cx="187.7" cy="223.6" r="7" fill="#4B5A87"/><text x="173.7" y="227.6" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="400" >milk</text><circle cx="165.0" cy="176.3" r="7" fill="#E8382D"/><text x="151.0" y="180.3" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="700" >nappies</text><circle cx="165.0" cy="123.7" r="7" fill="#4B5A87"/><text x="151.0" y="127.7" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="400" >rice</text><circle cx="187.7" cy="76.4" r="7" fill="#4B5A87"/><text x="173.7" y="80.4" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="400" >soap</text><circle cx="228.8" cy="43.7" r="7" fill="#4B5A87"/><text x="214.8" y="47.7" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="400" >tea</text></svg></div><div class="colstack"><div class="kv k3"><div class="lf "><small>nodes</small>14</div><div class="lf "><small>pairs</small>91</div><div class="lf bad"><small>strong links</small>2</div></div><div class="callout sm"><b>Two links stand out.</b> Butter and jam (lift 3.38) and beer and nappies (lift 2.76). 87 of the other 89 pairs have a lift between 0.9 and 1.1.</div><div class="callout sm"><b>A record here is a node and its links.</b> Social networks, payment networks and the web have the same form with millions of nodes.</div><div class="callout sm"><b>Mined with</b> graph clustering and link analysis, modules 7 and 8.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Data types">
+  <div class="eyebrow">Data types &#183; Example: text</div>
+  <h1 class="t">Example continued 5
+    <small>The supermarket also keeps 600 customer comments. A comment is a sentence, with no columns at all.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="colstack"><div class="outlbl">feedback.csv, first five comments</div><div class="out sm">the rice was fresh and the staff were helpful
+no curd on the shelf again
+price of butter went up again
+love the beer here
+fresh soap today</div><div class="callout warn sm">The comments are simulated from templates, with complaints about curd made more frequent on purpose.</div></div><div class="fig"><div class="cap">most frequent words, common words removed &#183; 33 distinct words</div><svg viewBox="0 0 520 198" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Most frequent words in the comments"><text x="80.0" y="19.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >billing</text><rect x="90.0" y="6.0" width="280.0" height="17.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="378.0" y="19.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">168</text><text x="80.0" y="43.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >fresh</text><rect x="90.0" y="30.0" width="235.0" height="17.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="333.0" y="43.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">141</text><text x="80.0" y="67.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >price</text><rect x="90.0" y="54.0" width="208.3" height="17.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="306.3" y="67.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">125</text><text x="80.0" y="91.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >curd</text><rect x="90.0" y="78.0" width="166.7" height="17.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="264.7" y="91.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">100</text><text x="80.0" y="115.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >long</text><rect x="90.0" y="102.0" width="156.7" height="17.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="254.7" y="115.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">94</text><text x="80.0" y="139.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >again</text><rect x="90.0" y="126.0" width="150.0" height="17.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="248.0" y="139.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">90</text><text x="80.0" y="163.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >good</text><rect x="90.0" y="150.0" width="126.7" height="17.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="224.7" y="163.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">76</text><text x="80.0" y="187.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="500" >staff</text><rect x="90.0" y="174.0" width="125.0" height="17.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="223.0" y="187.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" font-weight="700">75</text></svg><div class="rd"><b>curd</b> appears 100 times, 69 of them in complaints. The next item has 17.</div></div></div><div class="callout sm"><b>Text becomes a table by counting words.</b> Each comment turns into a row and each word into a column. Text mining, module 8.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Data types">
+  <div class="eyebrow">Data types &#183; Example: stream</div>
+  <h1 class="t">Example continued 6
+    <small>Seen from the tills, the sales file was never a file. It arrived one row at a time and it has no last row.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="kv k3"><div class="lf "><small>rows in six months</small>40,031</div><div class="lf "><small>rows per hour, mean</small>16.1</div><div class="lf bad"><small>busiest hour, 16 Jan 19:00</small>58</div></div><div class="cols3"><div class="card big b"><h3>One pass</h3><p>A stream is read once, in arrival order. There is no going back to sort it or to compute a second statistic.</p></div><div class="card big g"><h3>Bounded memory</h3><p>The method keeps a summary of fixed size: a running count, a sample, a window of the last hour.</p></div><div class="card big r"><h3>An answer at any moment</h3><p>A fraud check on a card payment has to return before the payment completes.</p></div></div><div class="callout sm"><b>Not in these files.</b> Spatial data (store locations, delivery routes) and multimedia (shelf cameras, call recordings) are two more forms. Module 8 takes streams and both of these.</div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Data types">
+  <div class="eyebrow">Data types &#183; Test</div>
+  <h1 class="t">Test
+    <small>Seven datasets. Choose the type of each by asking what one record is and how the records are related.</small></h1>
+  <div class="wrap" style="zoom:1.04">
+<div class="match" id="match"><div class="q" data-a="time series" data-why="One number per time stamp, in order."><div class="s">Hourly temperature readings from one weather station, 2015 to 2025<small></small></div><select><option value="">choose a type</option><option>relational table</option><option>transactions</option><option>time series</option><option>sequence</option><option>graph</option><option>text</option><option>stream</option></select></div><div class="q" data-a="graph" data-why="Accounts are nodes and follows are links."><div class="s">Who follows whom among 2 million accounts<small></small></div><select><option value="">choose a type</option><option>relational table</option><option>transactions</option><option>time series</option><option>sequence</option><option>graph</option><option>text</option><option>stream</option></select></div><div class="q" data-a="relational table" data-why="Independent rows with fixed attributes."><div class="s">A bank&#x27;s customer master: one row per customer, 40 columns<small></small></div><select><option value="">choose a type</option><option>relational table</option><option>transactions</option><option>time series</option><option>sequence</option><option>graph</option><option>text</option><option>stream</option></select></div><div class="q" data-a="sequence" data-why="Ordered events; the gaps between them may not matter."><div class="s">The pages one visitor opened on a website, in order<small></small></div><select><option value="">choose a type</option><option>relational table</option><option>transactions</option><option>time series</option><option>sequence</option><option>graph</option><option>text</option><option>stream</option></select></div><div class="q" data-a="stream" data-why="Unbounded arrival, one pass, an answer before the next row."><div class="s">Card payments checked for fraud as they happen<small></small></div><select><option value="">choose a type</option><option>relational table</option><option>transactions</option><option>time series</option><option>sequence</option><option>graph</option><option>text</option><option>stream</option></select></div><div class="q" data-a="text" data-why="Sentences; a table appears only after words are counted."><div class="s">Ten thousand product reviews<small></small></div><select><option value="">choose a type</option><option>relational table</option><option>transactions</option><option>time series</option><option>sequence</option><option>graph</option><option>text</option><option>stream</option></select></div><div class="q" data-a="transactions" data-why="A set of items of varying length per record."><div class="s">Prescriptions, each listing the drugs given together<small></small></div><select><option value="">choose a type</option><option>relational table</option><option>transactions</option><option>time series</option><option>sequence</option><option>graph</option><option>text</option><option>stream</option></select></div></div><div class="wctl"><div class="out sm" id="match-score" style="flex:1;white-space:normal">0 of 7 chosen</div><span class="jsbadge">browser JS</span></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Data types">
+  <div class="eyebrow">Data types &#183; Drawbacks</div>
+  <h1 class="t">Drawbacks
+    <small>Each of the five non-tabular types can be turned into a table, and each conversion throws away the property that made the type what it is.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><div class="cap">converting to a table</div><svg viewBox="0 0 1120 246" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Five data types, how each is converted to a table, and what the conversion loses"><text x="0.0" y="12.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="start" font-weight="600" >DATA TYPE</text><text x="190.0" y="12.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="start" font-weight="600" >CONVERTED TO A TABLE BY</text><text x="520.0" y="12.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="start" font-weight="600" >ON THE SUPERMARKET FILES</text><text x="850.0" y="12.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="start" font-weight="600" >LOST IN THE CONVERSION</text><rect x="0.0" y="24.0" width="170.0" height="36.0" fill="#0E1330" stroke="none" stroke-width="1" rx="5"/><text x="14.0" y="47.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#FFFFFF" text-anchor="start" font-weight="700" >transactions</text><rect x="190.0" y="24.0" width="310.0" height="36.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="5"/><text x="204.0" y="47.0" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="400" >one 0/1 column per item</text><rect x="520.0" y="24.0" width="310.0" height="36.0" fill="#E8ECFF" stroke="none" stroke-width="1" rx="5"/><text x="534" y="47" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" font-weight="600">12,000 baskets &#215; 14 items</text><rect x="850.0" y="24.0" width="270.0" height="36.0" fill="#FDE9E7" stroke="none" stroke-width="1" rx="5"/><text x="864.0" y="47.0" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#E8382D" text-anchor="start" font-weight="600" >quantities</text><rect x="0.0" y="68.0" width="170.0" height="36.0" fill="#0E1330" stroke="none" stroke-width="1" rx="5"/><text x="14.0" y="91.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#FFFFFF" text-anchor="start" font-weight="700" >time series</text><rect x="190.0" y="68.0" width="310.0" height="36.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="5"/><text x="204.0" y="91.0" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="400" >one row per window of past values</text><rect x="520.0" y="68.0" width="310.0" height="36.0" fill="#E8ECFF" stroke="none" stroke-width="1" rx="5"/><text x="534" y="91" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" font-weight="600">181 days &#8594; rows of the last 7 days</text><rect x="850.0" y="68.0" width="270.0" height="36.0" fill="#FDE9E7" stroke="none" stroke-width="1" rx="5"/><text x="864.0" y="91.0" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#E8382D" text-anchor="start" font-weight="600" >everything before the window</text><rect x="0.0" y="112.0" width="170.0" height="36.0" fill="#0E1330" stroke="none" stroke-width="1" rx="5"/><text x="14.0" y="135.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#FFFFFF" text-anchor="start" font-weight="700" >sequence</text><rect x="190.0" y="112.0" width="310.0" height="36.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="5"/><text x="204.0" y="135.0" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="400" >counts per customer</text><rect x="520.0" y="112.0" width="310.0" height="36.0" fill="#E8ECFF" stroke="none" stroke-width="1" rx="5"/><text x="534" y="135" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" font-weight="600">1,995 customers &#215; baskets, items bought</text><rect x="850.0" y="112.0" width="270.0" height="36.0" fill="#FDE9E7" stroke="none" stroke-width="1" rx="5"/><text x="864.0" y="135.0" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#E8382D" text-anchor="start" font-weight="600" >the order of the events</text><rect x="0.0" y="156.0" width="170.0" height="36.0" fill="#0E1330" stroke="none" stroke-width="1" rx="5"/><text x="14.0" y="179.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#FFFFFF" text-anchor="start" font-weight="700" >graph</text><rect x="190.0" y="156.0" width="310.0" height="36.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="5"/><text x="204.0" y="179.0" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="400" >one row per pair, or per node</text><rect x="520.0" y="156.0" width="310.0" height="36.0" fill="#E8ECFF" stroke="none" stroke-width="1" rx="5"/><text x="534" y="179" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" font-weight="600">91 pairs with their lift</text><rect x="850.0" y="156.0" width="270.0" height="36.0" fill="#FDE9E7" stroke="none" stroke-width="1" rx="5"/><text x="864.0" y="179.0" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#E8382D" text-anchor="start" font-weight="600" >paths longer than one link</text><rect x="0.0" y="200.0" width="170.0" height="36.0" fill="#0E1330" stroke="none" stroke-width="1" rx="5"/><text x="14.0" y="223.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#FFFFFF" text-anchor="start" font-weight="700" >text</text><rect x="190.0" y="200.0" width="310.0" height="36.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" rx="5"/><text x="204.0" y="223.0" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" text-anchor="start" font-weight="400" >one column per word</text><rect x="520.0" y="200.0" width="310.0" height="36.0" fill="#E8ECFF" stroke="none" stroke-width="1" rx="5"/><text x="534" y="223" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#0E1330" font-weight="600">600 comments &#215; 33 words</text><rect x="850.0" y="200.0" width="270.0" height="36.0" fill="#FDE9E7" stroke="none" stroke-width="1" rx="5"/><text x="864.0" y="223.0" font-family="Geist,system-ui,sans-serif" font-size="12.5" fill="#E8382D" text-anchor="start" font-weight="600" >word order and meaning</text></svg></div><div class="cols nat"><div class="callout sm"><b>Conversion is the first thing to try.</b> It lets every method of modules 5 to 7 run on the data.</div><div class="callout warn sm"><b>When the lost property is the question,</b> a method built for the type is needed: sequential patterns for order, graph methods for paths, time-series models for what came before the window.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Tasks">
+  <div class="eyebrow">Mining tasks &#183; Concept</div>
+  <h1 class="t">Concept
+    <small>A mining task is defined by the kind of pattern it returns. The textbook lists seven, in two groups.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><div class="cap">Han, Kamber &amp; Pei, section 1.4</div><svg viewBox="0 0 1120 232" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Four descriptive and three predictive mining tasks"><text x="0.0" y="14.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#2B4BFF" text-anchor="start" font-weight="700" >DESCRIPTIVE · say what the data contains</text><text x="0.0" y="140.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#E8382D" text-anchor="start" font-weight="700" >PREDICTIVE · say something about a record not yet seen</text><rect x="0.0" y="26.0" width="271.0" height="76.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="0.0" y="26.0" width="271.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="135.5" y="61.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >Characterisation</text><text x="135.5" y="79.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >summarise a group</text><rect x="283.0" y="26.0" width="271.0" height="76.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="283.0" y="26.0" width="271.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="418.5" y="61.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >Association</text><text x="418.5" y="79.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >what occurs together</text><rect x="566.0" y="26.0" width="271.0" height="76.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="566.0" y="26.0" width="271.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="701.5" y="61.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >Clustering</text><text x="701.5" y="79.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >groups that were not defined</text><rect x="849.0" y="26.0" width="271.0" height="76.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="849.0" y="26.0" width="271.0" height="4.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="984.5" y="61.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >Outlier detection</text><text x="984.5" y="79.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >records unlike the rest</text><rect x="0.0" y="152.0" width="271.0" height="76.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="0.0" y="152.0" width="271.0" height="4.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="135.5" y="187.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >Classification</text><text x="135.5" y="205.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >predict a category</text><rect x="283.0" y="152.0" width="271.0" height="76.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="283.0" y="152.0" width="271.0" height="4.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="418.5" y="187.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >Numeric prediction</text><text x="418.5" y="205.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >predict a number</text><rect x="566.0" y="152.0" width="271.0" height="76.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="566.0" y="152.0" width="271.0" height="4.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="701.5" y="187.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >Trend analysis</text><text x="701.5" y="205.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >how values change over time</text></svg></div><div class="cols nat"><div class="callout sm"><b>The next seven slides run each task once</b> on the supermarket files and show its input, its output and one number that says how well it did.</div><div class="callout sm"><b>Supervised or not.</b> Classification and numeric prediction need a column of known answers to learn from. The four descriptive tasks need none.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Tasks">
+  <div class="eyebrow">Mining tasks &#183; Characterisation and discrimination</div>
+  <h1 class="t">Example
+    <small>Characterisation summarises one group; discrimination sets it against another. Here the 822 Friday-evening baskets are set against the other 11,178.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols w6040 nat"><div class="fig"><div class="cap">share of baskets containing the item</div><svg viewBox="0 0 720 258" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Share of baskets containing four items, Friday evening against other times"><text x="96.0" y="36.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="600" >nappies</text><rect x="106.0" y="10.0" width="208.8" height="19.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="321.8" y="24.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="700" >28.1%</text><rect x="106.0" y="32.0" width="37.1" height="19.0" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="150.1" y="46.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="700" >5.0%</text><text x="96.0" y="92.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="600" >beer</text><rect x="106.0" y="66.0" width="159.1" height="19.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="272.1" y="80.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="700" >21.4%</text><rect x="106.0" y="88.0" width="52.7" height="19.0" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="165.7" y="102.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="700" >7.1%</text><text x="96.0" y="148.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="600" >butter</text><rect x="106.0" y="122.0" width="127.4" height="19.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="240.4" y="136.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="700" >17.2%</text><rect x="106.0" y="144.0" width="116.2" height="19.0" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="229.2" y="158.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="700" >15.6%</text><text x="96.0" y="204.0" font-family="Geist Mono,ui-monospace,monospace" font-size="13" fill="#0E1330" text-anchor="end" font-weight="600" >bread</text><rect x="106.0" y="178.0" width="481.7" height="19.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="594.7" y="192.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="700" >64.8%</text><rect x="106.0" y="200.0" width="472.3" height="19.0" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="585.3" y="214.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="start" font-weight="700" >63.6%</text><rect x="106.0" y="240.0" width="12.0" height="12.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="124.0" y="250.0" font-family="Geist,system-ui,sans-serif" font-size="11" fill="#0E1330" text-anchor="start" font-weight="400" >Friday, 5 pm onwards</text><rect x="300.0" y="240.0" width="12.0" height="12.0" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="318.0" y="250.0" font-family="Geist,system-ui,sans-serif" font-size="11" fill="#0E1330" text-anchor="start" font-weight="400" >all other times</text></svg></div><div class="colstack"><div class="kv k3"><div class="lf bad"><small>items, Fri eve</small>3.69</div><div class="lf "><small>items, other</small>3.31</div><div class="lf bad"><small>amount, Fri eve</small>&#8377;788</div></div><div class="callout sm"><b>Output.</b> A profile: Friday-evening baskets are larger, cost &#8377;788 against &#8377;468, and contain nappies 5.6 times as often.</div><div class="callout sm"><b>Input.</b> A table and a group chosen by the analyst. Statistics and OLAP supply the method; modules 3 and 4.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Tasks">
+  <div class="eyebrow">Mining tasks &#183; Association</div>
+  <h1 class="t">Example continued 1
+    <small>Association analysis returns items that occur together more than their separate frequencies predict. Lecture 1 ran it in full.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="kv"><div class="lf "><small>baskets with butter and jam</small>1,146</div><div class="lf "><small>confidence, butter &#8594; jam</small>60.7%</div><div class="lf bad"><small>lift</small>3.38</div><div class="lf "><small>strong pairs of 91</small>2</div></div><div class="cols3"><div class="card big"><h3>Input</h3><p>Transactions: a set of items per record. No column is marked as the answer.</p></div><div class="card big b"><h3>Output</h3><p>Rules X &#8594; y with support, confidence and lift, filtered by thresholds.</p></div><div class="card big r"><h3>Module 5</h3><p>Apriori and FP-growth, which find the frequent itemsets without counting all 16,383 of them.</p></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Tasks">
+  <div class="eyebrow">Mining tasks &#183; Classification</div>
+  <h1 class="t">Example continued 2
+    <small>Classification learns to predict a category from the other columns. A two-level decision tree predicts whether a basket contains jam and is right on 85.4% of test baskets.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><div class="cap">the tree's first split &#183; and its results on baskets it had not seen</div><svg viewBox="0 0 1120 186" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="A decision tree splitting on butter, and its confusion matrix on the test baskets"><rect x="160.0" y="0.0" width="240.0" height="56.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="160.0" y="0.0" width="240.0" height="4.0" fill="#0E1330" stroke="none" stroke-width="1" /><text x="280.0" y="25.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >butter in the basket?</text><text x="280.0" y="43.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >8,400 training baskets</text><line x1="220.0" y1="56.0" x2="115.4" y2="107.4" stroke="#5D6488" stroke-width="1.6" /><path d="M110.0,110.0 L118.9,110.1 L115.4,102.9 z" fill="#5D6488"/><line x1="340.0" y1="56.0" x2="444.6" y2="107.4" stroke="#5D6488" stroke-width="1.6" /><path d="M450.0,110.0 L444.6,102.9 L441.1,110.1 z" fill="#5D6488"/><text x="140.0" y="84.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#5D6488" text-anchor="end" font-weight="600" >no</text><text x="420.0" y="84.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#5D6488" text-anchor="start" font-weight="600" >yes</text><rect x="0.0" y="112.0" width="240.0" height="64.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="0.0" y="112.0" width="240.0" height="4.0" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="120.0" y="141.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >predict: no jam</text><text x="120.0" y="159.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >jam in 10.1% of these</text><rect x="320.0" y="112.0" width="240.0" height="64.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><rect x="320.0" y="112.0" width="240.0" height="4.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="440.0" y="141.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="middle" font-weight="700" >predict: jam</text><text x="440.0" y="159.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >jam in 60.6% of these</text><text x="790.0" y="10.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10.5" fill="#5D6488" text-anchor="middle" font-weight="400" >predicted on 3,600 test baskets</text><text x="790.0" y="38.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#0E1330" text-anchor="middle" font-weight="600" >jam</text><text x="900.0" y="38.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#0E1330" text-anchor="middle" font-weight="600" >no jam</text><text x="732.0" y="86.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#0E1330" text-anchor="end" font-weight="600" >has jam</text><text x="732.0" y="152.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#0E1330" text-anchor="end" font-weight="600" >no jam</text><rect x="740.0" y="48.0" width="104.0" height="60.0" fill="#0E7A55" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><text x="792.0" y="86.0" font-family="Geist Mono,ui-monospace,monospace" font-size="19" fill="#0E7A55" text-anchor="middle" font-weight="700" >325</text><rect x="850.0" y="48.0" width="104.0" height="60.0" fill="#E8382D" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><text x="902.0" y="86.0" font-family="Geist Mono,ui-monospace,monospace" font-size="19" fill="#E8382D" text-anchor="middle" font-weight="700" >321</text><rect x="740.0" y="114.0" width="104.0" height="60.0" fill="#E8382D" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><text x="792.0" y="152.0" font-family="Geist Mono,ui-monospace,monospace" font-size="19" fill="#E8382D" text-anchor="middle" font-weight="700" >206</text><rect x="850.0" y="114.0" width="104.0" height="60.0" fill="#0E7A55" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><text x="902.0" y="152.0" font-family="Geist Mono,ui-monospace,monospace" font-size="19" fill="#0E7A55" text-anchor="middle" font-weight="700" >2,748</text></svg></div><div class="cols3"><div class="callout sm"><b>Input.</b> A table with one column marked as the answer: jam, yes or no. 70% of baskets train the tree and 30% test it.</div><div class="callout warn sm"><b>Accuracy needs a baseline.</b> Predicting "no jam" for every basket is right 82.1% of the time. The tree adds 3.3 points.</div><div class="callout sm"><b>Where it fails.</b> It finds 325 of the 646 jam baskets and misses 321. Module 6 covers trees, naive Bayes and how to score them.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Tasks">
+  <div class="eyebrow">Mining tasks &#183; Numeric prediction</div>
+  <h1 class="t">Example continued 3
+    <small>Numeric prediction returns a number. A straight line predicts the amount of a basket from how many different items it holds: each extra item adds &#8377;174.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols w6040 nat"><div class="fig"><div class="cap">mean amount by basket size &#183; dot area shows the number of baskets</div><svg viewBox="0 0 640 254" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Mean basket amount against number of items, with the fitted line"><rect x="46.0" y="12.0" width="582.0" height="208.0" fill="#FFFFFF" stroke="#E2E5F0" stroke-width="1" /><line x1="46.0" y1="220.0" x2="628.0" y2="220.0" stroke="#E2E5F0" stroke-width="1" /><text x="40.0" y="223.5" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="end" font-weight="400" >0</text><line x1="46.0" y1="180.0" x2="628.0" y2="180.0" stroke="#E2E5F0" stroke-width="1" /><text x="40.0" y="183.5" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="end" font-weight="400" >500</text><line x1="46.0" y1="140.0" x2="628.0" y2="140.0" stroke="#E2E5F0" stroke-width="1" /><text x="40.0" y="143.5" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="end" font-weight="400" >1,000</text><line x1="46.0" y1="100.0" x2="628.0" y2="100.0" stroke="#E2E5F0" stroke-width="1" /><text x="40.0" y="103.5" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="end" font-weight="400" >1,500</text><line x1="46.0" y1="60.0" x2="628.0" y2="60.0" stroke="#E2E5F0" stroke-width="1" /><text x="40.0" y="63.5" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="end" font-weight="400" >2,000</text><line x1="46.0" y1="20.0" x2="628.0" y2="20.0" stroke="#E2E5F0" stroke-width="1" /><text x="40.0" y="23.5" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="end" font-weight="400" >2,500</text><text x="75.1" y="234.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >1</text><text x="133.3" y="234.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >2</text><text x="191.5" y="234.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >3</text><text x="249.7" y="234.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >4</text><text x="307.9" y="234.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >5</text><text x="366.1" y="234.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >6</text><text x="424.3" y="234.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >7</text><text x="482.5" y="234.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >8</text><text x="540.7" y="234.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >9</text><text x="598.9" y="234.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >10</text><text x="52.0" y="25.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="start" font-weight="400" >mean basket amount, rupees</text><text x="628.0" y="245.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="end" font-weight="400" >different items in the basket</text><polyline points="75.1,213.3 598.9,88.3" fill="none" stroke="#E8382D" stroke-width="2" stroke-opacity="1" stroke-linejoin="round"/><circle cx="75.1" cy="210.7" r="6.245796926123326" fill="#2B4BFF" /><circle cx="133.3" cy="199.2" r="7.4126217960977545" fill="#2B4BFF" /><circle cx="191.5" cy="187.0" r="8.0" fill="#2B4BFF" /><circle cx="249.7" cy="172.3" r="7.584995023285052" fill="#2B4BFF" /><circle cx="307.9" cy="157.0" r="6.517874639618461" fill="#2B4BFF" /><circle cx="366.1" cy="143.4" r="5.373444101157199" fill="#2B4BFF" /><circle cx="424.3" cy="127.5" r="4.3535908883977195" fill="#2B4BFF" /><circle cx="482.5" cy="112.6" r="3.6767954441988597" fill="#2B4BFF" /><circle cx="540.7" cy="76.0" r="3.3105350470222685" fill="#2B4BFF" /><circle cx="598.9" cy="20.4" r="3.0896437464955597" fill="#2B4BFF" /><text x="488.3" y="140.7" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#E8382D" text-anchor="start" font-weight="700" >amount = -89 + 174 × items</text></svg></div><div class="colstack"><div class="kv k3"><div class="lf "><small>slope, rupees per item</small>174</div><div class="lf bad"><small>R squared</small>0.33</div><div class="lf "><small>mean amount</small>&#8377;490</div></div><div class="callout sm"><b>R squared of 0.33.</b> The line explains a third of the variation between baskets. The rest is which items: a basket with nappies costs &#8377;699 more than one with chips.</div><div class="callout sm"><b>Input.</b> A table with a numeric answer column. Regression is the standard method; module 6.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Tasks">
+  <div class="eyebrow">Mining tasks &#183; Clustering</div>
+  <h1 class="t">Example continued 4
+    <small>Clustering forms groups that were not defined beforehand. Here the 14 items are grouped by how often they share a basket; butter and jam merge first.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="fig"><div class="cap">hierarchical clustering of the items, average link</div><svg viewBox="0 0 540 314" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Dendrogram of the fourteen items"><text id="cl-leaf-0" x="88" y="18" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">beer</text><text id="cl-leaf-10" x="88" y="37" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">nappies</text><text id="cl-leaf-12" x="88" y="56" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">soap</text><text id="cl-leaf-3" x="88" y="75" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">butter</text><text id="cl-leaf-8" x="88" y="94" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">jam</text><text id="cl-leaf-6" x="88" y="113" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">dal</text><text id="cl-leaf-11" x="88" y="132" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">rice</text><text id="cl-leaf-4" x="88" y="151" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">chips</text><text id="cl-leaf-13" x="88" y="170" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">tea</text><text id="cl-leaf-5" x="88" y="189" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">curd</text><text id="cl-leaf-1" x="88" y="208" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">biscuits</text><text id="cl-leaf-7" x="88" y="227" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">eggs</text><text id="cl-leaf-2" x="88" y="246" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">bread</text><text id="cl-leaf-9" x="88" y="265" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="end" font-weight="600">milk</text><line x1="96.0" y1="71.0" x2="349.9" y2="71.0" stroke="#5D6488" stroke-width="1.4" /><line x1="96.0" y1="90.0" x2="349.9" y2="90.0" stroke="#5D6488" stroke-width="1.4" /><line x1="349.9" y1="71.0" x2="349.9" y2="90.0" stroke="#5D6488" stroke-width="1.4" /><line x1="96.0" y1="242.0" x2="363.7" y2="242.0" stroke="#5D6488" stroke-width="1.4" /><line x1="96.0" y1="261.0" x2="363.7" y2="261.0" stroke="#5D6488" stroke-width="1.4" /><line x1="363.7" y1="242.0" x2="363.7" y2="261.0" stroke="#5D6488" stroke-width="1.4" /><line x1="96.0" y1="223.0" x2="415.5" y2="223.0" stroke="#5D6488" stroke-width="1.4" /><line x1="363.7" y1="251.5" x2="415.5" y2="251.5" stroke="#5D6488" stroke-width="1.4" /><line x1="415.5" y1="223.0" x2="415.5" y2="251.5" stroke="#5D6488" stroke-width="1.4" /><line x1="96.0" y1="204.0" x2="434.7" y2="204.0" stroke="#5D6488" stroke-width="1.4" /><line x1="415.5" y1="237.2" x2="434.7" y2="237.2" stroke="#5D6488" stroke-width="1.4" /><line x1="434.7" y1="204.0" x2="434.7" y2="237.2" stroke="#5D6488" stroke-width="1.4" /><line x1="96.0" y1="185.0" x2="444.5" y2="185.0" stroke="#5D6488" stroke-width="1.4" /><line x1="434.7" y1="220.6" x2="444.5" y2="220.6" stroke="#5D6488" stroke-width="1.4" /><line x1="444.5" y1="185.0" x2="444.5" y2="220.6" stroke="#5D6488" stroke-width="1.4" /><line x1="96.0" y1="166.0" x2="450.6" y2="166.0" stroke="#5D6488" stroke-width="1.4" /><line x1="444.5" y1="202.8" x2="450.6" y2="202.8" stroke="#5D6488" stroke-width="1.4" /><line x1="450.6" y1="166.0" x2="450.6" y2="202.8" stroke="#5D6488" stroke-width="1.4" /><line x1="96.0" y1="147.0" x2="456.4" y2="147.0" stroke="#5D6488" stroke-width="1.4" /><line x1="450.6" y1="184.4" x2="456.4" y2="184.4" stroke="#5D6488" stroke-width="1.4" /><line x1="456.4" y1="147.0" x2="456.4" y2="184.4" stroke="#5D6488" stroke-width="1.4" /><line x1="96.0" y1="128.0" x2="459.8" y2="128.0" stroke="#5D6488" stroke-width="1.4" /><line x1="456.4" y1="165.7" x2="459.8" y2="165.7" stroke="#5D6488" stroke-width="1.4" /><line x1="459.8" y1="128.0" x2="459.8" y2="165.7" stroke="#5D6488" stroke-width="1.4" /><line x1="96.0" y1="109.0" x2="465.4" y2="109.0" stroke="#5D6488" stroke-width="1.4" /><line x1="459.8" y1="146.9" x2="465.4" y2="146.9" stroke="#5D6488" stroke-width="1.4" /><line x1="465.4" y1="109.0" x2="465.4" y2="146.9" stroke="#5D6488" stroke-width="1.4" /><line x1="349.9" y1="80.5" x2="468.3" y2="80.5" stroke="#5D6488" stroke-width="1.4" /><line x1="465.4" y1="127.9" x2="468.3" y2="127.9" stroke="#5D6488" stroke-width="1.4" /><line x1="468.3" y1="80.5" x2="468.3" y2="127.9" stroke="#5D6488" stroke-width="1.4" /><line x1="96.0" y1="14.0" x2="469.3" y2="14.0" stroke="#5D6488" stroke-width="1.4" /><line x1="96.0" y1="33.0" x2="469.3" y2="33.0" stroke="#5D6488" stroke-width="1.4" /><line x1="469.3" y1="14.0" x2="469.3" y2="33.0" stroke="#5D6488" stroke-width="1.4" /><line x1="96.0" y1="52.0" x2="474.8" y2="52.0" stroke="#5D6488" stroke-width="1.4" /><line x1="468.3" y1="104.2" x2="474.8" y2="104.2" stroke="#5D6488" stroke-width="1.4" /><line x1="474.8" y1="52.0" x2="474.8" y2="104.2" stroke="#5D6488" stroke-width="1.4" /><line x1="469.3" y1="23.5" x2="491.8" y2="23.5" stroke="#5D6488" stroke-width="1.4" /><line x1="474.8" y1="78.1" x2="491.8" y2="78.1" stroke="#5D6488" stroke-width="1.4" /><line x1="491.8" y1="23.5" x2="491.8" y2="78.1" stroke="#5D6488" stroke-width="1.4" /><text x="96.0" y="292.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >0</text><text x="201.0" y="292.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >0.25</text><text x="306.0" y="292.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >0.5</text><text x="411.0" y="292.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >0.75</text><text x="516.0" y="292.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >1</text><text x="306.0" y="308.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >distance at which two groups merge (1 − Jaccard)</text><line id="cl-cut" x1="0" y1="4" x2="0" y2="276" stroke="#E8382D" stroke-width="2" stroke-dasharray="5 4"/></svg></div><div class="colstack"><div class="wctl"><label class="rg nar">number of groups <b id="cl-kv">5</b><input type="range" id="cl-k" min="1" max="14" step="1" value="5"/></label><span class="jsbadge">browser JS</span></div><div class="out sm" id="cl-groups"></div><div class="callout warn sm"><b>The measure decides the groups.</b> Bread and milk merge second because each is in most baskets, although their lift is below 1. Beer and nappies, lift 2.76, merge eleventh.</div><div class="callout sm"><b>Input.</b> Records and a distance between them; no answer column. Module 7 covers k-means, hierarchical and density-based clustering.</div></div></div><script type="application/json" id="cl-data">{"items":["beer","biscuits","bread","butter","chips","curd","dal","eggs","jam","milk","nappies","rice","soap","tea"],"cuts":{"1":[1,1,1,1,1,1,1,1,1,1,1,1,1,1],"2":[1,2,2,2,2,2,2,2,2,2,1,2,2,2],"3":[1,2,2,2,2,2,2,2,2,2,1,2,3,2],"4":[1,3,3,3,3,3,3,3,3,3,2,3,4,3],"5":[1,4,4,3,4,4,4,4,3,4,2,4,5,4],"6":[1,4,4,3,4,4,5,4,3,4,2,4,6,4],"7":[1,4,4,3,4,4,6,4,3,4,2,5,7,4],"8":[1,4,4,3,5,4,7,4,3,4,2,6,8,4],"9":[1,4,4,3,6,4,8,4,3,4,2,7,9,5],"10":[1,4,4,3,7,5,9,4,3,4,2,8,10,6],"11":[1,5,4,3,8,6,10,4,3,4,2,9,11,7],"12":[1,6,4,3,9,7,11,5,3,4,2,10,12,8],"13":[1,7,4,3,10,8,12,6,3,5,2,11,13,9],"14":[1,2,3,4,5,6,7,8,9,10,11,12,13,14]},"heights":[0.6045548654244306,0.6373917473255222,0.7605985462416169,0.8064413463893834,0.8298727197110812,0.844372287017061,0.8581712519658158,0.866256673987771,0.8795104927252747,0.8864140100594452,0.8888186986734049,0.9018933106937957,0.9423402429004528],"x0":96,"xw":420}</script>
+  </div>
+</section>
+
+<section class="slide" data-sec="Tasks">
+  <div class="eyebrow">Mining tasks &#183; Outlier detection</div>
+  <h1 class="t">Example continued 5
+    <small>Outlier detection returns the records that do not fit the rest. Tukey's rule on basket amounts flags 635 of the 12,000 baskets, those above &#8377;1,355.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols w6040 nat"><div class="fig"><div class="cap">baskets by amount, in steps of 200 rupees</div><svg viewBox="0 0 720 262" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Histogram of basket amounts with the upper fence"><line x1="40.0" y1="218.0" x2="710.0" y2="218.0" stroke="#CED3E6" stroke-width="1" /><rect x="44.5" y="43.0" width="28.3" height="175.0" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="58.6" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >0</text><rect x="81.7" y="53.2" width="28.3" height="164.8" fill="#8A90B0" stroke="none" stroke-width="1" /><rect x="118.9" y="106.9" width="28.3" height="111.1" fill="#8A90B0" stroke="none" stroke-width="1" /><rect x="156.1" y="152.3" width="28.3" height="65.7" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="170.3" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >600</text><rect x="193.4" y="177.6" width="28.3" height="40.4" fill="#8A90B0" stroke="none" stroke-width="1" /><rect x="230.6" y="192.6" width="28.3" height="25.4" fill="#8A90B0" stroke="none" stroke-width="1" /><rect x="267.8" y="204.4" width="28.3" height="13.6" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="281.9" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >1,200</text><rect x="305.0" y="208.3" width="28.3" height="9.7" fill="#E8382D" stroke="none" stroke-width="1" /><rect x="342.2" y="211.7" width="28.3" height="6.3" fill="#E8382D" stroke="none" stroke-width="1" /><rect x="379.5" y="214.3" width="28.3" height="3.7" fill="#E8382D" stroke="none" stroke-width="1" /><text x="393.6" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >1,800</text><rect x="416.7" y="215.3" width="28.3" height="2.7" fill="#E8382D" stroke="none" stroke-width="1" /><rect x="453.9" y="215.0" width="28.3" height="3.0" fill="#E8382D" stroke="none" stroke-width="1" /><rect x="491.1" y="215.6" width="28.3" height="2.4" fill="#E8382D" stroke="none" stroke-width="1" /><text x="505.3" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >2,400</text><rect x="528.4" y="216.8" width="28.3" height="1.2" fill="#E8382D" stroke="none" stroke-width="1" /><rect x="565.6" y="217.1" width="28.3" height="0.9" fill="#E8382D" stroke="none" stroke-width="1" /><rect x="602.8" y="217.6" width="28.3" height="0.4" fill="#E8382D" stroke="none" stroke-width="1" /><text x="616.9" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >3,000</text><rect x="640.0" y="217.8" width="28.3" height="0.2" fill="#E8382D" stroke="none" stroke-width="1" /><rect x="677.2" y="217.9" width="28.3" height="0.1" fill="#E8382D" stroke="none" stroke-width="1" /><line x1="292.2" y1="16.0" x2="292.2" y2="218.0" stroke="#E8382D" stroke-width="1.6" stroke-dasharray="5 4"/><text x="298.2" y="26.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11" fill="#E8382D" text-anchor="start" font-weight="700" >upper fence ₹1,355</text><text x="380.0" y="256.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >basket amount, rupees</text></svg></div><div class="colstack"><div class="kv k3"><div class="lf "><small>median</small>&#8377;360</div><div class="lf bad"><small>flagged</small>635</div><div class="lf bad"><small>largest</small>&#8377;3,493</div></div><div class="callout warn sm"><b>What the outliers are.</b> 482 of the 635 contain nappies, which cost &#8377;699 a pack. They are ordinary baskets with one expensive item.</div><div class="callout sm"><b>Input.</b> Records and a notion of what is usual. Whether an outlier is an error, a fraud or a good customer is decided afterwards. Module 7.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Tasks">
+  <div class="eyebrow">Mining tasks &#183; Trend analysis</div>
+  <h1 class="t">Example continued 6
+    <small>Trend and evolution analysis describes how values change with time. On Fridays the share of baskets with nappies changes at 5 pm.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols w6040 nat"><div class="fig"><div class="cap">Fridays &#183; share of baskets containing nappies, by hour</div><svg viewBox="0 0 720 244" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Share of Friday baskets containing nappies, by hour"><line x1="34.0" y1="218.0" x2="712.0" y2="218.0" stroke="#CED3E6" stroke-width="1" /><rect x="39.8" y="177.0" width="36.8" height="41.0" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="58.2" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >8h</text><text x="58.2" y="173.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >8%</text><rect x="88.2" y="212.7" width="36.8" height="5.3" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="106.6" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >9h</text><text x="106.6" y="208.7" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >1%</text><rect x="136.7" y="200.7" width="36.8" height="17.3" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="155.1" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >10h</text><text x="155.1" y="196.7" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >3%</text><rect x="185.1" y="181.2" width="36.8" height="36.8" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="203.5" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >11h</text><text x="203.5" y="177.2" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >7%</text><rect x="233.5" y="189.6" width="36.8" height="28.4" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="251.9" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >12h</text><text x="251.9" y="185.6" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >5%</text><rect x="282.0" y="182.3" width="36.8" height="35.7" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="300.4" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >13h</text><text x="300.4" y="178.3" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >7%</text><rect x="330.4" y="187.5" width="36.8" height="30.5" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="348.8" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >14h</text><text x="348.8" y="183.5" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >6%</text><rect x="378.8" y="188.0" width="36.8" height="30.0" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="397.2" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >15h</text><text x="397.2" y="184.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >6%</text><rect x="427.2" y="208.0" width="36.8" height="10.0" fill="#8A90B0" stroke="none" stroke-width="1" /><text x="445.6" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >16h</text><text x="445.6" y="204.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >2%</text><rect x="475.7" y="80.8" width="36.8" height="137.2" fill="#E8382D" stroke="none" stroke-width="1" /><text x="494.1" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >17h</text><text x="494.1" y="76.8" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >26%</text><rect x="524.1" y="77.2" width="36.8" height="140.8" fill="#E8382D" stroke="none" stroke-width="1" /><text x="542.5" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >18h</text><text x="542.5" y="73.2" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >27%</text><rect x="572.5" y="57.7" width="36.8" height="160.3" fill="#E8382D" stroke="none" stroke-width="1" /><text x="590.9" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >19h</text><text x="590.9" y="53.7" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >30%</text><rect x="621.0" y="85.0" width="36.8" height="133.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="639.4" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >20h</text><text x="639.4" y="81.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >25%</text><rect x="669.4" y="43.0" width="36.8" height="175.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="687.8" y="232.0" font-family="Geist Mono,ui-monospace,monospace" font-size="10" fill="#5D6488" text-anchor="middle" font-weight="400" >21h</text><text x="687.8" y="39.0" font-family="Geist Mono,ui-monospace,monospace" font-size="9.5" fill="#0E1330" text-anchor="middle" font-weight="600" >33%</text></svg></div><div class="colstack"><div class="callout sm"><b>Output.</b> A change point: before 5 pm the share is 1% to 8%, from 5 pm it is 25% or more.</div><div class="callout warn sm"><b>The count hides it.</b> Fridays have 66.7 baskets a day against 67.0 on Thursdays. The number of baskets does not move; what is in them does.</div><div class="callout sm"><b>Input.</b> Records with a time stamp, kept in order. Module 8.</div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Tasks">
+  <div class="eyebrow">Mining tasks &#183; Verdict</div>
+  <h1 class="t">Verdict
+    <small>Data types down the side, tasks across the top. Each filled cell is a combination the course teaches, with its module.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="fig"><div class="cap">where each combination is taught</div><svg viewBox="0 0 1120 284" width="100%" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Data type by mining task, with the module that covers each combination"><text x="263.0" y="14.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="middle" font-weight="700" >association</text><text x="419.0" y="14.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="middle" font-weight="700" >classification</text><text x="575.0" y="14.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="middle" font-weight="700" >prediction</text><text x="731.0" y="14.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="middle" font-weight="700" >clustering</text><text x="887.0" y="14.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="middle" font-weight="700" >outliers</text><text x="1043.0" y="14.0" font-family="Geist Mono,ui-monospace,monospace" font-size="11.5" fill="#0E1330" text-anchor="middle" font-weight="700" >trend</text><text x="0.0" y="45.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="start" font-weight="700" >relational table</text><rect x="190.0" y="26.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="346.0" y="26.0" width="146.0" height="28.0" fill="#E8382D" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="346.0" y="26.0" width="4.0" height="28.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="419.0" y="45.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#E8382D" text-anchor="middle" font-weight="700" >module 6</text><rect x="502.0" y="26.0" width="146.0" height="28.0" fill="#E8382D" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="502.0" y="26.0" width="4.0" height="28.0" fill="#E8382D" stroke="none" stroke-width="1" /><text x="575.0" y="45.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#E8382D" text-anchor="middle" font-weight="700" >module 6</text><rect x="658.0" y="26.0" width="146.0" height="28.0" fill="#0E7A55" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="658.0" y="26.0" width="4.0" height="28.0" fill="#0E7A55" stroke="none" stroke-width="1" /><text x="731.0" y="45.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E7A55" text-anchor="middle" font-weight="700" >module 7</text><rect x="814.0" y="26.0" width="146.0" height="28.0" fill="#0E7A55" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="814.0" y="26.0" width="4.0" height="28.0" fill="#0E7A55" stroke="none" stroke-width="1" /><text x="887.0" y="45.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E7A55" text-anchor="middle" font-weight="700" >module 7</text><rect x="970.0" y="26.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><text x="0.0" y="81.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="start" font-weight="700" >transactions</text><rect x="190.0" y="62.0" width="146.0" height="28.0" fill="#2B4BFF" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="190.0" y="62.0" width="4.0" height="28.0" fill="#2B4BFF" stroke="none" stroke-width="1" /><text x="263.0" y="81.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#2B4BFF" text-anchor="middle" font-weight="700" >module 5</text><rect x="346.0" y="62.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="502.0" y="62.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="658.0" y="62.0" width="146.0" height="28.0" fill="#0E7A55" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="658.0" y="62.0" width="4.0" height="28.0" fill="#0E7A55" stroke="none" stroke-width="1" /><text x="731.0" y="81.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#0E7A55" text-anchor="middle" font-weight="700" >module 7</text><rect x="814.0" y="62.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="970.0" y="62.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><text x="0.0" y="117.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="start" font-weight="700" >time series</text><rect x="190.0" y="98.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="346.0" y="98.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="502.0" y="98.0" width="146.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="502.0" y="98.0" width="4.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" /><text x="575.0" y="117.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#9B2C7E" text-anchor="middle" font-weight="700" >module 8</text><rect x="658.0" y="98.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="814.0" y="98.0" width="146.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="814.0" y="98.0" width="4.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" /><text x="887.0" y="117.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#9B2C7E" text-anchor="middle" font-weight="700" >module 8</text><rect x="970.0" y="98.0" width="146.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="970.0" y="98.0" width="4.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" /><text x="1043.0" y="117.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#9B2C7E" text-anchor="middle" font-weight="700" >module 8</text><text x="0.0" y="153.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="start" font-weight="700" >sequence</text><rect x="190.0" y="134.0" width="146.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="190.0" y="134.0" width="4.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" /><text x="263.0" y="153.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#9B2C7E" text-anchor="middle" font-weight="700" >module 8</text><rect x="346.0" y="134.0" width="146.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="346.0" y="134.0" width="4.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" /><text x="419.0" y="153.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#9B2C7E" text-anchor="middle" font-weight="700" >module 8</text><rect x="502.0" y="134.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="658.0" y="134.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="814.0" y="134.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="970.0" y="134.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><text x="0.0" y="189.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="start" font-weight="700" >graph</text><rect x="190.0" y="170.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="346.0" y="170.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="502.0" y="170.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="658.0" y="170.0" width="146.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="658.0" y="170.0" width="4.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" /><text x="731.0" y="189.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#9B2C7E" text-anchor="middle" font-weight="700" >module 8</text><rect x="814.0" y="170.0" width="146.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="814.0" y="170.0" width="4.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" /><text x="887.0" y="189.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#9B2C7E" text-anchor="middle" font-weight="700" >module 8</text><rect x="970.0" y="170.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><text x="0.0" y="225.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="start" font-weight="700" >text</text><rect x="190.0" y="206.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="346.0" y="206.0" width="146.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="346.0" y="206.0" width="4.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" /><text x="419.0" y="225.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#9B2C7E" text-anchor="middle" font-weight="700" >module 8</text><rect x="502.0" y="206.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="658.0" y="206.0" width="146.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="658.0" y="206.0" width="4.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" /><text x="731.0" y="225.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#9B2C7E" text-anchor="middle" font-weight="700" >module 8</text><rect x="814.0" y="206.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="970.0" y="206.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><text x="0.0" y="261.0" font-family="Geist,system-ui,sans-serif" font-size="13.5" fill="#0E1330" text-anchor="start" font-weight="700" >stream</text><rect x="190.0" y="242.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="346.0" y="242.0" width="146.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="346.0" y="242.0" width="4.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" /><text x="419.0" y="261.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#9B2C7E" text-anchor="middle" font-weight="700" >module 8</text><rect x="502.0" y="242.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="658.0" y="242.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/><rect x="814.0" y="242.0" width="146.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" rx="5" fill-opacity=".14"/><rect x="814.0" y="242.0" width="4.0" height="28.0" fill="#9B2C7E" stroke="none" stroke-width="1" /><text x="887.0" y="261.0" font-family="Geist Mono,ui-monospace,monospace" font-size="12" fill="#9B2C7E" text-anchor="middle" font-weight="700" >module 8</text><rect x="970.0" y="242.0" width="146.0" height="28.0" fill="#F4F6FB" stroke="none" stroke-width="1" rx="5"/></svg></div><div class="cols nat"><div class="callout sm"><b>Modules 5, 6 and 7 mine a table.</b> Frequent patterns, classification and prediction, then clustering and outlier detection.</div><div class="callout sm"><b>Module 8 mines the other types.</b> Time series and sequences, text, graphs and streams, each with the method that keeps what conversion to a table would lose.</div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Summary">
+  <div class="eyebrow">Summary</div>
+  <h1 class="t">Summary
+    <small>Seven tasks on one set of files, each with its input, its output and the number it produced.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<table class="d lg"><tr><th>task</th><th>input</th><th>output</th><th>on the supermarket files</th></tr><tr><td>Characterisation</td><td>table and a chosen group</td><td>profile of the group</td><td>Friday-evening baskets: &#8377;788 against &#8377;468</td></tr><tr><td>Association</td><td>transactions</td><td>rules X &#8594; y</td><td>butter &#8594; jam, lift 3.38</td></tr><tr><td>Classification</td><td>table with a category to predict</td><td>a model and its error</td><td>jam: 85.4% against a 82.1% baseline</td></tr><tr><td>Numeric prediction</td><td>table with a number to predict</td><td>a model and its error</td><td>&#8377;174 per item, R squared 0.33</td></tr><tr><td>Clustering</td><td>records and a distance</td><td>groups</td><td>butter and jam merge first of 14 items</td></tr><tr><td>Outlier detection</td><td>records and a notion of usual</td><td>the unusual records</td><td>635 baskets above &#8377;1,355</td></tr><tr><td>Trend analysis</td><td>time-stamped records</td><td>changes over time</td><td>nappies on Fridays from 5 pm</td></tr></table>
+  </div>
+</section>
+
+<section class="slide" data-sec="Practice">
+  <div class="eyebrow">Practice</div>
+  <h1 class="t">Practice on the three files
+    <small>customers.csv, sales.csv and feedback.csv are in the course repository under module1/data.</small></h1>
+  <div class="wrap" style="zoom:1.5">
+<div class="cols nat"><div class="colstack"><div class="card big"><h3><span class="num">1</span>Name the type</h3><p>For three datasets from your own work, say what one record is and how records are related. Which of the seven types is each?</p></div><div class="card big"><h3><span class="num">2</span>Change the baseline</h3><p>Predict whether a basket contains bread. What accuracy does "always yes" reach, and why is it harder to beat than for jam?</p></div></div><div class="colstack"><div class="card big"><h3><span class="num">3</span>Find the outliers again</h3><p>Apply Tukey's rule to the number of items in a basket, where the lecture used the amount. How many baskets are flagged, and do they contain nappies?</p></div><div class="card big"><h3><span class="num">4</span>Count the words</h3><p>In feedback.csv, which item is named most in comments that contain "stale", "stock" or "date"?</p></div></div></div>
+  </div>
+</section>
+</div></div>
+<div id="nav"><button id="prev" aria-label="Previous slide">&#8249;</button><button id="next" aria-label="Next slide">&#8250;</button></div>
+<div id="hint">&#8592; &#8594; navigate &#183; F fullscreen &#183; P print</div>
+<script>
+/* ============================================================
+   deck mechanics — identical to the other decks in the module
+   ============================================================ */
+(function(){
+  const slides=[...document.querySelectorAll('.slide')],
+        deck=document.getElementById('deck'), pbar=document.getElementById('pbar');
+  let i=0;
+  slides.forEach((s,idx)=>{
+    const r=document.createElement('div'); r.className='rail';
+    r.innerHTML='<div class="a">DA5500W &#183; Data Mining: Concepts and Techniques</div>'+
+      '<div class="n">Dr. Arun B Ayyar</div>'+
+      '<div class="b">'+(s.dataset.sec||'')+'</div>'+
+      '<div class="c">'+String(idx+1).padStart(2,'0')+' / '+slides.length+'</div>';
+    s.appendChild(r);
+  });
+  // ---- staged builds ------------------------------------------------
+  // A slide carrying .build holds its [data-at] pieces back. Arrow
+  // right releases the next one; only when they are all out does the
+  // deck advance. Entering backwards lands on the finished slide.
+  function maxStep(s){
+    let m=0;
+    s.querySelectorAll('[data-at]').forEach(e=>{ m=Math.max(m,+e.dataset.at||0); });
+    return m;
+  }
+  function paint(s){
+    const k=+s.dataset.step||0;
+    // data-to="k" retires a piece once the build moves past step k
+    s.querySelectorAll('[data-at]').forEach(e=>
+      e.classList.toggle('shown',(+e.dataset.at||0)<=k&&
+        (e.dataset.to===undefined||k<=+e.dataset.to)));
+    const d=s.querySelector('.bld');
+    if(d)[...d.children].forEach((c,n)=>c.classList.toggle('on',n<k));
+  }
+  function build(s,dir){
+    if(!s||!s.classList.contains('build'))return false;
+    const t=(+s.dataset.step||0)+dir;
+    if(t<0||t>maxStep(s))return false;
+    s.dataset.step=t; paint(s); return true;
+  }
+  function show(n){
+    const prev=i, back=n<i;
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+    pbar.style.width=(i/(slides.length-1)*100)+'%';
+    history.replaceState(null,'','#/'+(i+1));
+    const cur=slides[i];
+    if(cur&&cur.classList.contains('build')){
+      cur.dataset.step=back?maxStep(cur):0; paint(cur);
+    }
+    if(prev!==i && slides[prev]) slides[prev].dispatchEvent(new CustomEvent('hidden'));
+    if(cur) cur.dispatchEvent(new CustomEvent('shown'));
+  }
+  function fit(){ deck.style.transform='scale('+Math.min(innerWidth/1330,innerHeight/770)+')'; }
+  addEventListener('resize',fit); fit();
+  document.getElementById('next').onclick=()=>{ if(!build(slides[i],1))show(i+1); };
+  document.getElementById('prev').onclick=()=>{ if(!build(slides[i],-1))show(i-1); };
+  addEventListener('keydown',e=>{
+    if(/^(INPUT|TEXTAREA)$/.test(e.target.tagName))return;
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){
+      if(!build(slides[i],1))show(i+1); e.preventDefault();}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){
+      if(!build(slides[i],-1))show(i-1); e.preventDefault();}
+    else if(e.key==='Home')show(0);
+    else if(e.key==='End')show(slides.length-1);
+    else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}
+    else if(e.key==='p'||e.key==='P')print();
+  });
+  const m=location.hash.match(/#\/(\d+)/); show(m?+m[1]-1:0);
+})();
+
+
+
+/* ---------------- Data types test: match seven datasets to a type ---------------- */
+(function(){
+  const box=document.getElementById('match'); if(!box) return;
+  const score=document.getElementById('match-score');
+  box.addEventListener('change',e=>{
+    const sel=e.target.closest('select'); if(!sel) return;
+    const q=sel.closest('.q');
+    if(!sel.value){q.classList.remove('right','wrong');q.querySelector('small').textContent='';}
+    else{
+      const ok=sel.value===q.dataset.a;
+      q.classList.toggle('right',ok); q.classList.toggle('wrong',!ok);
+      q.querySelector('small').textContent=ok?q.dataset.why:'Ask again what one record is.';
+    }
+    const qs=[...box.querySelectorAll('.q')], done=qs.filter(x=>x.querySelector('select').value);
+    score.textContent=done.length+' of 7 chosen · '+qs.filter(x=>x.classList.contains('right')).length+' correct';
+  });
+  /* arrow keys inside a select must not turn the slide */
+  box.addEventListener('keydown',e=>e.stopPropagation());
+})();
+
+/* ---------------- Clustering: cut the dendrogram into k groups ---------------- */
+(function(){
+  const el=document.getElementById('cl-data'); if(!el) return;
+  const D=JSON.parse(el.textContent), n=D.items.length;
+  const COL=['#2B4BFF','#E8382D','#0E7A55','#A87900','#9B2C7E','#4B5A87','#0E1330'];
+  const K=document.getElementById('cl-k'), cut=document.getElementById('cl-cut');
+  function draw(){
+    const k=+K.value, lab=D.cuts[String(k)];
+    document.getElementById('cl-kv').textContent=k;
+    const groups={}; lab.forEach((g,i)=>{(groups[g]=groups[g]||[]).push(D.items[i]);});
+    const gs=Object.values(groups).sort((a,b)=>b.length-a.length);
+    const colOf={}; let c=0;
+    gs.forEach(g=>{const col=g.length>1?COL[c++%COL.length]:'#5D6488'; g.forEach(it=>colOf[it]=col);});
+    D.items.forEach((it,i)=>{document.getElementById('cl-leaf-'+i).setAttribute('fill',colOf[it]);});
+    /* the cut sits between the merge that leaves k groups and the next one */
+    const h=D.heights, lo=k>=n?0:h[n-k-1], hi=k<=1?1:h[n-k];
+    const x=D.x0+D.xw*(lo+hi)/2;
+    cut.setAttribute('x1',x); cut.setAttribute('x2',x);
+    document.getElementById('cl-groups').innerHTML=k+' group'+(k>1?'s':'')+': '+
+      gs.map(g=>'<b style="color:'+colOf[g[0]]+'">{'+g.join(', ')+'}</b>').join('  ');
+  }
+  K.addEventListener('input',draw); K.addEventListener('keydown',e=>e.stopPropagation());
+  draw();
+})();
+
+</script>
+</body>
+</html>

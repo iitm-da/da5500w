@@ -19,14 +19,14 @@ DEMO_RE = re.compile(r"^\d\d ")
 # Optional: nicer names for folders. Anything not listed falls back to the
 # folder name with dashes/underscores turned into spaces and title-cased.
 SECTION_TITLES = {
-    "module1": "Module 1 · Introduction and data types",
-    "module2": "Module 2 · Data scraping and collection",
-    "module3": "Module 3 · Understanding data: statistics and visualisation",
-    "module4": "Module 4 · Preprocessing: cleaning and integration",
-    "module5": "Module 5 · Preprocessing: reduction and transformation",
-    "module6": "Module 6 · Advanced visualisation",
-    "module7": "Module 7 · Data warehousing and OLAP",
-    "module8": "Module 8 · Clustering, outlier detection and trends",
+    "module1": "Module 1 · Introduction: data, patterns and the KDD process",
+    "module2": "Module 2 · Getting data: APIs, scraping, ethics",
+    "module3": "Module 3 · Knowing your data: attributes, statistics, similarity",
+    "module4": "Module 4 · Preprocessing: cleaning, integration, reduction",
+    "module5": "Module 5 · Mining a table: frequent patterns and association rules",
+    "module6": "Module 6 · Mining a table: classification and prediction",
+    "module7": "Module 7 · Mining a table: clustering and outlier detection",
+    "module8": "Module 8 · Mining other data: text, time series, graphs, streams",
 }
 
 

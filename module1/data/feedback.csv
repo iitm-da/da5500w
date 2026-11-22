@@ -1,0 +1,601 @@
+fb_id,text
+F0001,the rice was fresh and the staff were helpful
+F0002,no curd on the shelf again
+F0003,price of butter went up again
+F0004,love the beer here
+F0005,fresh soap today
+F0006,price of curd went up again
+F0007,the rice was fresh and the staff were helpful
+F0008,love the bread here
+F0009,"quick billing, got eggs and beer"
+F0010,"quick billing, got eggs and milk"
+F0011,love the soap here
+F0012,good price on jam
+F0013,love the jam here
+F0014,good price on biscuits
+F0015,fresh dal today
+F0016,the eggs was fresh and the staff were helpful
+F0017,fresh dal today
+F0018,billing took too long
+F0019,good price on nappies
+F0020,good price on chips
+F0021,fresh eggs today
+F0022,price of biscuits went up again
+F0023,"eggs out of stock, long queue at billing"
+F0024,good price on butter
+F0025,price of curd went up again
+F0026,the rice was fresh and the staff were helpful
+F0027,fresh tea today
+F0028,good price on butter
+F0029,good price on curd
+F0030,"quick billing, got nappies and rice"
+F0031,the nappies was fresh and the staff were helpful
+F0032,good price on eggs
+F0033,billing took too long
+F0034,the soap was fresh and the staff were helpful
+F0035,the curd was past its date
+F0036,no biscuits on the shelf again
+F0037,love the eggs here
+F0038,price of curd went up again
+F0039,love the butter here
+F0040,billing took too long
+F0041,love the chips here
+F0042,"curd out of stock, long queue at billing"
+F0043,billing took too long
+F0044,the curd was stale
+F0045,the tea was fresh and the staff were helpful
+F0046,the soap was past its date
+F0047,the soap was fresh and the staff were helpful
+F0048,the chips was fresh and the staff were helpful
+F0049,price of curd went up again
+F0050,fresh curd today
+F0051,no rice on the shelf again
+F0052,billing took too long
+F0053,good price on dal
+F0054,fresh jam today
+F0055,billing took too long
+F0056,the chips was past its date
+F0057,love the bread here
+F0058,"quick billing, got beer and eggs"
+F0059,good price on chips
+F0060,"curd out of stock, long queue at billing"
+F0061,good price on dal
+F0062,"biscuits out of stock, long queue at billing"
+F0063,good price on bread
+F0064,billing took too long
+F0065,the chips was fresh and the staff were helpful
+F0066,no beer on the shelf again
+F0067,"biscuits out of stock, long queue at billing"
+F0068,good price on soap
+F0069,price of curd went up again
+F0070,"quick billing, got nappies and rice"
+F0071,good price on nappies
+F0072,"curd out of stock, long queue at billing"
+F0073,fresh curd today
+F0074,good price on dal
+F0075,the eggs was fresh and the staff were helpful
+F0076,the biscuits was fresh and the staff were helpful
+F0077,good price on butter
+F0078,"quick billing, got dal and curd"
+F0079,fresh curd today
+F0080,no soap on the shelf again
+F0081,the curd was past its date
+F0082,the bread was fresh and the staff were helpful
+F0083,no nappies on the shelf again
+F0084,billing took too long
+F0085,the curd was fresh and the staff were helpful
+F0086,"quick billing, got dal and nappies"
+F0087,love the butter here
+F0088,good price on bread
+F0089,"quick billing, got beer and biscuits"
+F0090,good price on curd
+F0091,price of soap went up again
+F0092,good price on chips
+F0093,love the chips here
+F0094,the rice was fresh and the staff were helpful
+F0095,good price on nappies
+F0096,fresh nappies today
+F0097,good price on dal
+F0098,no curd on the shelf again
+F0099,"curd out of stock, long queue at billing"
+F0100,billing took too long
+F0101,billing took too long
+F0102,fresh eggs today
+F0103,the tea was past its date
+F0104,"jam out of stock, long queue at billing"
+F0105,the nappies was fresh and the staff were helpful
+F0106,the bread was fresh and the staff were helpful
+F0107,billing took too long
+F0108,the jam was fresh and the staff were helpful
+F0109,"curd out of stock, long queue at billing"
+F0110,"quick billing, got jam and biscuits"
+F0111,the soap was fresh and the staff were helpful
+F0112,love the butter here
+F0113,the tea was fresh and the staff were helpful
+F0114,love the rice here
+F0115,the curd was stale
+F0116,"biscuits out of stock, long queue at billing"
+F0117,the jam was fresh and the staff were helpful
+F0118,"quick billing, got beer and eggs"
+F0119,no chips on the shelf again
+F0120,"quick billing, got jam and curd"
+F0121,"quick billing, got curd and bread"
+F0122,"quick billing, got biscuits and jam"
+F0123,"quick billing, got jam and curd"
+F0124,fresh curd today
+F0125,the nappies was fresh and the staff were helpful
+F0126,"quick billing, got eggs and soap"
+F0127,the tea was past its date
+F0128,"quick billing, got nappies and beer"
+F0129,good price on eggs
+F0130,"quick billing, got bread and beer"
+F0131,billing took too long
+F0132,"quick billing, got chips and nappies"
+F0133,no jam on the shelf again
+F0134,"nappies out of stock, long queue at billing"
+F0135,"quick billing, got rice and curd"
+F0136,fresh soap today
+F0137,the tea was fresh and the staff were helpful
+F0138,the dal was fresh and the staff were helpful
+F0139,"tea out of stock, long queue at billing"
+F0140,the curd was fresh and the staff were helpful
+F0141,love the rice here
+F0142,billing took too long
+F0143,the curd was stale
+F0144,good price on nappies
+F0145,billing took too long
+F0146,the butter was fresh and the staff were helpful
+F0147,love the soap here
+F0148,good price on beer
+F0149,love the tea here
+F0150,the bread was stale
+F0151,love the chips here
+F0152,price of soap went up again
+F0153,love the nappies here
+F0154,no curd on the shelf again
+F0155,the soap was fresh and the staff were helpful
+F0156,love the bread here
+F0157,fresh chips today
+F0158,the biscuits was stale
+F0159,price of bread went up again
+F0160,good price on biscuits
+F0161,price of soap went up again
+F0162,good price on dal
+F0163,love the butter here
+F0164,love the butter here
+F0165,the beer was fresh and the staff were helpful
+F0166,the tea was past its date
+F0167,the dal was past its date
+F0168,the tea was fresh and the staff were helpful
+F0169,"jam out of stock, long queue at billing"
+F0170,"jam out of stock, long queue at billing"
+F0171,fresh eggs today
+F0172,the tea was fresh and the staff were helpful
+F0173,"quick billing, got jam and eggs"
+F0174,"quick billing, got biscuits and jam"
+F0175,"quick billing, got milk and beer"
+F0176,price of rice went up again
+F0177,the biscuits was past its date
+F0178,good price on rice
+F0179,the chips was stale
+F0180,love the tea here
+F0181,love the jam here
+F0182,"quick billing, got tea and dal"
+F0183,the rice was stale
+F0184,the tea was fresh and the staff were helpful
+F0185,the biscuits was fresh and the staff were helpful
+F0186,billing took too long
+F0187,the nappies was past its date
+F0188,"quick billing, got curd and milk"
+F0189,the soap was fresh and the staff were helpful
+F0190,"bread out of stock, long queue at billing"
+F0191,love the rice here
+F0192,good price on milk
+F0193,the nappies was stale
+F0194,"quick billing, got rice and chips"
+F0195,no soap on the shelf again
+F0196,good price on jam
+F0197,the butter was stale
+F0198,the milk was stale
+F0199,fresh beer today
+F0200,fresh eggs today
+F0201,good price on soap
+F0202,billing took too long
+F0203,"soap out of stock, long queue at billing"
+F0204,no jam on the shelf again
+F0205,billing took too long
+F0206,the soap was fresh and the staff were helpful
+F0207,"beer out of stock, long queue at billing"
+F0208,fresh curd today
+F0209,"chips out of stock, long queue at billing"
+F0210,the curd was past its date
+F0211,no curd on the shelf again
+F0212,the curd was past its date
+F0213,good price on bread
+F0214,price of curd went up again
+F0215,billing took too long
+F0216,love the jam here
+F0217,billing took too long
+F0218,"dal out of stock, long queue at billing"
+F0219,"quick billing, got tea and jam"
+F0220,the tea was fresh and the staff were helpful
+F0221,"quick billing, got chips and jam"
+F0222,price of dal went up again
+F0223,fresh soap today
+F0224,billing took too long
+F0225,good price on beer
+F0226,price of curd went up again
+F0227,the bread was past its date
+F0228,billing took too long
+F0229,the biscuits was fresh and the staff were helpful
+F0230,fresh soap today
+F0231,good price on nappies
+F0232,the bread was stale
+F0233,price of curd went up again
+F0234,price of dal went up again
+F0235,the curd was past its date
+F0236,the soap was fresh and the staff were helpful
+F0237,price of curd went up again
+F0238,love the jam here
+F0239,"quick billing, got soap and eggs"
+F0240,good price on eggs
+F0241,the beer was stale
+F0242,no curd on the shelf again
+F0243,the curd was past its date
+F0244,"curd out of stock, long queue at billing"
+F0245,billing took too long
+F0246,fresh dal today
+F0247,the chips was fresh and the staff were helpful
+F0248,fresh curd today
+F0249,good price on beer
+F0250,price of curd went up again
+F0251,the biscuits was stale
+F0252,the butter was fresh and the staff were helpful
+F0253,billing took too long
+F0254,love the tea here
+F0255,"beer out of stock, long queue at billing"
+F0256,"quick billing, got bread and milk"
+F0257,love the rice here
+F0258,fresh biscuits today
+F0259,billing took too long
+F0260,the rice was fresh and the staff were helpful
+F0261,"quick billing, got rice and dal"
+F0262,fresh eggs today
+F0263,the curd was past its date
+F0264,love the tea here
+F0265,"butter out of stock, long queue at billing"
+F0266,the jam was fresh and the staff were helpful
+F0267,billing took too long
+F0268,"milk out of stock, long queue at billing"
+F0269,price of chips went up again
+F0270,price of curd went up again
+F0271,"quick billing, got nappies and jam"
+F0272,love the chips here
+F0273,no tea on the shelf again
+F0274,the biscuits was past its date
+F0275,the nappies was stale
+F0276,"quick billing, got chips and dal"
+F0277,no curd on the shelf again
+F0278,the biscuits was fresh and the staff were helpful
+F0279,good price on eggs
+F0280,fresh chips today
+F0281,price of milk went up again
+F0282,"quick billing, got chips and dal"
+F0283,love the chips here
+F0284,good price on dal
+F0285,fresh soap today
+F0286,love the curd here
+F0287,good price on milk
+F0288,love the milk here
+F0289,no rice on the shelf again
+F0290,good price on milk
+F0291,good price on beer
+F0292,the curd was stale
+F0293,the tea was past its date
+F0294,"quick billing, got butter and milk"
+F0295,the nappies was stale
+F0296,love the eggs here
+F0297,fresh jam today
+F0298,no soap on the shelf again
+F0299,"curd out of stock, long queue at billing"
+F0300,billing took too long
+F0301,love the jam here
+F0302,"quick billing, got tea and curd"
+F0303,good price on curd
+F0304,"quick billing, got dal and butter"
+F0305,good price on eggs
+F0306,the biscuits was fresh and the staff were helpful
+F0307,billing took too long
+F0308,fresh bread today
+F0309,no nappies on the shelf again
+F0310,good price on eggs
+F0311,the nappies was past its date
+F0312,price of bread went up again
+F0313,billing took too long
+F0314,love the chips here
+F0315,"bread out of stock, long queue at billing"
+F0316,good price on milk
+F0317,the curd was stale
+F0318,price of curd went up again
+F0319,love the eggs here
+F0320,the bread was stale
+F0321,fresh biscuits today
+F0322,the curd was past its date
+F0323,love the soap here
+F0324,no curd on the shelf again
+F0325,no curd on the shelf again
+F0326,fresh curd today
+F0327,"quick billing, got rice and eggs"
+F0328,"milk out of stock, long queue at billing"
+F0329,"quick billing, got biscuits and nappies"
+F0330,fresh dal today
+F0331,love the biscuits here
+F0332,love the jam here
+F0333,no soap on the shelf again
+F0334,love the chips here
+F0335,the tea was fresh and the staff were helpful
+F0336,price of biscuits went up again
+F0337,love the jam here
+F0338,good price on dal
+F0339,price of rice went up again
+F0340,love the soap here
+F0341,good price on rice
+F0342,billing took too long
+F0343,price of tea went up again
+F0344,billing took too long
+F0345,"quick billing, got soap and tea"
+F0346,the dal was stale
+F0347,"quick billing, got rice and nappies"
+F0348,price of biscuits went up again
+F0349,good price on chips
+F0350,"quick billing, got milk and nappies"
+F0351,love the eggs here
+F0352,"quick billing, got eggs and nappies"
+F0353,billing took too long
+F0354,the tea was fresh and the staff were helpful
+F0355,no curd on the shelf again
+F0356,the tea was stale
+F0357,love the beer here
+F0358,"quick billing, got bread and tea"
+F0359,fresh soap today
+F0360,the beer was past its date
+F0361,fresh chips today
+F0362,the nappies was fresh and the staff were helpful
+F0363,no curd on the shelf again
+F0364,"quick billing, got chips and eggs"
+F0365,"quick billing, got rice and jam"
+F0366,good price on butter
+F0367,love the tea here
+F0368,billing took too long
+F0369,billing took too long
+F0370,"curd out of stock, long queue at billing"
+F0371,the butter was past its date
+F0372,the tea was fresh and the staff were helpful
+F0373,"quick billing, got butter and chips"
+F0374,the dal was fresh and the staff were helpful
+F0375,"quick billing, got curd and milk"
+F0376,no milk on the shelf again
+F0377,billing took too long
+F0378,"quick billing, got tea and jam"
+F0379,price of curd went up again
+F0380,fresh chips today
+F0381,billing took too long
+F0382,"quick billing, got nappies and milk"
+F0383,billing took too long
+F0384,good price on biscuits
+F0385,good price on tea
+F0386,good price on tea
+F0387,no curd on the shelf again
+F0388,price of jam went up again
+F0389,"bread out of stock, long queue at billing"
+F0390,billing took too long
+F0391,good price on tea
+F0392,billing took too long
+F0393,fresh chips today
+F0394,love the nappies here
+F0395,love the butter here
+F0396,love the tea here
+F0397,"quick billing, got jam and eggs"
+F0398,the chips was fresh and the staff were helpful
+F0399,"quick billing, got rice and dal"
+F0400,the butter was fresh and the staff were helpful
+F0401,the jam was stale
+F0402,no eggs on the shelf again
+F0403,"quick billing, got chips and eggs"
+F0404,the curd was stale
+F0405,the eggs was fresh and the staff were helpful
+F0406,billing took too long
+F0407,the beer was fresh and the staff were helpful
+F0408,the chips was fresh and the staff were helpful
+F0409,fresh beer today
+F0410,fresh butter today
+F0411,no curd on the shelf again
+F0412,good price on rice
+F0413,good price on eggs
+F0414,the curd was past its date
+F0415,billing took too long
+F0416,the rice was stale
+F0417,fresh soap today
+F0418,good price on milk
+F0419,price of biscuits went up again
+F0420,no jam on the shelf again
+F0421,"curd out of stock, long queue at billing"
+F0422,fresh tea today
+F0423,"quick billing, got jam and tea"
+F0424,good price on chips
+F0425,billing took too long
+F0426,the jam was fresh and the staff were helpful
+F0427,"quick billing, got biscuits and bread"
+F0428,the tea was fresh and the staff were helpful
+F0429,the curd was stale
+F0430,billing took too long
+F0431,the biscuits was fresh and the staff were helpful
+F0432,no rice on the shelf again
+F0433,the jam was fresh and the staff were helpful
+F0434,"quick billing, got beer and nappies"
+F0435,good price on biscuits
+F0436,no eggs on the shelf again
+F0437,price of curd went up again
+F0438,the rice was fresh and the staff were helpful
+F0439,billing took too long
+F0440,fresh beer today
+F0441,price of soap went up again
+F0442,the curd was past its date
+F0443,the chips was fresh and the staff were helpful
+F0444,billing took too long
+F0445,"curd out of stock, long queue at billing"
+F0446,the tea was fresh and the staff were helpful
+F0447,"curd out of stock, long queue at billing"
+F0448,price of curd went up again
+F0449,fresh curd today
+F0450,"quick billing, got curd and bread"
+F0451,the biscuits was fresh and the staff were helpful
+F0452,the curd was past its date
+F0453,"quick billing, got dal and milk"
+F0454,"quick billing, got butter and curd"
+F0455,billing took too long
+F0456,good price on beer
+F0457,the jam was fresh and the staff were helpful
+F0458,the curd was past its date
+F0459,"chips out of stock, long queue at billing"
+F0460,good price on milk
+F0461,"biscuits out of stock, long queue at billing"
+F0462,the rice was fresh and the staff were helpful
+F0463,the dal was past its date
+F0464,the eggs was fresh and the staff were helpful
+F0465,the dal was fresh and the staff were helpful
+F0466,"quick billing, got soap and eggs"
+F0467,no dal on the shelf again
+F0468,"quick billing, got bread and curd"
+F0469,no rice on the shelf again
+F0470,the nappies was past its date
+F0471,price of curd went up again
+F0472,billing took too long
+F0473,fresh tea today
+F0474,fresh chips today
+F0475,fresh bread today
+F0476,fresh bread today
+F0477,love the bread here
+F0478,price of curd went up again
+F0479,price of butter went up again
+F0480,billing took too long
+F0481,the bread was fresh and the staff were helpful
+F0482,price of rice went up again
+F0483,"quick billing, got butter and curd"
+F0484,the biscuits was past its date
+F0485,fresh butter today
+F0486,"curd out of stock, long queue at billing"
+F0487,love the tea here
+F0488,good price on rice
+F0489,love the chips here
+F0490,fresh rice today
+F0491,good price on beer
+F0492,the dal was fresh and the staff were helpful
+F0493,the butter was fresh and the staff were helpful
+F0494,the tea was stale
+F0495,price of nappies went up again
+F0496,good price on biscuits
+F0497,billing took too long
+F0498,the bread was past its date
+F0499,the soap was past its date
+F0500,fresh butter today
+F0501,the chips was fresh and the staff were helpful
+F0502,good price on rice
+F0503,no jam on the shelf again
+F0504,fresh biscuits today
+F0505,the curd was stale
+F0506,love the jam here
+F0507,price of eggs went up again
+F0508,fresh beer today
+F0509,the curd was fresh and the staff were helpful
+F0510,good price on soap
+F0511,fresh dal today
+F0512,fresh chips today
+F0513,billing took too long
+F0514,good price on chips
+F0515,fresh bread today
+F0516,the dal was fresh and the staff were helpful
+F0517,good price on curd
+F0518,price of chips went up again
+F0519,love the beer here
+F0520,good price on nappies
+F0521,no biscuits on the shelf again
+F0522,the dal was fresh and the staff were helpful
+F0523,no butter on the shelf again
+F0524,"quick billing, got beer and biscuits"
+F0525,the curd was past its date
+F0526,"curd out of stock, long queue at billing"
+F0527,good price on curd
+F0528,price of curd went up again
+F0529,billing took too long
+F0530,the dal was stale
+F0531,"quick billing, got nappies and butter"
+F0532,"quick billing, got dal and biscuits"
+F0533,fresh tea today
+F0534,fresh chips today
+F0535,good price on butter
+F0536,the soap was stale
+F0537,good price on nappies
+F0538,good price on bread
+F0539,price of chips went up again
+F0540,good price on dal
+F0541,love the nappies here
+F0542,"quick billing, got milk and biscuits"
+F0543,no dal on the shelf again
+F0544,"quick billing, got rice and soap"
+F0545,love the milk here
+F0546,price of curd went up again
+F0547,the beer was past its date
+F0548,the curd was past its date
+F0549,"quick billing, got biscuits and bread"
+F0550,"quick billing, got soap and jam"
+F0551,price of bread went up again
+F0552,billing took too long
+F0553,"quick billing, got eggs and beer"
+F0554,fresh jam today
+F0555,good price on eggs
+F0556,love the milk here
+F0557,good price on chips
+F0558,"quick billing, got curd and dal"
+F0559,"quick billing, got soap and beer"
+F0560,the soap was past its date
+F0561,price of rice went up again
+F0562,the milk was past its date
+F0563,good price on chips
+F0564,fresh curd today
+F0565,the eggs was fresh and the staff were helpful
+F0566,the biscuits was past its date
+F0567,price of curd went up again
+F0568,price of rice went up again
+F0569,"eggs out of stock, long queue at billing"
+F0570,billing took too long
+F0571,fresh jam today
+F0572,billing took too long
+F0573,the chips was fresh and the staff were helpful
+F0574,no chips on the shelf again
+F0575,"rice out of stock, long queue at billing"
+F0576,love the jam here
+F0577,no biscuits on the shelf again
+F0578,no curd on the shelf again
+F0579,fresh jam today
+F0580,love the milk here
+F0581,billing took too long
+F0582,fresh jam today
+F0583,the butter was fresh and the staff were helpful
+F0584,good price on chips
+F0585,fresh bread today
+F0586,fresh soap today
+F0587,love the rice here
+F0588,fresh chips today
+F0589,billing took too long
+F0590,billing took too long
+F0591,fresh eggs today
+F0592,"quick billing, got soap and eggs"
+F0593,"quick billing, got rice and butter"
+F0594,"nappies out of stock, long queue at billing"
+F0595,fresh nappies today
+F0596,the curd was past its date
+F0597,no eggs on the shelf again
+F0598,price of nappies went up again
+F0599,fresh butter today
+F0600,"quick billing, got jam and dal"
